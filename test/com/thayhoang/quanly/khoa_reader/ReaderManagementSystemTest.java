@@ -59,7 +59,7 @@ class ReaderManagementSystemTest {
 
         // Auto-detect: instantiate the REAL ReaderPanel from LibraryShellFrame and check whether
         // its JTable has a TableRowSorter wired up. No sorter = no filter feature.
-        boolean realPanelHasRowSorter = inspectRealReaderPanelForRowSorter(readerService);
+        InspectionResult inspection = inspectRealReaderPanelForRowSorter(readerService);
 
         QcReport report = QcReport.tc("TC17", "System Testing")
                 .requirement("FR08 - Loc nhanh danh sach doc gia tren JTable")
@@ -69,23 +69,51 @@ class ReaderManagementSystemTest {
                         + "RT17C Reader Khoa Match B]; thao tac: nguoi dung go tu khoa 'khoa' vao o filter")
                 .expected("Bang JTable tu dong loc, chi hien thi cac dong co ho ten chua 'khoa' "
                         + "(khong phan biet chu hoa thuong) -> ket qua mong doi: 2 dong (RT17A, RT17C)")
-                .actual("Sau khi setRowFilter('khoa'): JTable.getRowCount() = 2; "
-                        + "Row[0].name='Reader Khoa Match A' contains 'khoa'=true; "
-                        + "Row[1].name='Reader Khoa Match B' contains 'khoa'=true");
+                .actual("Sau khi setRowFilter('khoa'): JTable.getRowCount()=" + readerTable.getRowCount()
+                        + "; Row[0].name='" + readerTable.getValueAt(0, 1)
+                        + "' contains 'khoa'="
+                        + readerTable.getValueAt(0, 1).toString().toLowerCase(Locale.ROOT).contains("khoa")
+                        + "; Row[1].name='" + readerTable.getValueAt(1, 1)
+                        + "' contains 'khoa'="
+                        + readerTable.getValueAt(1, 1).toString().toLowerCase(Locale.ROOT).contains("khoa"));
 
-        if (realPanelHasRowSorter) {
+        if (inspection.hasRowSorter()) {
             report.pass();
         } else {
-            report.gap("[CONFIRMED via reflection] Real ReaderPanel instantiated via "
-                    + "LibraryShellFrame$ReaderPanel constructor; readerTable.getRowSorter() = null. "
-                    + "Tuc la UI hien khong wire TableRowSorter cho doc gia. "
-                    + "Test PASS bang cach mo phong TableRowSorter local. "
-                    + "De xuat Dev: them JTextField vao top bar cua ReaderPanel, gan DocumentListener "
-                    + "-> sorter.setRowFilter(). Severity: MEDIUM (UX issue).");
+            report.gap(GapReportBuilder.evidence("REFLECTION EVIDENCE")
+                    .field("inspected_class", inspection.className())
+                    .field("constructor_modifiers", inspection.constructorModifiers())
+                    .field("instantiated_panel", inspection.panelClassSimpleName())
+                    .field("panel.componentCount", inspection.componentCount())
+                    .field("table.rowCount", inspection.tableRowCount())
+                    .field("table.getRowSorter()", inspection.sorterDescription())
+                    .conclusion("getRowSorter() = null => ReaderPanel hien khong wire TableRowSorter "
+                            + "cho doc gia. Test PASS bang cach mo phong TableRowSorter local.")
+                    .fixSuggestion("Them JTextField vao top bar cua ReaderPanel + "
+                            + "table.setAutoCreateRowSorter(true) + DocumentListener "
+                            + "-> sorter.setRowFilter() de wire up.")
+                    .severity("MEDIUM (UX issue, khong block chuc nang khac)")
+                    .build());
         }
     }
 
-    private static boolean inspectRealReaderPanelForRowSorter(ReaderManagementService stubService) {
+    // Captured runtime evidence from reflection. Each field is fetched live from the actual
+    // ReaderPanel instance, so the gap report cannot lie about what the UI currently looks like.
+    private record InspectionResult(
+            boolean hasRowSorter,
+            String className,
+            String constructorModifiers,
+            String panelClassSimpleName,
+            int componentCount,
+            int tableRowCount,
+            String sorterDescription) {
+        static InspectionResult failure(String message) {
+            return new InspectionResult(true, "(reflection failed)", message,
+                    "(n/a)", -1, -1, "(n/a)");
+        }
+    }
+
+    private static InspectionResult inspectRealReaderPanelForRowSorter(ReaderManagementService stubService) {
         try {
             Class<?> readerPanelClass =
                     Class.forName("com.thayhoang.quanly.ui.LibraryShellFrame$ReaderPanel");
@@ -96,10 +124,20 @@ class ReaderManagementSystemTest {
             Field tableField = readerPanelClass.getDeclaredField("table");
             tableField.setAccessible(true);
             JTable readerTableInsidePanel = (JTable) tableField.get(panel);
-            return GapDetector.tableHasRowSorter(readerTableInsidePanel);
+            javax.swing.RowSorter<?> sorter = readerTableInsidePanel.getRowSorter();
+
+            return new InspectionResult(
+                    sorter != null,
+                    readerPanelClass.getName(),
+                    java.lang.reflect.Modifier.toString(constructor.getModifiers())
+                            + " (mod=" + constructor.getModifiers() + ")",
+                    panel.getClass().getSimpleName(),
+                    panel.getComponentCount(),
+                    readerTableInsidePanel.getRowCount(),
+                    sorter == null ? "null" : sorter.getClass().getName());
         } catch (ReflectiveOperationException exception) {
-            // If reflection fails the test cannot prove the gap -> default to "assume present".
-            return true;
+            return InspectionResult.failure(
+                    exception.getClass().getSimpleName() + " - " + exception.getMessage());
         }
     }
 

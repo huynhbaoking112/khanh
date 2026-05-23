@@ -51,26 +51,37 @@ class ReaderManagementRulesTest {
         // Auto-detect: does ReaderStatus enum actually have LOCKED constant?
         boolean hasLocked = GapDetector.hasReaderStatusLocked();
         String enumNames = GapDetector.describeReaderStatusEnum();
+        String statusUsedByCode = lockedReader.status().name();
+        String statusInDbAfterUpdate = fromDb.status().name();
 
         QcReport report = QcReport.tc("TC15", "Unit Testing")
                 .requirement("FR07 - Chinh sua trang thai the doc gia")
                 .dataset("TD11")
                 .precondition("DB co reader R015 voi status=ACTIVE (vua duoc upsert tu Setup)")
-                .input("readerId=R015, statusMoi=INACTIVE (= LOCKED theo tai lieu); action=bam nut Luu")
-                .expected("UPDATE READER SET status='INACTIVE' WHERE reader_id='R015'; "
-                        + "SELECT lai phai tra ve status=INACTIVE")
+                .input("readerId=R015, statusMoi=" + statusUsedByCode
+                        + " (= LOCKED theo tai lieu); action=bam nut Luu")
+                .expected("UPDATE READER SET status='" + statusUsedByCode
+                        + "' WHERE reader_id='R015'; SELECT lai phai tra ve status=" + statusUsedByCode)
                 .actual("service.updateReader() goi update() thanh cong; "
-                        + "SELECT R015 tu DB tra ve status=" + fromDb.status().name())
+                        + "SELECT R015 tu DB tra ve status=" + statusInDbAfterUpdate)
                 .dbBefore(before)
                 .dbAfter(after);
 
         if (hasLocked) {
             report.pass();
         } else {
-            report.gap("[CONFIRMED via reflection] ReaderStatus.values() = " + enumNames
-                    + " — khong co constant LOCKED. Test PASS theo enum hien tai (INACTIVE) "
-                    + "nhung tai lieu V6 yeu cau ten LOCKED. De xuat Dev: bo sung enum LOCKED "
-                    + "vao ReaderStatus.java HOAC cap nhat tai lieu thong nhat ten INACTIVE. Severity: LOW.");
+            report.gap(GapReportBuilder.evidence("ENUM EVIDENCE")
+                    .field("ReaderStatus.values()", enumNames)
+                    .field("spec_required_constant", "'LOCKED'")
+                    .field("constant_present_in_code", hasLocked)
+                    .field("status_used_by_test", statusUsedByCode)
+                    .field("status_persisted_in_db", statusInDbAfterUpdate)
+                    .conclusion("Spec yeu cau enum 'LOCKED' nhung ma nguon dung '" + statusUsedByCode
+                            + "' => naming mismatch giua tai lieu va code.")
+                    .fixSuggestion("Bo sung enum LOCKED vao ReaderStatus.java HOAC cap nhat tai lieu "
+                            + "thong nhat ten " + statusUsedByCode + ".")
+                    .severity("LOW (chi la naming convention)")
+                    .build());
         }
     }
 
@@ -78,36 +89,65 @@ class ReaderManagementRulesTest {
     @DisplayName("TC16 - reader update validation documents current phone-field gap (REAL DB)")
     void tc16_emptyReaderPhoneCurrentlyPassesValidation() throws SQLException {
         // Setup: insert R016 with valid phone so we can compare BEFORE/AFTER.
-        TestDbHelper.upsertReader("R016", "Reader With Phone", "0901000016",
+        String originalPhone = "0901000016";
+        TestDbHelper.upsertReader("R016", "Reader With Phone", originalPhone,
                 "reader.with.phone@example.com", 3, ReaderStatus.ACTIVE);
         String before = TestDbHelper.dumpReader("R016");
+        Reader readerBeforeUpdate = readerRepository.findById("R016").orElseThrow();
 
         // Action: librarian wipes the phone field and hits Update.
         Reader readerWithBlankPhone = new Reader("R016", "Reader With Phone", "",
                 "reader.with.phone@example.com", 3, ReaderStatus.ACTIVE);
-        assertDoesNotThrow(() -> service.updateReader(readerWithBlankPhone));
+
+        // Capture whether the service throws (it should, per spec, but currently does not).
+        boolean serviceThrew;
+        String exceptionName;
+        try {
+            service.updateReader(readerWithBlankPhone);
+            serviceThrew = false;
+            exceptionName = "(none)";
+        } catch (RuntimeException ex) {
+            serviceThrew = true;
+            exceptionName = ex.getClass().getSimpleName() + " - " + ex.getMessage();
+        }
 
         // Verify: phone is now blank in the DB - this is the gap (spec says it should have been rejected).
         String after = TestDbHelper.dumpReader("R016");
         Reader fromDb = readerRepository.findById("R016").orElseThrow();
-        assertTrue(fromDb.phone() == null || fromDb.phone().isEmpty(),
+        String persistedPhone = fromDb.phone() == null ? "null" : "'" + fromDb.phone() + "'";
+        boolean persistedPhoneIsBlank = fromDb.phone() == null || fromDb.phone().isEmpty();
+        assertTrue(persistedPhoneIsBlank,
                 "Expected blank phone to be persisted in current implementation (evidence of gap)");
 
         QcReport.tc("TC16", "Unit Testing")
                 .requirement("FR07 - Validate so dien thoai bat buoc")
                 .dataset("TD12")
-                .precondition("DB co reader R016 (Reader With Phone) voi phone='0901000016' (valid)")
+                .precondition("DB co reader R016 (" + readerBeforeUpdate.fullName()
+                        + ") voi phone='" + readerBeforeUpdate.phone() + "' (valid)")
                 .input("readerId=R016, fullName=Reader With Phone, phone=\"\" (rong), "
                         + "email=reader.with.phone@example.com; action=bam nut Cap nhat")
                 .expected("Service phai NEM BusinessRuleViolationException va khong duoc UPDATE DB "
                         + "(theo tai lieu V6, phone la truong bat buoc)")
-                .actual("Service KHONG nem exception; UPDATE thanh cong; "
-                        + "SELECT R016 cho phone='" + fromDb.phone() + "' (rong)")
+                .actual("service.updateReader() exception_thrown=" + serviceThrew
+                        + " (" + exceptionName + "); "
+                        + "SELECT R016 sau update -> phone=" + persistedPhone
+                        + ", is_blank=" + persistedPhoneIsBlank)
                 .dbBefore(before)
                 .dbAfter(after)
-                .gap("[BUG-FR07-01] Severity: MEDIUM. Tang Service thieu validate truong phone. "
-                        + "Vi tri: ReaderManagementServiceImpl.validate(). De xuat Dev: them "
-                        + "`if(isBlank(reader.phone())) throw new BusinessRuleViolationException(\"So dien thoai bat buoc\");`. "
-                        + "Evidence trong DB: row R016 (Reader With Phone) hien co phone rong, chung minh validation bi bypass.");
+                .gap(GapReportBuilder.evidence("VALIDATION EVIDENCE")
+                        .field("phone_before", "'" + readerBeforeUpdate.phone() + "'")
+                        .field("phone_input_to_service", "''")
+                        .field("service_threw_exception", serviceThrew)
+                        .field("observed_exception", exceptionName)
+                        .field("phone_persisted_in_db", persistedPhone)
+                        .field("phone_is_blank_after_update", persistedPhoneIsBlank)
+                        .conclusion("Spec yeu cau service NEM exception khi phone rong, "
+                                + "NHUNG observed=khong nem va DB van persist phone rong => "
+                                + "validation bi bypass tai tang Service.")
+                        .fixSuggestion("Them `if(isBlank(reader.phone())) throw new "
+                                + "BusinessRuleViolationException(\"So dien thoai bat buoc\");` "
+                                + "vao ReaderManagementServiceImpl.validate().")
+                        .severity("MEDIUM (validation gap)")
+                        .build());
     }
 }

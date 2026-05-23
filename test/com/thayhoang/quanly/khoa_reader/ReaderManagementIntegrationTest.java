@@ -136,15 +136,23 @@ class ReaderManagementIntegrationTest {
                 TestDbHelper.dumpLoan("LT18C"));
 
         // Action: cross-repository JOIN to find overdue readers (simulates the spec'd UI button behavior).
+        // Track real query counts so the GAP report can quantify the N+1 access pattern.
+        int findAllCalls = 0;
+        int findByReaderIdCalls = 0;
         List<Reader> overdueList = new ArrayList<>();
-        for (Reader reader : readerRepository.findAll()) {
-            for (Loan loan : loanRepository.findByReaderId(reader.readerId())) {
+        List<Reader> allReaders = readerRepository.findAll();
+        findAllCalls++;
+        for (Reader reader : allReaders) {
+            List<Loan> readerLoans = loanRepository.findByReaderId(reader.readerId());
+            findByReaderIdCalls++;
+            for (Loan loan : readerLoans) {
                 if (loan.status() != LoanStatus.COMPLETED && loan.dueDate().isBefore(today)) {
                     overdueList.add(reader);
                     break;
                 }
             }
         }
+        int totalQueries = findAllCalls + findByReaderIdCalls;
 
         // Verify: only RT18A should appear in the overdue list among our test readers.
         assertTrue(overdueList.stream().anyMatch(r -> "RT18A".equals(r.readerId())),
@@ -185,11 +193,21 @@ class ReaderManagementIntegrationTest {
         if (hasOverdueMethod) {
             report.pass();
         } else {
-            report.gap("[CONFIRMED via reflection] JdbcReaderRepository declared methods = " + methodsList
-                    + " — khong co method nao chua chu 'overdue'. "
-                    + "Test pass bang cach goi findAll() + findByReaderId() roi filter tay (N+1 query). "
-                    + "De xuat Dev: bo sung `findOverdueReaders(LocalDate today)` voi SQL JOIN truc tiep "
-                    + "vao JdbcReaderRepository. Severity: MEDIUM (chuc nang chay duoc nhung khong toi uu).");
+            report.gap(GapReportBuilder.evidence("REPO METHOD + QUERY COUNT EVIDENCE")
+                    .field("JdbcReaderRepository.getDeclaredMethods()", methodsList)
+                    .field("methods_containing_'overdue'", hasOverdueMethod ? 1 : 0)
+                    .field("readers_iterated", allReaders.size())
+                    .field("findAll_calls", findAllCalls)
+                    .field("findByReaderId_calls", findByReaderIdCalls)
+                    .field("total_DB_round_trips", totalQueries
+                            + " (= " + findAllCalls + " findAll + " + findByReaderIdCalls + " findByReaderId)")
+                    .conclusion("Khong co method 'overdue' chuyen biet trong JdbcReaderRepository => "
+                            + "test phai gop tu " + totalQueries + " queries thay vi 1 SQL JOIN duy nhat. "
+                            + "N+1 access pattern xuat hien khi so reader tang.")
+                    .fixSuggestion("Bo sung `findOverdueReaders(LocalDate today)` voi 1 SQL JOIN truc tiep "
+                            + "vao JdbcReaderRepository (READER JOIN LOAN WHERE due_date < ? AND status != 'COMPLETED').")
+                    .severity("MEDIUM (chuc nang chay duoc nhung khong toi uu)")
+                    .build());
         }
     }
 }
