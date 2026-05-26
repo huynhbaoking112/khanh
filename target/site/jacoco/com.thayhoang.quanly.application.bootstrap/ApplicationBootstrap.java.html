@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApplicationBootstrap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.application.bootstrap</a> &gt; <span class="el_source">ApplicationBootstrap.java</span></div><h1>ApplicationBootstrap.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package com.thayhoang.quanly.application.bootstrap;</span>
+
+import com.thayhoang.quanly.application.repository.BookRepository;
+import com.thayhoang.quanly.application.repository.FineRepository;
+import com.thayhoang.quanly.application.repository.LibrarianRepository;
+import com.thayhoang.quanly.application.repository.LoanDetailRepository;
+import com.thayhoang.quanly.application.repository.LoanRepository;
+import com.thayhoang.quanly.application.repository.ReaderRepository;
+import com.thayhoang.quanly.application.service.AuthenticationService;
+import com.thayhoang.quanly.application.service.BookCatalogService;
+import com.thayhoang.quanly.application.service.CirculationService;
+import com.thayhoang.quanly.application.service.HistoryService;
+import com.thayhoang.quanly.application.service.ReaderManagementService;
+import com.thayhoang.quanly.application.service.impl.AuthenticationServiceImpl;
+import com.thayhoang.quanly.application.service.impl.BookCatalogServiceImpl;
+import com.thayhoang.quanly.application.service.impl.CirculationServiceImpl;
+import com.thayhoang.quanly.application.service.impl.HistoryServiceImpl;
+import com.thayhoang.quanly.application.service.impl.ReaderManagementServiceImpl;
+import com.thayhoang.quanly.infrastructure.db.DatabaseBootstrap;
+import com.thayhoang.quanly.infrastructure.db.DatabaseConfig;
+import com.thayhoang.quanly.infrastructure.repository.jdbc.JdbcBookRepository;
+import com.thayhoang.quanly.infrastructure.repository.jdbc.JdbcFineRepository;
+import com.thayhoang.quanly.infrastructure.repository.jdbc.JdbcLibrarianRepository;
+import com.thayhoang.quanly.infrastructure.repository.jdbc.JdbcLoanDetailRepository;
+import com.thayhoang.quanly.infrastructure.repository.jdbc.JdbcLoanRepository;
+import com.thayhoang.quanly.infrastructure.repository.jdbc.JdbcReaderRepository;
+import java.nio.file.Path;
+import java.sql.SQLException;
+
+public record ApplicationBootstrap(
+        Path databasePath,
+        AuthenticationService authenticationService,
+        BookCatalogService bookCatalogService,
+        ReaderManagementService readerManagementService,
+        CirculationService circulationService,
+        HistoryService historyService) {
+    public static ApplicationBootstrap initialize() throws SQLException {
+<span class="nc" id="L38">        DatabaseBootstrap.initialize();</span>
+
+<span class="nc" id="L40">        BookRepository bookRepository = new JdbcBookRepository();</span>
+<span class="nc" id="L41">        ReaderRepository readerRepository = new JdbcReaderRepository();</span>
+<span class="nc" id="L42">        LibrarianRepository librarianRepository = new JdbcLibrarianRepository();</span>
+<span class="nc" id="L43">        LoanRepository loanRepository = new JdbcLoanRepository();</span>
+<span class="nc" id="L44">        LoanDetailRepository loanDetailRepository = new JdbcLoanDetailRepository();</span>
+<span class="nc" id="L45">        FineRepository fineRepository = new JdbcFineRepository();</span>
+
+<span class="nc" id="L47">        AuthenticationService authenticationService = new AuthenticationServiceImpl(librarianRepository);</span>
+<span class="nc" id="L48">        BookCatalogService bookCatalogService = new BookCatalogServiceImpl(bookRepository);</span>
+<span class="nc" id="L49">        ReaderManagementService readerManagementService =</span>
+<span class="nc" id="L50">                new ReaderManagementServiceImpl(readerRepository, loanDetailRepository);</span>
+<span class="nc" id="L51">        CirculationService circulationService = new CirculationServiceImpl(</span>
+<span class="nc" id="L52">                readerRepository,</span>
+<span class="nc" id="L53">                librarianRepository,</span>
+<span class="nc" id="L54">                bookRepository,</span>
+<span class="nc" id="L55">                loanRepository,</span>
+<span class="nc" id="L56">                loanDetailRepository,</span>
+<span class="nc" id="L57">                fineRepository);</span>
+<span class="nc" id="L58">        HistoryService historyService = new HistoryServiceImpl(</span>
+<span class="nc" id="L59">                readerRepository,</span>
+<span class="nc" id="L60">                librarianRepository,</span>
+<span class="nc" id="L61">                loanRepository,</span>
+<span class="nc" id="L62">                loanDetailRepository,</span>
+<span class="nc" id="L63">                fineRepository);</span>
+
+<span class="nc" id="L65">        return new ApplicationBootstrap(</span>
+<span class="nc" id="L66">                DatabaseConfig.databaseFile(),</span>
+<span class="nc" id="L67">                authenticationService,</span>
+<span class="nc" id="L68">                bookCatalogService,</span>
+<span class="nc" id="L69">                readerManagementService,</span>
+<span class="nc" id="L70">                circulationService,</span>
+<span class="nc" id="L71">                historyService);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

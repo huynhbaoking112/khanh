@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseBootstrap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.infrastructure.db</a> &gt; <span class="el_source">DatabaseBootstrap.java</span></div><h1>DatabaseBootstrap.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.infrastructure.db;
+
+import com.thayhoang.quanly.domain.enums.BookStatus;
+import com.thayhoang.quanly.domain.enums.ReaderStatus;
+import com.thayhoang.quanly.domain.enums.UserRole;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public final class DatabaseBootstrap {
+    private DatabaseBootstrap() {
+    }
+
+    public static void initialize() throws SQLException {
+<span class="fc" id="L20">        ensureDataDirectory();</span>
+<span class="fc" id="L21">        ensureDriver();</span>
+
+<span class="fc" id="L23">        try (Connection connection = DriverManager.getConnection(DatabaseConfig.jdbcUrl());</span>
+<span class="fc" id="L24">                Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L25">            statement.execute(&quot;PRAGMA foreign_keys = ON&quot;);</span>
+<span class="fc" id="L26">            createSchema(statement);</span>
+<span class="fc" id="L27">            seedData(connection);</span>
+        }
+<span class="fc" id="L29">    }</span>
+
+    private static void createSchema(Statement statement) throws SQLException {
+<span class="fc" id="L32">        statement.execute(&quot;&quot;&quot;</span>
+                CREATE TABLE IF NOT EXISTS LIBRARIAN (
+                    librarian_id TEXT PRIMARY KEY,
+                    full_name TEXT NOT NULL,
+                    username TEXT NOT NULL UNIQUE,
+                    password TEXT NOT NULL,
+                    role TEXT NOT NULL
+                )
+                &quot;&quot;&quot;);
+
+<span class="fc" id="L42">        statement.execute(&quot;&quot;&quot;</span>
+                CREATE TABLE IF NOT EXISTS READER (
+                    reader_id TEXT PRIMARY KEY,
+                    full_name TEXT NOT NULL,
+                    phone TEXT,
+                    email TEXT,
+                    max_borrow INTEGER NOT NULL DEFAULT 3 CHECK (max_borrow &gt;= 0),
+                    status TEXT NOT NULL
+                )
+                &quot;&quot;&quot;);
+
+<span class="fc" id="L53">        statement.execute(&quot;&quot;&quot;</span>
+                CREATE TABLE IF NOT EXISTS BOOK (
+                    book_id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    author TEXT NOT NULL,
+                    publisher TEXT,
+                    year_publish INTEGER NOT NULL,
+                    quantity_total INTEGER NOT NULL CHECK (quantity_total &gt;= 0),
+                    quantity_available INTEGER NOT NULL CHECK (
+                        quantity_available &gt;= 0 AND quantity_available &lt;= quantity_total
+                    ),
+                    status TEXT NOT NULL
+                )
+                &quot;&quot;&quot;);
+
+<span class="fc" id="L68">        statement.execute(&quot;&quot;&quot;</span>
+                CREATE TABLE IF NOT EXISTS LOAN (
+                    loan_id TEXT PRIMARY KEY,
+                    reader_id TEXT NOT NULL,
+                    librarian_id TEXT NOT NULL,
+                    loan_date TEXT NOT NULL,
+                    due_date TEXT NOT NULL,
+                    return_date TEXT,
+                    status TEXT NOT NULL,
+                    FOREIGN KEY (reader_id) REFERENCES READER(reader_id),
+                    FOREIGN KEY (librarian_id) REFERENCES LIBRARIAN(librarian_id)
+                )
+                &quot;&quot;&quot;);
+
+<span class="fc" id="L82">        statement.execute(&quot;&quot;&quot;</span>
+                CREATE TABLE IF NOT EXISTS LOAN_DETAIL (
+                    loan_detail_id TEXT PRIMARY KEY,
+                    loan_id TEXT NOT NULL,
+                    book_id TEXT NOT NULL,
+                    quantity INTEGER NOT NULL CHECK (quantity &gt; 0),
+                    returned INTEGER NOT NULL DEFAULT 0,
+                    note TEXT,
+                    UNIQUE (loan_id, book_id),
+                    FOREIGN KEY (loan_id) REFERENCES LOAN(loan_id) ON DELETE CASCADE,
+                    FOREIGN KEY (book_id) REFERENCES BOOK(book_id)
+                )
+                &quot;&quot;&quot;);
+
+<span class="fc" id="L96">        statement.execute(&quot;&quot;&quot;</span>
+                CREATE TABLE IF NOT EXISTS FINE (
+                    fine_id TEXT PRIMARY KEY,
+                    loan_id TEXT NOT NULL UNIQUE,
+                    amount NUMERIC NOT NULL,
+                    reason TEXT NOT NULL,
+                    paid_status TEXT NOT NULL,
+                    FOREIGN KEY (loan_id) REFERENCES LOAN(loan_id) ON DELETE CASCADE
+                )
+                &quot;&quot;&quot;);
+<span class="fc" id="L106">    }</span>
+
+    private static void ensureDataDirectory() throws SQLException {
+        try {
+<span class="fc" id="L110">            Files.createDirectories(DatabaseConfig.dataDirectory());</span>
+<span class="pc" id="L111">        } catch (IOException exception) {</span>
+<span class="nc" id="L112">            throw new SQLException(&quot;Khong the tao thu muc du lieu SQLite&quot;, exception);</span>
+        }
+<span class="fc" id="L114">    }</span>
+
+    private static void ensureDriver() throws SQLException {
+        try {
+<span class="fc" id="L118">            Class.forName(&quot;org.sqlite.JDBC&quot;);</span>
+<span class="pc" id="L119">        } catch (ClassNotFoundException exception) {</span>
+<span class="nc" id="L120">            throw new SQLException(&quot;Khong tim thay SQLite JDBC driver trong thu muc lib&quot;, exception);</span>
+        }
+<span class="fc" id="L122">    }</span>
+
+    private static void seedData(Connection connection) throws SQLException {
+<span class="fc" id="L125">        seedLibrarians(connection);</span>
+<span class="fc" id="L126">        seedReaders(connection);</span>
+<span class="fc" id="L127">        seedBooks(connection);</span>
+<span class="fc" id="L128">    }</span>
+
+    private static void seedLibrarians(Connection connection) throws SQLException {
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (countRows(connection, &quot;LIBRARIAN&quot;) &gt; 0) {</span>
+<span class="fc" id="L132">            return;</span>
+        }
+
+<span class="nc" id="L135">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                INSERT INTO LIBRARIAN (librarian_id, full_name, username, password, role)
+                VALUES (?, ?, ?, ?, ?)
+                &quot;&quot;&quot;)) {
+<span class="nc" id="L139">            insertLibrarian(statement, &quot;LIB001&quot;, &quot;System Administrator&quot;, &quot;admin&quot;, &quot;admin123&quot;, UserRole.ADMIN);</span>
+<span class="nc" id="L140">            insertLibrarian(statement, &quot;LIB002&quot;, &quot;Thu Thu Mac Dinh&quot;, &quot;librarian&quot;, &quot;lib123&quot;, UserRole.LIBRARIAN);</span>
+        }
+<span class="nc" id="L142">    }</span>
+
+    private static void insertLibrarian(
+            PreparedStatement statement,
+            String id,
+            String fullName,
+            String username,
+            String password,
+            UserRole role) throws SQLException {
+<span class="nc" id="L151">        statement.setString(1, id);</span>
+<span class="nc" id="L152">        statement.setString(2, fullName);</span>
+<span class="nc" id="L153">        statement.setString(3, username);</span>
+<span class="nc" id="L154">        statement.setString(4, password);</span>
+<span class="nc" id="L155">        statement.setString(5, role.name());</span>
+<span class="nc" id="L156">        statement.executeUpdate();</span>
+<span class="nc" id="L157">    }</span>
+
+    private static void seedReaders(Connection connection) throws SQLException {
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (countRows(connection, &quot;READER&quot;) &gt; 0) {</span>
+<span class="fc" id="L161">            return;</span>
+        }
+
+<span class="nc" id="L164">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                INSERT INTO READER (reader_id, full_name, phone, email, max_borrow, status)
+                VALUES (?, ?, ?, ?, ?, ?)
+                &quot;&quot;&quot;)) {
+<span class="nc" id="L168">            insertReader(statement, &quot;R001&quot;, &quot;Nguyen Van An&quot;, &quot;0901000001&quot;, &quot;an@example.com&quot;, 3, ReaderStatus.ACTIVE);</span>
+<span class="nc" id="L169">            insertReader(statement, &quot;R002&quot;, &quot;Tran Thi Binh&quot;, &quot;0901000002&quot;, &quot;binh@example.com&quot;, 3, ReaderStatus.ACTIVE);</span>
+<span class="nc" id="L170">            insertReader(statement, &quot;R003&quot;, &quot;Le Minh Khoa&quot;, &quot;0901000003&quot;, &quot;khoa@example.com&quot;, 3, ReaderStatus.INACTIVE);</span>
+        }
+<span class="nc" id="L172">    }</span>
+
+    private static void insertReader(
+            PreparedStatement statement,
+            String id,
+            String fullName,
+            String phone,
+            String email,
+            int maxBorrow,
+            ReaderStatus status) throws SQLException {
+<span class="nc" id="L182">        statement.setString(1, id);</span>
+<span class="nc" id="L183">        statement.setString(2, fullName);</span>
+<span class="nc" id="L184">        statement.setString(3, phone);</span>
+<span class="nc" id="L185">        statement.setString(4, email);</span>
+<span class="nc" id="L186">        statement.setInt(5, maxBorrow);</span>
+<span class="nc" id="L187">        statement.setString(6, status.name());</span>
+<span class="nc" id="L188">        statement.executeUpdate();</span>
+<span class="nc" id="L189">    }</span>
+
+    private static void seedBooks(Connection connection) throws SQLException {
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (countRows(connection, &quot;BOOK&quot;) &gt; 0) {</span>
+<span class="fc" id="L193">            return;</span>
+        }
+
+<span class="nc" id="L196">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                INSERT INTO BOOK (
+                    book_id, title, author, publisher, year_publish, quantity_total, quantity_available, status
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                &quot;&quot;&quot;)) {
+<span class="nc" id="L201">            insertBook(statement, &quot;B001&quot;, &quot;Lap Trinh Java Co Ban&quot;, &quot;Nguyen Huu Lap&quot;, &quot;Giao Duc&quot;, 2022, 5, 5, BookStatus.AVAILABLE);</span>
+<span class="nc" id="L202">            insertBook(statement, &quot;B002&quot;, &quot;Cau Truc Du Lieu&quot;, &quot;Tran Van Tri&quot;, &quot;Thong Tin&quot;, 2021, 3, 2, BookStatus.AVAILABLE);</span>
+<span class="nc" id="L203">            insertBook(statement, &quot;B003&quot;, &quot;Phan Tich He Thong&quot;, &quot;Le Hoang&quot;, &quot;Dai Hoc Quoc Gia&quot;, 2020, 2, 0, BookStatus.AVAILABLE);</span>
+        }
+<span class="nc" id="L205">    }</span>
+
+    private static void insertBook(
+            PreparedStatement statement,
+            String id,
+            String title,
+            String author,
+            String publisher,
+            int yearPublish,
+            int quantityTotal,
+            int quantityAvailable,
+            BookStatus status) throws SQLException {
+<span class="nc" id="L217">        statement.setString(1, id);</span>
+<span class="nc" id="L218">        statement.setString(2, title);</span>
+<span class="nc" id="L219">        statement.setString(3, author);</span>
+<span class="nc" id="L220">        statement.setString(4, publisher);</span>
+<span class="nc" id="L221">        statement.setInt(5, yearPublish);</span>
+<span class="nc" id="L222">        statement.setInt(6, quantityTotal);</span>
+<span class="nc" id="L223">        statement.setInt(7, quantityAvailable);</span>
+<span class="nc" id="L224">        statement.setString(8, status.name());</span>
+<span class="nc" id="L225">        statement.executeUpdate();</span>
+<span class="nc" id="L226">    }</span>
+
+    private static int countRows(Connection connection, String tableName) throws SQLException {
+<span class="fc" id="L229">        try (PreparedStatement statement = connection.prepareStatement(&quot;SELECT COUNT(*) FROM &quot; + tableName);</span>
+<span class="fc" id="L230">                ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">            return resultSet.next() ? resultSet.getInt(1) : 0;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

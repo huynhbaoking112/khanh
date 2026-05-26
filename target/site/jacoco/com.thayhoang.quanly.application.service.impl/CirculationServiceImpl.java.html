@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CirculationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.application.service.impl</a> &gt; <span class="el_source">CirculationServiceImpl.java</span></div><h1>CirculationServiceImpl.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.application.service.impl;
+
+import com.thayhoang.quanly.application.exception.ApplicationException;
+import com.thayhoang.quanly.application.exception.BusinessRuleViolationException;
+import com.thayhoang.quanly.application.repository.BookRepository;
+import com.thayhoang.quanly.application.repository.FineRepository;
+import com.thayhoang.quanly.application.repository.LibrarianRepository;
+import com.thayhoang.quanly.application.repository.LoanDetailRepository;
+import com.thayhoang.quanly.application.repository.LoanRepository;
+import com.thayhoang.quanly.application.repository.ReaderRepository;
+import com.thayhoang.quanly.application.service.CirculationService;
+import com.thayhoang.quanly.application.service.dto.LoanReceipt;
+import com.thayhoang.quanly.application.service.dto.ReturnReceipt;
+import com.thayhoang.quanly.application.support.IdentifierGenerator;
+import com.thayhoang.quanly.domain.enums.FinePaymentStatus;
+import com.thayhoang.quanly.domain.enums.LoanStatus;
+import com.thayhoang.quanly.domain.model.Book;
+import com.thayhoang.quanly.domain.model.Fine;
+import com.thayhoang.quanly.domain.model.Loan;
+import com.thayhoang.quanly.domain.model.LoanDetail;
+import com.thayhoang.quanly.domain.model.Reader;
+import com.thayhoang.quanly.domain.rules.CirculationRules;
+import com.thayhoang.quanly.infrastructure.db.DatabaseSupport;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+public final class CirculationServiceImpl implements CirculationService {
+    private final ReaderRepository readerRepository;
+    private final LibrarianRepository librarianRepository;
+    private final BookRepository bookRepository;
+    private final LoanRepository loanRepository;
+    private final LoanDetailRepository loanDetailRepository;
+    private final FineRepository fineRepository;
+
+<span class="fc" id="L42">    public CirculationServiceImpl(</span>
+            ReaderRepository readerRepository,
+            LibrarianRepository librarianRepository,
+            BookRepository bookRepository,
+            LoanRepository loanRepository,
+            LoanDetailRepository loanDetailRepository,
+            FineRepository fineRepository) {
+<span class="fc" id="L49">        this.readerRepository = readerRepository;</span>
+<span class="fc" id="L50">        this.librarianRepository = librarianRepository;</span>
+<span class="fc" id="L51">        this.bookRepository = bookRepository;</span>
+<span class="fc" id="L52">        this.loanRepository = loanRepository;</span>
+<span class="fc" id="L53">        this.loanDetailRepository = loanDetailRepository;</span>
+<span class="fc" id="L54">        this.fineRepository = fineRepository;</span>
+<span class="fc" id="L55">    }</span>
+
+    @Override
+    public LoanReceipt createLoan(String readerId, String librarianId, List&lt;String&gt; bookIds) {
+<span class="fc" id="L59">        List&lt;String&gt; normalizedBookIds = normalizeBookIds(bookIds);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (normalizedBookIds.isEmpty()) {</span>
+<span class="nc" id="L61">            throw new BusinessRuleViolationException(&quot;Danh sach sach muon khong duoc rong&quot;);</span>
+        }
+
+<span class="fc" id="L64">        Set&lt;String&gt; distinctBookIds = new LinkedHashSet&lt;&gt;(normalizedBookIds);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (distinctBookIds.size() != normalizedBookIds.size()) {</span>
+<span class="nc" id="L66">            throw new BusinessRuleViolationException(&quot;Moi sach chi duoc chon mot lan trong phieu muon&quot;);</span>
+        }
+
+<span class="fc" id="L69">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L70">            connection.setAutoCommit(false);</span>
+            try {
+<span class="fc" id="L72">                Reader reader = readerRepository.findById(connection, readerId)</span>
+<span class="pc" id="L73">                        .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Khong tim thay doc gia&quot;));</span>
+<span class="fc" id="L74">                librarianRepository.findById(connection, librarianId)</span>
+<span class="pc" id="L75">                        .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Khong tim thay thu thu&quot;));</span>
+
+<span class="fc" id="L77">                int currentBorrowCount = loanDetailRepository.countActiveBorrowedBooksForReader(connection, readerId);</span>
+<span class="fc" id="L78">                CirculationRules.validateReaderForBorrowing(reader, currentBorrowCount, distinctBookIds.size());</span>
+
+<span class="fc" id="L80">                List&lt;Book&gt; booksToBorrow = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                for (String bookId : distinctBookIds) {</span>
+<span class="fc" id="L82">                    Book book = bookRepository.findById(connection, bookId)</span>
+<span class="pc" id="L83">                            .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Khong tim thay sach &quot; + bookId));</span>
+<span class="fc" id="L84">                    CirculationRules.validateBookAvailability(book, 1);</span>
+<span class="fc" id="L85">                    booksToBorrow.add(book);</span>
+                }
+
+<span class="fc" id="L88">                LocalDate loanDate = LocalDate.now();</span>
+<span class="fc" id="L89">                Loan loan = new Loan(</span>
+<span class="fc" id="L90">                        IdentifierGenerator.next(&quot;LOAN&quot;),</span>
+<span class="fc" id="L91">                        readerId,</span>
+<span class="fc" id="L92">                        librarianId,</span>
+<span class="fc" id="L93">                        loanDate,</span>
+<span class="fc" id="L94">                        CirculationRules.defaultDueDate(loanDate),</span>
+<span class="fc" id="L95">                        null,</span>
+<span class="fc" id="L96">                        LoanStatus.ACTIVE);</span>
+<span class="fc" id="L97">                loanRepository.save(connection, loan);</span>
+
+<span class="fc" id="L99">                List&lt;LoanDetail&gt; details = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                for (Book book : booksToBorrow) {</span>
+<span class="fc" id="L101">                    LoanDetail detail = new LoanDetail(</span>
+<span class="fc" id="L102">                            IdentifierGenerator.next(&quot;LD&quot;),</span>
+<span class="fc" id="L103">                            loan.loanId(),</span>
+<span class="fc" id="L104">                            book.bookId(),</span>
+<span class="fc" id="L105">                            1,</span>
+<span class="fc" id="L106">                            false,</span>
+<span class="fc" id="L107">                            null);</span>
+<span class="fc" id="L108">                    loanDetailRepository.save(connection, detail);</span>
+<span class="fc" id="L109">                    details.add(detail);</span>
+
+<span class="fc" id="L111">                    bookRepository.update(connection, new Book(</span>
+<span class="fc" id="L112">                            book.bookId(),</span>
+<span class="fc" id="L113">                            book.title(),</span>
+<span class="fc" id="L114">                            book.author(),</span>
+<span class="fc" id="L115">                            book.publisher(),</span>
+<span class="fc" id="L116">                            book.yearPublish(),</span>
+<span class="fc" id="L117">                            book.quantityTotal(),</span>
+<span class="fc" id="L118">                            book.quantityAvailable() - 1,</span>
+<span class="fc" id="L119">                            book.status()));</span>
+                }
+
+<span class="fc" id="L122">                connection.commit();</span>
+<span class="fc" id="L123">                return new LoanReceipt(loan, List.copyOf(details));</span>
+<span class="fc" id="L124">            } catch (Exception exception) {</span>
+<span class="fc" id="L125">                rollback(connection);</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">                if (exception instanceof ApplicationException applicationException) {</span>
+<span class="fc" id="L127">                    throw applicationException;</span>
+                }
+<span class="nc" id="L129">                throw new ApplicationException(&quot;Khong the tao phieu muon&quot;, exception);</span>
+            } finally {
+<span class="fc" id="L131">                connection.setAutoCommit(true);</span>
+            }
+<span class="nc" id="L133">        } catch (SQLException exception) {</span>
+<span class="nc" id="L134">            throw new ApplicationException(&quot;Khong the tao phieu muon&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public ReturnReceipt returnBooks(String loanId, List&lt;String&gt; returnedBookIds, LocalDate returnDate) {
+<span class="fc" id="L140">        List&lt;String&gt; normalizedBookIds = normalizeBookIds(returnedBookIds);</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (normalizedBookIds.isEmpty()) {</span>
+<span class="nc" id="L142">            throw new BusinessRuleViolationException(&quot;Danh sach sach tra khong duoc rong&quot;);</span>
+        }
+
+<span class="fc" id="L145">        Set&lt;String&gt; distinctBookIds = new LinkedHashSet&lt;&gt;(normalizedBookIds);</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (distinctBookIds.size() != normalizedBookIds.size()) {</span>
+<span class="nc" id="L147">            throw new BusinessRuleViolationException(&quot;Danh sach sach tra bi trung lap&quot;);</span>
+        }
+
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        LocalDate effectiveReturnDate = returnDate == null ? LocalDate.now() : returnDate;</span>
+
+<span class="fc" id="L152">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L153">            connection.setAutoCommit(false);</span>
+            try {
+<span class="fc" id="L155">                Loan loan = loanRepository.findById(connection, loanId)</span>
+<span class="pc" id="L156">                        .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Khong tim thay phieu muon&quot;));</span>
+<span class="fc" id="L157">                CirculationRules.validateLoanCanAcceptReturns(loan);</span>
+
+<span class="fc" id="L159">                List&lt;LoanDetail&gt; allDetails = new ArrayList&lt;&gt;(loanDetailRepository.findByLoanId(connection, loanId));</span>
+
+<span class="fc bfc" id="L161" title="All 2 branches covered.">                for (String bookId : distinctBookIds) {</span>
+<span class="fc" id="L162">                    LoanDetail detail = loanDetailRepository.findByLoanAndBookId(connection, loanId, bookId)</span>
+<span class="pc" id="L163">                            .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Sach &quot; + bookId + &quot; khong nam trong phieu muon&quot;));</span>
+<span class="fc" id="L164">                    CirculationRules.validateLoanDetailCanBeReturned(detail);</span>
+
+<span class="fc" id="L166">                    LoanDetail updatedDetail = new LoanDetail(</span>
+<span class="fc" id="L167">                            detail.loanDetailId(),</span>
+<span class="fc" id="L168">                            detail.loanId(),</span>
+<span class="fc" id="L169">                            detail.bookId(),</span>
+<span class="fc" id="L170">                            detail.quantity(),</span>
+<span class="fc" id="L171">                            true,</span>
+<span class="fc" id="L172">                            detail.note());</span>
+<span class="fc" id="L173">                    loanDetailRepository.update(connection, updatedDetail);</span>
+<span class="fc" id="L174">                    replaceDetail(allDetails, updatedDetail);</span>
+
+<span class="fc" id="L176">                    Book book = bookRepository.findById(connection, detail.bookId())</span>
+<span class="pc" id="L177">                            .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Khong tim thay sach de cap nhat ton kho&quot;));</span>
+<span class="fc" id="L178">                    bookRepository.update(connection, new Book(</span>
+<span class="fc" id="L179">                            book.bookId(),</span>
+<span class="fc" id="L180">                            book.title(),</span>
+<span class="fc" id="L181">                            book.author(),</span>
+<span class="fc" id="L182">                            book.publisher(),</span>
+<span class="fc" id="L183">                            book.yearPublish(),</span>
+<span class="fc" id="L184">                            book.quantityTotal(),</span>
+<span class="fc" id="L185">                            book.quantityAvailable() + detail.quantity(),</span>
+<span class="fc" id="L186">                            book.status()));</span>
+                }
+
+<span class="fc" id="L189">                boolean allReturned = allDetails.stream().allMatch(LoanDetail::returned);</span>
+<span class="fc" id="L190">                Loan updatedLoan = new Loan(</span>
+<span class="fc" id="L191">                        loan.loanId(),</span>
+<span class="fc" id="L192">                        loan.readerId(),</span>
+<span class="fc" id="L193">                        loan.librarianId(),</span>
+<span class="fc" id="L194">                        loan.loanDate(),</span>
+<span class="fc" id="L195">                        loan.dueDate(),</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">                        allReturned ? effectiveReturnDate : loan.returnDate(),</span>
+<span class="fc" id="L197">                        CirculationRules.resolveLoanStatusAfterReturn(allReturned, loan.dueDate(), effectiveReturnDate));</span>
+<span class="fc" id="L198">                loanRepository.update(connection, updatedLoan);</span>
+
+<span class="fc" id="L200">                Optional&lt;Fine&gt; fine = Optional.empty();</span>
+<span class="fc" id="L201">                BigDecimal fineAmount = CirculationRules.calculateFine(loan.dueDate(), effectiveReturnDate);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                if (fineAmount.signum() &gt; 0) {</span>
+<span class="fc" id="L203">                    Fine fineToSave = new Fine(</span>
+<span class="fc" id="L204">                            fineRepository.findByLoanId(connection, loan.loanId())</span>
+<span class="fc" id="L205">                                    .map(Fine::fineId)</span>
+<span class="fc" id="L206">                                    .orElse(IdentifierGenerator.next(&quot;FINE&quot;)),</span>
+<span class="fc" id="L207">                            loan.loanId(),</span>
+<span class="fc" id="L208">                            fineAmount,</span>
+<span class="fc" id="L209">                            &quot;Tra sach tre han&quot;,</span>
+<span class="fc" id="L210">                            FinePaymentStatus.UNPAID);</span>
+<span class="fc" id="L211">                    fine = Optional.of(fineRepository.saveOrUpdate(connection, fineToSave));</span>
+                }
+
+<span class="fc" id="L214">                connection.commit();</span>
+<span class="fc" id="L215">                return new ReturnReceipt(updatedLoan, List.copyOf(allDetails), fine);</span>
+<span class="nc" id="L216">            } catch (Exception exception) {</span>
+<span class="nc" id="L217">                rollback(connection);</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">                if (exception instanceof ApplicationException applicationException) {</span>
+<span class="nc" id="L219">                    throw applicationException;</span>
+                }
+<span class="nc" id="L221">                throw new ApplicationException(&quot;Khong the xu ly tra sach&quot;, exception);</span>
+            } finally {
+<span class="fc" id="L223">                connection.setAutoCommit(true);</span>
+            }
+<span class="nc" id="L225">        } catch (SQLException exception) {</span>
+<span class="nc" id="L226">            throw new ApplicationException(&quot;Khong the xu ly tra sach&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public Loan renewLoan(String loanId, int extraDays, LocalDate referenceDate) {
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        LocalDate effectiveReferenceDate = referenceDate == null ? LocalDate.now() : referenceDate;</span>
+
+<span class="fc" id="L234">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L235">            connection.setAutoCommit(false);</span>
+            try {
+<span class="fc" id="L237">                Loan loan = loanRepository.findById(connection, loanId)</span>
+<span class="pc" id="L238">                        .orElseThrow(() -&gt; new BusinessRuleViolationException(&quot;Khong tim thay phieu muon&quot;));</span>
+<span class="fc" id="L239">                List&lt;LoanDetail&gt; details = loanDetailRepository.findByLoanId(connection, loanId);</span>
+<span class="fc" id="L240">                CirculationRules.validateLoanRenewal(loan, details, extraDays, effectiveReferenceDate);</span>
+
+<span class="fc" id="L242">                Loan renewedLoan = new Loan(</span>
+<span class="fc" id="L243">                        loan.loanId(),</span>
+<span class="fc" id="L244">                        loan.readerId(),</span>
+<span class="fc" id="L245">                        loan.librarianId(),</span>
+<span class="fc" id="L246">                        loan.loanDate(),</span>
+<span class="fc" id="L247">                        loan.dueDate().plusDays(extraDays),</span>
+<span class="fc" id="L248">                        loan.returnDate(),</span>
+<span class="fc" id="L249">                        loan.status());</span>
+<span class="fc" id="L250">                loanRepository.update(connection, renewedLoan);</span>
+<span class="fc" id="L251">                connection.commit();</span>
+<span class="fc" id="L252">                return renewedLoan;</span>
+<span class="nc" id="L253">            } catch (Exception exception) {</span>
+<span class="nc" id="L254">                rollback(connection);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">                if (exception instanceof ApplicationException applicationException) {</span>
+<span class="nc" id="L256">                    throw applicationException;</span>
+                }
+<span class="nc" id="L258">                throw new ApplicationException(&quot;Khong the gia han phieu muon&quot;, exception);</span>
+            } finally {
+<span class="fc" id="L260">                connection.setAutoCommit(true);</span>
+            }
+<span class="nc" id="L262">        } catch (SQLException exception) {</span>
+<span class="nc" id="L263">            throw new ApplicationException(&quot;Khong the gia han phieu muon&quot;, exception);</span>
+        }
+    }
+
+    private List&lt;String&gt; normalizeBookIds(List&lt;String&gt; bookIds) {
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        if (bookIds == null) {</span>
+<span class="nc" id="L269">            return List.of();</span>
+        }
+
+<span class="fc" id="L272">        List&lt;String&gt; normalized = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">        for (String bookId : bookIds) {</span>
+<span class="pc bpc" id="L274" title="2 of 4 branches missed.">            if (bookId != null &amp;&amp; !bookId.trim().isEmpty()) {</span>
+<span class="fc" id="L275">                normalized.add(bookId.trim());</span>
+            }
+        }
+<span class="fc" id="L278">        return List.copyOf(normalized);</span>
+    }
+
+    private void replaceDetail(List&lt;LoanDetail&gt; details, LoanDetail updatedDetail) {
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        for (int index = 0; index &lt; details.size(); index++) {</span>
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">            if (details.get(index).loanDetailId().equals(updatedDetail.loanDetailId())) {</span>
+<span class="fc" id="L284">                details.set(index, updatedDetail);</span>
+<span class="fc" id="L285">                return;</span>
+            }
+        }
+<span class="nc" id="L288">    }</span>
+
+    private void rollback(Connection connection) {
+        try {
+<span class="fc" id="L292">            connection.rollback();</span>
+<span class="pc" id="L293">        } catch (SQLException ignored) {</span>
+        }
+<span class="fc" id="L295">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

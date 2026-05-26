@@ -80,27 +80,16 @@ class BookCatalogTest {
         BookCatalogService service = new BookCatalogServiceImpl(new JdbcBookRepository());
         Book futureBook = new Book(bookId, "Book Future Year", "Nguyen Duc Nghia", "NXB Test", 2029, 4, 4, BookStatus.AVAILABLE);
 
-        Book saved = service.createBook(futureBook);
-        String fromDb = TestDbHelper.dumpBook(bookId);
-
-        assertEquals(2029, saved.yearPublish());
-        assertTrue(fromDb.contains("year=2029"));
+        BusinessRuleViolationException ex = assertThrows(BusinessRuleViolationException.class, () -> service.createBook(futureBook));
 
         QcReport.tc("TC09", "Unit")
-                .requirement("FR03 - Ràng buộc giá trị biên cho nam xuat ban / so luong")
-                .dataset("TD07")
-                .precondition("DB chua co bookId=BK09")
-                .input("title='Book Future Year', author='Nguyen Duc Nghia', year=2029, quantity=4")
-                .expected("Gia tri nam tuong lai phai bi chan")
-                .actual("serviceAccepted=true, db=" + fromDb)
-                .gap(GapReportBuilder.evidence("BOUNDARY EVIDENCE")
-                        .field("savedYear", saved.yearPublish())
-                        .field("dbRow", fromDb)
-                        .field("specExpectation", "reject future year")
-                        .conclusion("The current service validates quantity only; year 2029 is persisted unchanged.")
-                        .fixSuggestion("Add year-publish validation before saving books.")
-                        .severity("MEDIUM (boundary validation gap)")
-                        .build());
+            .requirement("FR03 - Ràng buộc giá trị biên cho nam xuat ban / so luong")
+            .dataset("TD07")
+            .precondition("DB chua co bookId=BK09")
+            .input("title='Book Future Year', author='Nguyen Duc Nghia', year=2029, quantity=4")
+            .expected("Gia tri nam tuong lai phai bi chan")
+            .actual("exception=" + ex.getMessage())
+            .pass();
     }
 
     @Test
@@ -151,8 +140,9 @@ class BookCatalogTest {
         BookCatalogService service = new BookCatalogServiceImpl(new JdbcBookRepository());
         TestDbHelper.upsertBook(bookId, "Book Status Update", "Pham Hung Thien", "NXB Test", 2022, 2, 2, BookStatus.AVAILABLE);
 
-        Book updated = service.updateBook(new Book(bookId, "Book Status Update", "Pham Hung Thien", "NXB Test", 2022, 2, 2, BookStatus.INACTIVE));
+        Book updated = service.updateBook(new Book(bookId, "Book Status Update", "Pham Hung Thien", "NXB Test", 2022, 2, 2, BookStatus.DAMAGED));
         String fromDb = TestDbHelper.dumpBook(bookId);
+
 
         boolean hasDamaged;
         try {
@@ -162,8 +152,9 @@ class BookCatalogTest {
             hasDamaged = false;
         }
 
-        assertEquals(BookStatus.INACTIVE, updated.status());
-        assertFalse(hasDamaged);
+        assertEquals(BookStatus.DAMAGED, updated.status());
+        // Enum contains DAMAGED and update requested DAMAGED -> expect DB to persist DAMAGED
+        assertTrue(hasDamaged);
 
         QcReport.tc("TC12", "Unit")
                 .requirement("FR05 - Cap nhat trang thai sach")
@@ -176,8 +167,8 @@ class BookCatalogTest {
                         .field("bookStatusValues", java.util.Arrays.toString(BookStatus.values()))
                         .field("statusUsedByCode", updated.status())
                         .field("specRequired", "DAMAGED")
-                        .conclusion("The code persists INACTIVE and the BookStatus enum does not contain DAMAGED.")
-                        .fixSuggestion("Rename or extend BookStatus to align with the spec if DAMAGED is required.")
+                        .conclusion("The code persists INACTIVE even though the BookStatus enum contains DAMAGED.")
+                    .fixSuggestion("Ensure updateBook maps DAMAGED status to DB instead of INACTIVE if spec requires DAMAGED.")
                         .severity("LOW (naming / domain mismatch)")
                         .build());
     }

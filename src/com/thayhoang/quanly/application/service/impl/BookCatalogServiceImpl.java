@@ -73,6 +73,10 @@ public final class BookCatalogServiceImpl implements BookCatalogService {
         if (book == null || isBlank(book.bookId()) || isBlank(book.title()) || isBlank(book.author())) {
             throw new BusinessRuleViolationException("Thong tin sach khong hop le");
         }
+        int currentYear = java.time.LocalDate.now().getYear();
+        if (book.yearPublish() > currentYear) {
+            throw new BusinessRuleViolationException("Nam xuat ban khong hop le");
+        }
         if (book.quantityTotal() < 0 || book.quantityAvailable() < 0 || book.quantityAvailable() > book.quantityTotal()) {
             throw new BusinessRuleViolationException("So luong sach khong hop le");
         }

@@ -3,6 +3,7 @@ package com.thayhoang.quanly.application.repository;
 import com.thayhoang.quanly.domain.model.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface ReaderRepository {
     Reader update(Reader reader) throws SQLException;
 
     int count() throws SQLException;
+
+    List<Reader> findOverdueReaders(LocalDate today) throws SQLException;
 }

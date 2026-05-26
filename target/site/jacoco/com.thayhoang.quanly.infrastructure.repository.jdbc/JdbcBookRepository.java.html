@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JdbcBookRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.infrastructure.repository.jdbc</a> &gt; <span class="el_source">JdbcBookRepository.java</span></div><h1>JdbcBookRepository.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.infrastructure.repository.jdbc;
+
+import com.thayhoang.quanly.application.repository.BookRepository;
+import com.thayhoang.quanly.domain.enums.BookStatus;
+import com.thayhoang.quanly.domain.model.Book;
+import com.thayhoang.quanly.infrastructure.db.DatabaseSupport;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+<span class="fc" id="L15">public final class JdbcBookRepository implements BookRepository {</span>
+    @Override
+    public Optional&lt;Book&gt; findById(String bookId) throws SQLException {
+<span class="fc" id="L18">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L19">            return findById(connection, bookId);</span>
+        }
+    }
+
+    @Override
+    public Optional&lt;Book&gt; findById(Connection connection, String bookId) throws SQLException {
+<span class="fc" id="L25">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                SELECT book_id, title, author, publisher, year_publish, quantity_total, quantity_available, status
+                FROM BOOK
+                WHERE book_id = ?
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L30">            statement.setString(1, bookId);</span>
+<span class="fc" id="L31">            try (ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">                return resultSet.next() ? Optional.of(mapRow(resultSet)) : Optional.empty();</span>
+            }
+        }
+    }
+
+    @Override
+    public List&lt;Book&gt; findAll() throws SQLException {
+<span class="nc" id="L39">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="nc" id="L40">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        SELECT book_id, title, author, publisher, year_publish, quantity_total, quantity_available, status
+                        FROM BOOK
+                        ORDER BY title
+                        &quot;&quot;&quot;);
+<span class="nc" id="L45">                ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="nc" id="L46">            return mapRows(resultSet);</span>
+        }
+    }
+
+    @Override
+    public List&lt;Book&gt; search(String keyword, boolean onlyAvailable) throws SQLException {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        String normalizedKeyword = keyword == null ? &quot;&quot; : keyword.trim().toLowerCase();</span>
+<span class="fc" id="L53">        String likeKeyword = &quot;%&quot; + normalizedKeyword + &quot;%&quot;;</span>
+
+<span class="fc" id="L55">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="fc" id="L56">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        SELECT book_id, title, author, publisher, year_publish, quantity_total, quantity_available, status
+                        FROM BOOK
+                        WHERE (
+                            ? = ''
+                            OR lower(book_id) LIKE ?
+                            OR lower(title) LIKE ?
+                            OR lower(author) LIKE ?
+                        )
+                        AND (? = 0 OR quantity_available &gt; 0)
+                        ORDER BY title
+                        &quot;&quot;&quot;)) {
+<span class="fc" id="L68">            statement.setString(1, normalizedKeyword);</span>
+<span class="fc" id="L69">            statement.setString(2, likeKeyword);</span>
+<span class="fc" id="L70">            statement.setString(3, likeKeyword);</span>
+<span class="fc" id="L71">            statement.setString(4, likeKeyword);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            statement.setInt(5, onlyAvailable ? 1 : 0);</span>
+<span class="fc" id="L73">            try (ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="fc" id="L74">                return mapRows(resultSet);</span>
+            }
+        }
+    }
+
+    @Override
+    public Book save(Book book) throws SQLException {
+<span class="fc" id="L81">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L82">            return save(connection, book);</span>
+        }
+    }
+
+    @Override
+    public Book save(Connection connection, Book book) throws SQLException {
+<span class="fc" id="L88">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                INSERT INTO BOOK (
+                    book_id, title, author, publisher, year_publish, quantity_total, quantity_available, status
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L93">            bind(statement, book, false);</span>
+<span class="fc" id="L94">            statement.executeUpdate();</span>
+<span class="fc" id="L95">            return book;</span>
+        }
+    }
+
+    @Override
+    public Book update(Book book) throws SQLException {
+<span class="fc" id="L101">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L102">            return update(connection, book);</span>
+        }
+    }
+
+    @Override
+    public Book update(Connection connection, Book book) throws SQLException {
+<span class="fc" id="L108">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                UPDATE BOOK
+                SET title = ?, author = ?, publisher = ?, year_publish = ?, quantity_total = ?, quantity_available = ?, status = ?
+                WHERE book_id = ?
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L113">            bind(statement, book, true);</span>
+<span class="fc" id="L114">            statement.executeUpdate();</span>
+<span class="fc" id="L115">            return book;</span>
+        }
+    }
+
+    @Override
+    public int count() throws SQLException {
+<span class="nc" id="L121">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="nc" id="L122">                PreparedStatement statement = connection.prepareStatement(&quot;SELECT COUNT(*) FROM BOOK&quot;);</span>
+<span class="nc" id="L123">                ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            return resultSet.next() ? resultSet.getInt(1) : 0;</span>
+        }
+    }
+
+    private void bind(PreparedStatement statement, Book book, boolean forUpdate) throws SQLException {
+<span class="fc" id="L129">        int index = 1;</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (!forUpdate) {</span>
+<span class="fc" id="L131">            statement.setString(index++, book.bookId());</span>
+        }
+<span class="fc" id="L133">        statement.setString(index++, book.title());</span>
+<span class="fc" id="L134">        statement.setString(index++, book.author());</span>
+<span class="fc" id="L135">        statement.setString(index++, book.publisher());</span>
+<span class="fc" id="L136">        statement.setInt(index++, book.yearPublish());</span>
+<span class="fc" id="L137">        statement.setInt(index++, book.quantityTotal());</span>
+<span class="fc" id="L138">        statement.setInt(index++, book.quantityAvailable());</span>
+<span class="fc" id="L139">        statement.setString(index++, book.status().name());</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (forUpdate) {</span>
+<span class="fc" id="L141">            statement.setString(index, book.bookId());</span>
+        }
+<span class="fc" id="L143">    }</span>
+
+    private List&lt;Book&gt; mapRows(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L146">        List&lt;Book&gt; books = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        while (resultSet.next()) {</span>
+<span class="fc" id="L148">            books.add(mapRow(resultSet));</span>
+        }
+<span class="fc" id="L150">        return List.copyOf(books);</span>
+    }
+
+    private Book mapRow(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L154">        return new Book(</span>
+<span class="fc" id="L155">                resultSet.getString(&quot;book_id&quot;),</span>
+<span class="fc" id="L156">                resultSet.getString(&quot;title&quot;),</span>
+<span class="fc" id="L157">                resultSet.getString(&quot;author&quot;),</span>
+<span class="fc" id="L158">                resultSet.getString(&quot;publisher&quot;),</span>
+<span class="fc" id="L159">                resultSet.getInt(&quot;year_publish&quot;),</span>
+<span class="fc" id="L160">                resultSet.getInt(&quot;quantity_total&quot;),</span>
+<span class="fc" id="L161">                resultSet.getInt(&quot;quantity_available&quot;),</span>
+<span class="fc" id="L162">                BookStatus.valueOf(resultSet.getString(&quot;status&quot;)));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

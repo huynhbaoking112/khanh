@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginDialog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.ui</a> &gt; <span class="el_source">LoginDialog.java</span></div><h1>LoginDialog.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.ui;
+
+import com.thayhoang.quanly.application.service.AuthenticationService;
+import com.thayhoang.quanly.application.service.dto.AuthenticatedSession;
+import java.awt.BorderLayout;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.util.Optional;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public final class LoginDialog extends JDialog {
+    private final AuthenticationService authenticationService;
+<span class="fc" id="L23">    private final JTextField usernameField = new JTextField(&quot;admin&quot;, 18);</span>
+<span class="fc" id="L24">    private final JPasswordField passwordField = new JPasswordField(&quot;admin123&quot;, 18);</span>
+    private AuthenticatedSession session;
+
+    private LoginDialog(Frame owner, AuthenticationService authenticationService) {
+<span class="fc" id="L28">        super(owner, &quot;Dang Nhap&quot;, true);</span>
+<span class="fc" id="L29">        this.authenticationService = authenticationService;</span>
+<span class="fc" id="L30">        buildUi();</span>
+<span class="fc" id="L31">    }</span>
+
+    public static Optional&lt;AuthenticatedSession&gt; showDialog(Frame owner, AuthenticationService authenticationService) {
+<span class="nc" id="L34">        LoginDialog dialog = new LoginDialog(owner, authenticationService);</span>
+<span class="nc" id="L35">        dialog.setVisible(true);</span>
+<span class="nc" id="L36">        return Optional.ofNullable(dialog.session);</span>
+    }
+
+    private void buildUi() {
+<span class="fc" id="L40">        setDefaultCloseOperation(DISPOSE_ON_CLOSE);</span>
+<span class="fc" id="L41">        setLayout(new BorderLayout(12, 12));</span>
+
+<span class="fc" id="L43">        JPanel formPanel = new JPanel(new GridBagLayout());</span>
+<span class="fc" id="L44">        formPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(16, 16, 0, 16));</span>
+
+<span class="fc" id="L46">        GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="fc" id="L47">        gbc.insets = new Insets(6, 6, 6, 6);</span>
+<span class="fc" id="L48">        gbc.anchor = GridBagConstraints.WEST;</span>
+<span class="fc" id="L49">        gbc.fill = GridBagConstraints.HORIZONTAL;</span>
+
+<span class="fc" id="L51">        gbc.gridx = 0;</span>
+<span class="fc" id="L52">        gbc.gridy = 0;</span>
+<span class="fc" id="L53">        formPanel.add(new JLabel(&quot;Tai khoan&quot;), gbc);</span>
+
+<span class="fc" id="L55">        gbc.gridx = 1;</span>
+<span class="fc" id="L56">        formPanel.add(usernameField, gbc);</span>
+
+<span class="fc" id="L58">        gbc.gridx = 0;</span>
+<span class="fc" id="L59">        gbc.gridy = 1;</span>
+<span class="fc" id="L60">        formPanel.add(new JLabel(&quot;Mat khau&quot;), gbc);</span>
+
+<span class="fc" id="L62">        gbc.gridx = 1;</span>
+<span class="fc" id="L63">        formPanel.add(passwordField, gbc);</span>
+
+<span class="fc" id="L65">        add(formPanel, BorderLayout.CENTER);</span>
+
+<span class="fc" id="L67">        JPanel buttonPanel = new JPanel();</span>
+<span class="fc" id="L68">        JButton loginButton = new JButton(new AbstractAction(&quot;Dang nhap&quot;) {</span>
+            @Override
+            public void actionPerformed(ActionEvent event) {
+<span class="nc" id="L71">                login();</span>
+<span class="nc" id="L72">            }</span>
+        });
+<span class="fc" id="L74">        JButton cancelButton = new JButton(new AbstractAction(&quot;Thoat&quot;) {</span>
+            @Override
+            public void actionPerformed(ActionEvent event) {
+<span class="nc" id="L77">                dispose();</span>
+<span class="nc" id="L78">            }</span>
+        });
+
+<span class="fc" id="L81">        getRootPane().setDefaultButton(loginButton);</span>
+<span class="fc" id="L82">        buttonPanel.add(loginButton);</span>
+<span class="fc" id="L83">        buttonPanel.add(cancelButton);</span>
+<span class="fc" id="L84">        add(buttonPanel, BorderLayout.SOUTH);</span>
+
+<span class="fc" id="L86">        pack();</span>
+<span class="fc" id="L87">        setResizable(false);</span>
+<span class="fc" id="L88">        setLocationRelativeTo(getOwner());</span>
+<span class="fc" id="L89">    }</span>
+
+    private void login() {
+<span class="fc" id="L92">        String user = usernameField.getText().trim();</span>
+<span class="fc" id="L93">        String pass = new String(passwordField.getPassword());</span>
+<span class="pc bpc" id="L94" title="1 of 4 branches missed.">        if (user.isBlank() || pass.isBlank()) {</span>
+<span class="fc" id="L95">            JOptionPane.showMessageDialog(</span>
+<span class="fc" id="L96">                    this,</span>
+<span class="fc" id="L97">                    &quot;Vui long nhap tai khoan va mat khau.&quot;,</span>
+<span class="fc" id="L98">                    &quot;Dang nhap that bai&quot;,</span>
+<span class="fc" id="L99">                    JOptionPane.WARNING_MESSAGE);</span>
+<span class="fc" id="L100">            return;</span>
+        }
+
+<span class="fc" id="L103">        Optional&lt;AuthenticatedSession&gt; authenticated = authenticationService.login(user, pass);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (authenticated.isPresent()) {</span>
+<span class="nc" id="L105">            session = authenticated.get();</span>
+<span class="nc" id="L106">            dispose();</span>
+<span class="nc" id="L107">            return;</span>
+        }
+
+<span class="fc" id="L110">        JOptionPane.showMessageDialog(</span>
+<span class="fc" id="L111">                this,</span>
+<span class="fc" id="L112">                &quot;Tai khoan hoac mat khau khong dung.&quot;,</span>
+<span class="fc" id="L113">                &quot;Dang nhap that bai&quot;,</span>
+<span class="fc" id="L114">                JOptionPane.WARNING_MESSAGE);</span>
+<span class="fc" id="L115">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

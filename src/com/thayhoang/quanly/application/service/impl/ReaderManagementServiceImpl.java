@@ -78,6 +78,10 @@ public final class ReaderManagementServiceImpl implements ReaderManagementServic
         if (reader == null || isBlank(reader.readerId()) || isBlank(reader.fullName())) {
             throw new BusinessRuleViolationException("Thong tin doc gia khong hop le");
         }
+        // Phone is required according to spec V6
+        if (isBlank(reader.phone())) {
+            throw new BusinessRuleViolationException("So dien thoai bat buoc");
+        }
         if (reader.maxBorrow() < 0) {
             throw new BusinessRuleViolationException("Gioi han muon khong hop le");
         }

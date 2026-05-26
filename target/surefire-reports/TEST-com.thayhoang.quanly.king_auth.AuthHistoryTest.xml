@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="3.088" tests="6" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="3.709" tests="6" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="sun.awt.enableExtraMouseButtons" value="true"/>
     <property name="java.class.path" value="E:\khanh-feat-qc-khoa-reader-manager\target\test-classes;E:\khanh-feat-qc-khoa-reader-manager\target\classes;C:\Users\ADMIN\.m2\repository\org\xerial\sqlite-jdbc\3.51.2.0\sqlite-jdbc-3.51.2.0.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.3\junit-jupiter-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\ADMIN\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\ADMIN\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\ADMIN\.m2\repository\org\mockito\mockito-core\5.12.0\mockito-core-5.12.0.jar;C:\Users\ADMIN\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\ADMIN\.m2\repository\org\mockito\mockito-junit-jupiter\5.12.0\mockito-junit-jupiter-5.12.0.jar;C:\Users\ADMIN\.m2\repository\net\bytebuddy\byte-buddy\1.16.0\byte-buddy-1.16.0.jar;C:\Users\ADMIN\.m2\repository\net\bytebuddy\byte-buddy-agent\1.16.0\byte-buddy-agent-1.16.0.jar;"/>
+    <property name="sun.awt.enableExtraMouseButtons" value="true"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="net.bytebuddy.experimental" value="true"/>
     <property name="sun.arch.data.model" value="64"/>
@@ -17,9 +17,8 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-22\bin"/>
-    <property name="sun.java.command" value="C:\Users\ADMIN\AppData\Local\Temp\surefire6837175439075942219\surefirebooter-20260525090037020_3.jar C:\Users\ADMIN\AppData\Local\Temp\surefire6837175439075942219 2026-05-25T09-00-36_282-jvmRun1 surefire-20260525090037020_1tmp surefire_0-20260525090037020_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\ADMIN\AppData\Local\Temp\surefire5295633576215093063\surefirebooter-20260526224850531_3.jar C:\Users\ADMIN\AppData\Local\Temp\surefire5295633576215093063 2026-05-26T22-48-50_413-jvmRun1 surefire-20260526224850531_1tmp surefire_0-20260526224850531_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="AuthHistoryTest"/>
     <property name="surefire.test.class.path" value="E:\khanh-feat-qc-khoa-reader-manager\target\test-classes;E:\khanh-feat-qc-khoa-reader-manager\target\classes;C:\Users\ADMIN\.m2\repository\org\xerial\sqlite-jdbc\3.51.2.0\sqlite-jdbc-3.51.2.0.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.3\junit-jupiter-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\ADMIN\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\ADMIN\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\ADMIN\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\ADMIN\.m2\repository\org\mockito\mockito-core\5.12.0\mockito-core-5.12.0.jar;C:\Users\ADMIN\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\ADMIN\.m2\repository\org\mockito\mockito-junit-jupiter\5.12.0\mockito-junit-jupiter-5.12.0.jar;C:\Users\ADMIN\.m2\repository\net\bytebuddy\byte-buddy\1.16.0\byte-buddy-1.16.0.jar;C:\Users\ADMIN\.m2\repository\net\bytebuddy\byte-buddy-agent\1.16.0\byte-buddy-agent-1.16.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\ADMIN"/>
@@ -33,7 +32,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\ADMIN\AppData\Local\Temp\surefire6837175439075942219\surefirebooter-20260525090037020_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\ADMIN\AppData\Local\Temp\surefire5295633576215093063\surefirebooter-20260526224850531_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="22.0.2+9-70"/>
@@ -61,31 +60,20 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="tc02_blankCredentialsReachRepositoryAndReturnEmpty" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.036">
+  <testcase name="tc02_blankCredentialsReachRepositoryAndReturnEmpty" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.005">
     <system-out><![CDATA[
 ==============================================================================
-[PASS / GAP] TC02  |  Level: Unit  |  Requirement: FR01 - Kiem tra validation rong o form login  |  Dataset: TD01
+[PASS] TC02  |  Level: Unit  |  Requirement: FR01 - Kiem tra validation rong o form login  |  Dataset: TD01
 ------------------------------------------------------------------------------
 PRECONDITION : LoginDialog dang hien thi voi 2 o trong
 INPUT        : username='   ', password=''; action=login
-EXPECTED     : Form phai chan submit truoc khi goi service
-ACTUAL       : AuthenticationServiceImpl van normalize sang chuoi rong va goi repository; session_present=false
-------------------------------------------------------------------------------
-GAP / BUG    :
-  [SERVICE LOOKUP EVIDENCE]
-    lookupCount            : 1
-    lastUsernameLookup     : ''
-    serviceReturnedSession : false
-  CONCLUSION:
-    Blank credentials are forwarded to repository instead of being blocked at the UI/service boundary.
-  FIX SUGGESTION:
-    Add blank-field validation in LoginDialog before calling authenticationService.login().
-  SEVERITY: MEDIUM (validation gap)
+EXPECTED     : Form phai chan submit truoc khi goi service (or service must block blank credentials)
+ACTUAL       : AuthenticationServiceImpl now blocks blank credentials; session_present=false
 ==============================================================================
 
 ]]></system-out>
   </testcase>
-  <testcase name="tc04_unknownUsernameReturnsEmptySession" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.006">
+  <testcase name="tc04_unknownUsernameReturnsEmptySession" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.018">
     <system-out><![CDATA[
 ==============================================================================
 [PASS] TC04  |  Level: Integration  |  Requirement: FR01 - Dang nhap tai khoan khong ton tai  |  Dataset: TD03
@@ -98,7 +86,7 @@ ACTUAL       : session_present=false
 
 ]]></system-out>
   </testcase>
-  <testcase name="tc06_readerHistoryIsEmptyWhenNoLoansExist" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.022">
+  <testcase name="tc06_readerHistoryIsEmptyWhenNoLoansExist" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.025">
     <system-out><![CDATA[
 ==============================================================================
 [PASS] TC06  |  Level: Integration  |  Requirement: FR02 - Doc gia chua co giao dich thi bang rong  |  Dataset: TD10
@@ -111,7 +99,7 @@ ACTUAL       : historySize=0
 
 ]]></system-out>
   </testcase>
-  <testcase name="tc03_wrongPasswordDoesNotClearFields" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="2.811">
+  <testcase name="tc03_wrongPasswordDoesNotClearFields" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="3.548">
     <system-out><![CDATA[
 ==============================================================================
 [PASS] TC03  |  Level: System  |  Requirement: FR01 - Dang nhap sai mat khau  |  Dataset: TD02
@@ -124,7 +112,7 @@ ACTUAL       : serviceCalled=1, usernameAfter='admin', passwordAfter='wrong-pass
 
 ]]></system-out>
   </testcase>
-  <testcase name="tc05_readerHistoryLoadsJoinedLoanRecords" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.033">
+  <testcase name="tc05_readerHistoryLoadsJoinedLoanRecords" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.081">
     <system-out><![CDATA[
 ==============================================================================
 [PASS] TC05  |  Level: Integration  |  Requirement: FR02 - Tra cuu lich su muon tra theo doc gia  |  Dataset: TD10
@@ -140,7 +128,7 @@ DB AFTER     : id=RH05 | name=Reader History Valid | phone='0901050005' | email=
 
 ]]></system-out>
   </testcase>
-  <testcase name="tc01_loginSuccessReturnsSeedAdminSession" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.003">
+  <testcase name="tc01_loginSuccessReturnsSeedAdminSession" classname="com.thayhoang.quanly.king_auth.AuthHistoryTest" time="0.004">
     <system-out><![CDATA[
 ==============================================================================
 [PASS] TC01  |  Level: System / Unit  |  Requirement: FR01 - Xac thuc tai khoan thu thu  |  Dataset: TD01

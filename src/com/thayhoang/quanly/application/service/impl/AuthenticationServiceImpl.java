@@ -17,6 +17,11 @@ public final class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public Optional<AuthenticatedSession> login(String username, String password) {
+        // Basic validation: block blank username/password early to avoid unnecessary repository calls
+        if (isBlank(username) || isBlank(password)) {
+            return Optional.empty();
+        }
+
         try {
             Optional<Librarian> librarian = librarianRepository.findByUsername(normalize(username));
             if (librarian.isEmpty()) {
@@ -40,5 +45,9 @@ public final class AuthenticationServiceImpl implements AuthenticationService {
 
     private String normalize(String value) {
         return value == null ? "" : value.trim();
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 }

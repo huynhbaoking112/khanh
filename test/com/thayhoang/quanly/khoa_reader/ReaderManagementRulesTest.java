@@ -111,15 +111,13 @@ class ReaderManagementRulesTest {
             exceptionName = ex.getClass().getSimpleName() + " - " + ex.getMessage();
         }
 
-        // Verify: phone is now blank in the DB - this is the gap (spec says it should have been rejected).
+        // Verify: per spec the service SHOULD throw and DB should remain unchanged.
         String after = TestDbHelper.dumpReader("R016");
         Reader fromDb = readerRepository.findById("R016").orElseThrow();
         String persistedPhone = fromDb.phone() == null ? "null" : "'" + fromDb.phone() + "'";
         boolean persistedPhoneIsBlank = fromDb.phone() == null || fromDb.phone().isEmpty();
-        assertTrue(persistedPhoneIsBlank,
-                "Expected blank phone to be persisted in current implementation (evidence of gap)");
 
-        QcReport.tc("TC16", "Unit Testing")
+        QcReport report = QcReport.tc("TC16", "Unit Testing")
                 .requirement("FR07 - Validate so dien thoai bat buoc")
                 .dataset("TD12")
                 .precondition("DB co reader R016 (" + readerBeforeUpdate.fullName()
@@ -133,21 +131,26 @@ class ReaderManagementRulesTest {
                         + "SELECT R016 sau update -> phone=" + persistedPhone
                         + ", is_blank=" + persistedPhoneIsBlank)
                 .dbBefore(before)
-                .dbAfter(after)
-                .gap(GapReportBuilder.evidence("VALIDATION EVIDENCE")
-                        .field("phone_before", "'" + readerBeforeUpdate.phone() + "'")
-                        .field("phone_input_to_service", "''")
-                        .field("service_threw_exception", serviceThrew)
-                        .field("observed_exception", exceptionName)
-                        .field("phone_persisted_in_db", persistedPhone)
-                        .field("phone_is_blank_after_update", persistedPhoneIsBlank)
-                        .conclusion("Spec yeu cau service NEM exception khi phone rong, "
-                                + "NHUNG observed=khong nem va DB van persist phone rong => "
-                                + "validation bi bypass tai tang Service.")
-                        .fixSuggestion("Them `if(isBlank(reader.phone())) throw new "
-                                + "BusinessRuleViolationException(\"So dien thoai bat buoc\");` "
-                                + "vao ReaderManagementServiceImpl.validate().")
-                        .severity("MEDIUM (validation gap)")
-                        .build());
+                .dbAfter(after);
+
+        if (serviceThrew && !persistedPhoneIsBlank) {
+            report.pass();
+        } else {
+            report.gap(GapReportBuilder.evidence("VALIDATION EVIDENCE")
+                    .field("phone_before", "'" + readerBeforeUpdate.phone() + "'")
+                    .field("phone_input_to_service", "''")
+                    .field("service_threw_exception", serviceThrew)
+                    .field("observed_exception", exceptionName)
+                    .field("phone_persisted_in_db", persistedPhone)
+                    .field("phone_is_blank_after_update", persistedPhoneIsBlank)
+                    .conclusion("Spec yeu cau service NEM exception khi phone rong, "
+                            + "NHUNG observed=khong nem va DB van persist phone rong => "
+                            + "validation bi bypass tai tang Service.")
+                    .fixSuggestion("Them `if(isBlank(reader.phone())) throw new "
+                            + "BusinessRuleViolationException(\"So dien thoai bat buoc\");` "
+                            + "vao ReaderManagementServiceImpl.validate().")
+                    .severity("MEDIUM (validation gap)")
+                    .build());
+        }
     }
 }

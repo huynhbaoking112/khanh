@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthenticationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.application.service.impl</a> &gt; <span class="el_source">AuthenticationServiceImpl.java</span></div><h1>AuthenticationServiceImpl.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.application.service.impl;
+
+import com.thayhoang.quanly.application.exception.ApplicationException;
+import com.thayhoang.quanly.application.repository.LibrarianRepository;
+import com.thayhoang.quanly.application.service.AuthenticationService;
+import com.thayhoang.quanly.application.service.dto.AuthenticatedSession;
+import com.thayhoang.quanly.domain.model.Librarian;
+import java.sql.SQLException;
+import java.util.Optional;
+
+public final class AuthenticationServiceImpl implements AuthenticationService {
+    private final LibrarianRepository librarianRepository;
+
+<span class="fc" id="L14">    public AuthenticationServiceImpl(LibrarianRepository librarianRepository) {</span>
+<span class="fc" id="L15">        this.librarianRepository = librarianRepository;</span>
+<span class="fc" id="L16">    }</span>
+
+    @Override
+    public Optional&lt;AuthenticatedSession&gt; login(String username, String password) {
+        // Basic validation: block blank username/password early to avoid unnecessary repository calls
+<span class="pc bpc" id="L21" title="1 of 4 branches missed.">        if (isBlank(username) || isBlank(password)) {</span>
+<span class="fc" id="L22">            return Optional.empty();</span>
+        }
+
+        try {
+<span class="fc" id="L26">            Optional&lt;Librarian&gt; librarian = librarianRepository.findByUsername(normalize(username));</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">            if (librarian.isEmpty()) {</span>
+<span class="nc" id="L28">                return Optional.empty();</span>
+            }
+
+<span class="fc" id="L31">            Librarian matched = librarian.get();</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">            if (!matched.password().equals(password)) {</span>
+<span class="nc" id="L33">                return Optional.empty();</span>
+            }
+
+<span class="fc" id="L36">            return Optional.of(new AuthenticatedSession(</span>
+<span class="fc" id="L37">                    matched.librarianId(),</span>
+<span class="fc" id="L38">                    matched.fullName(),</span>
+<span class="fc" id="L39">                    matched.username(),</span>
+<span class="fc" id="L40">                    matched.role()));</span>
+<span class="nc" id="L41">        } catch (SQLException exception) {</span>
+<span class="nc" id="L42">            throw new ApplicationException(&quot;Khong the xac thuc tai khoan&quot;, exception);</span>
+        }
+    }
+
+    private String normalize(String value) {
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        return value == null ? &quot;&quot; : value.trim();</span>
+    }
+
+    private boolean isBlank(String value) {
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">        return value == null || value.trim().isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

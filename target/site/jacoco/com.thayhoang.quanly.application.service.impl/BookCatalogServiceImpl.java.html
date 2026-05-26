@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookCatalogServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.application.service.impl</a> &gt; <span class="el_source">BookCatalogServiceImpl.java</span></div><h1>BookCatalogServiceImpl.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.application.service.impl;
+
+import com.thayhoang.quanly.application.exception.ApplicationException;
+import com.thayhoang.quanly.application.exception.BusinessRuleViolationException;
+import com.thayhoang.quanly.application.repository.BookRepository;
+import com.thayhoang.quanly.application.service.BookCatalogService;
+import com.thayhoang.quanly.domain.model.Book;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+
+public final class BookCatalogServiceImpl implements BookCatalogService {
+    private final BookRepository bookRepository;
+
+<span class="fc" id="L15">    public BookCatalogServiceImpl(BookRepository bookRepository) {</span>
+<span class="fc" id="L16">        this.bookRepository = bookRepository;</span>
+<span class="fc" id="L17">    }</span>
+
+    @Override
+    public List&lt;Book&gt; listBooks() {
+        try {
+<span class="nc" id="L22">            return bookRepository.findAll();</span>
+<span class="fc" id="L23">        } catch (SQLException exception) {</span>
+<span class="fc" id="L24">            throw new ApplicationException(&quot;Khong the tai danh muc sach&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public List&lt;Book&gt; searchBooks(String keyword, boolean onlyAvailable) {
+        try {
+<span class="fc" id="L31">            return bookRepository.search(keyword, onlyAvailable);</span>
+<span class="nc" id="L32">        } catch (SQLException exception) {</span>
+<span class="nc" id="L33">            throw new ApplicationException(&quot;Khong the tim kiem sach&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public Optional&lt;Book&gt; getBook(String bookId) {
+        try {
+<span class="fc" id="L40">            return bookRepository.findById(bookId);</span>
+<span class="nc" id="L41">        } catch (SQLException exception) {</span>
+<span class="nc" id="L42">            throw new ApplicationException(&quot;Khong the tai thong tin sach&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public Book createBook(Book book) {
+<span class="fc" id="L48">        validate(book);</span>
+        try {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            if (bookRepository.findById(book.bookId()).isPresent()) {</span>
+<span class="nc" id="L51">                throw new BusinessRuleViolationException(&quot;Ma sach da ton tai&quot;);</span>
+            }
+<span class="fc" id="L53">            return bookRepository.save(book);</span>
+<span class="fc" id="L54">        } catch (SQLException exception) {</span>
+<span class="fc" id="L55">            throw new ApplicationException(&quot;Khong the tao sach moi&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public Book updateBook(Book book) {
+<span class="fc" id="L61">        validate(book);</span>
+        try {
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">            if (bookRepository.findById(book.bookId()).isEmpty()) {</span>
+<span class="nc" id="L64">                throw new BusinessRuleViolationException(&quot;Khong tim thay sach can cap nhat&quot;);</span>
+            }
+<span class="fc" id="L66">            return bookRepository.update(book);</span>
+<span class="fc" id="L67">        } catch (SQLException exception) {</span>
+<span class="fc" id="L68">            throw new ApplicationException(&quot;Khong the cap nhat sach&quot;, exception);</span>
+        }
+    }
+
+    private void validate(Book book) {
+<span class="pc bpc" id="L73" title="2 of 8 branches missed.">        if (book == null || isBlank(book.bookId()) || isBlank(book.title()) || isBlank(book.author())) {</span>
+<span class="fc" id="L74">            throw new BusinessRuleViolationException(&quot;Thong tin sach khong hop le&quot;);</span>
+        }
+<span class="fc" id="L76">        int currentYear = java.time.LocalDate.now().getYear();</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (book.yearPublish() &gt; currentYear) {</span>
+<span class="fc" id="L78">            throw new BusinessRuleViolationException(&quot;Nam xuat ban khong hop le&quot;);</span>
+        }
+<span class="pc bpc" id="L80" title="1 of 6 branches missed.">        if (book.quantityTotal() &lt; 0 || book.quantityAvailable() &lt; 0 || book.quantityAvailable() &gt; book.quantityTotal()) {</span>
+<span class="fc" id="L81">            throw new BusinessRuleViolationException(&quot;So luong sach khong hop le&quot;);</span>
+        }
+<span class="fc" id="L83">    }</span>
+
+    private boolean isBlank(String value) {
+<span class="pc bpc" id="L86" title="1 of 4 branches missed.">        return value == null || value.trim().isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

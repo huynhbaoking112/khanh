@@ -89,9 +89,18 @@ public final class LoginDialog extends JDialog {
     }
 
     private void login() {
-        Optional<AuthenticatedSession> authenticated = authenticationService.login(
-                usernameField.getText().trim(),
-                new String(passwordField.getPassword()));
+        String user = usernameField.getText().trim();
+        String pass = new String(passwordField.getPassword());
+        if (user.isBlank() || pass.isBlank()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui long nhap tai khoan va mat khau.",
+                    "Dang nhap that bai",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Optional<AuthenticatedSession> authenticated = authenticationService.login(user, pass);
         if (authenticated.isPresent()) {
             session = authenticated.get();
             dispose();

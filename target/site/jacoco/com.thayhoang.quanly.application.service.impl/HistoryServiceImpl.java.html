@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HistoryServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.application.service.impl</a> &gt; <span class="el_source">HistoryServiceImpl.java</span></div><h1>HistoryServiceImpl.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.application.service.impl;
+
+import com.thayhoang.quanly.application.exception.ApplicationException;
+import com.thayhoang.quanly.application.repository.FineRepository;
+import com.thayhoang.quanly.application.repository.LibrarianRepository;
+import com.thayhoang.quanly.application.repository.LoanDetailRepository;
+import com.thayhoang.quanly.application.repository.LoanRepository;
+import com.thayhoang.quanly.application.repository.ReaderRepository;
+import com.thayhoang.quanly.application.service.HistoryService;
+import com.thayhoang.quanly.application.service.dto.LoanRecord;
+import com.thayhoang.quanly.domain.model.Loan;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public final class HistoryServiceImpl implements HistoryService {
+    private final ReaderRepository readerRepository;
+    private final LibrarianRepository librarianRepository;
+    private final LoanRepository loanRepository;
+    private final LoanDetailRepository loanDetailRepository;
+    private final FineRepository fineRepository;
+
+<span class="fc" id="L24">    public HistoryServiceImpl(</span>
+            ReaderRepository readerRepository,
+            LibrarianRepository librarianRepository,
+            LoanRepository loanRepository,
+            LoanDetailRepository loanDetailRepository,
+            FineRepository fineRepository) {
+<span class="fc" id="L30">        this.readerRepository = readerRepository;</span>
+<span class="fc" id="L31">        this.librarianRepository = librarianRepository;</span>
+<span class="fc" id="L32">        this.loanRepository = loanRepository;</span>
+<span class="fc" id="L33">        this.loanDetailRepository = loanDetailRepository;</span>
+<span class="fc" id="L34">        this.fineRepository = fineRepository;</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public List&lt;LoanRecord&gt; getReaderHistory(String readerId) {
+        try {
+<span class="fc" id="L40">            Optional&lt;com.thayhoang.quanly.domain.model.Reader&gt; reader = readerRepository.findById(readerId);</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (reader.isEmpty()) {</span>
+<span class="nc" id="L42">                return List.of();</span>
+            }
+
+<span class="fc" id="L45">            List&lt;LoanRecord&gt; records = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            for (Loan loan : loanRepository.findByReaderId(readerId)) {</span>
+<span class="fc" id="L47">                Optional&lt;com.thayhoang.quanly.domain.model.Librarian&gt; librarian =</span>
+<span class="fc" id="L48">                        librarianRepository.findById(loan.librarianId());</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">                if (librarian.isEmpty()) {</span>
+<span class="nc" id="L50">                    continue;</span>
+                }
+<span class="fc" id="L52">                records.add(new LoanRecord(</span>
+<span class="fc" id="L53">                        loan,</span>
+<span class="fc" id="L54">                        reader.get(),</span>
+<span class="fc" id="L55">                        librarian.get(),</span>
+<span class="fc" id="L56">                        loanDetailRepository.findByLoanId(loan.loanId()),</span>
+<span class="fc" id="L57">                        fineRepository.findByLoanId(loan.loanId())));</span>
+            }
+<span class="fc" id="L59">            return List.copyOf(records);</span>
+<span class="nc" id="L60">        } catch (SQLException exception) {</span>
+<span class="nc" id="L61">            throw new ApplicationException(&quot;Khong the tai lich su muon cua doc gia&quot;, exception);</span>
+        }
+    }
+
+    @Override
+    public Optional&lt;LoanRecord&gt; getLoanRecord(String loanId) {
+        try {
+<span class="nc" id="L68">            Optional&lt;Loan&gt; loan = loanRepository.findById(loanId);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (loan.isEmpty()) {</span>
+<span class="nc" id="L70">                return Optional.empty();</span>
+            }
+
+<span class="nc" id="L73">            Loan foundLoan = loan.get();</span>
+<span class="nc" id="L74">            Optional&lt;com.thayhoang.quanly.domain.model.Reader&gt; reader = readerRepository.findById(foundLoan.readerId());</span>
+<span class="nc" id="L75">            Optional&lt;com.thayhoang.quanly.domain.model.Librarian&gt; librarian =</span>
+<span class="nc" id="L76">                    librarianRepository.findById(foundLoan.librarianId());</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">            if (reader.isEmpty() || librarian.isEmpty()) {</span>
+<span class="nc" id="L78">                return Optional.empty();</span>
+            }
+
+<span class="nc" id="L81">            return Optional.of(new LoanRecord(</span>
+<span class="nc" id="L82">                    foundLoan,</span>
+<span class="nc" id="L83">                    reader.get(),</span>
+<span class="nc" id="L84">                    librarian.get(),</span>
+<span class="nc" id="L85">                    loanDetailRepository.findByLoanId(foundLoan.loanId()),</span>
+<span class="nc" id="L86">                    fineRepository.findByLoanId(foundLoan.loanId())));</span>
+<span class="nc" id="L87">        } catch (SQLException exception) {</span>
+<span class="nc" id="L88">            throw new ApplicationException(&quot;Khong the tai chi tiet phieu muon&quot;, exception);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

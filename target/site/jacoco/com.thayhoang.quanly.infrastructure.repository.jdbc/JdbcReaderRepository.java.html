@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JdbcReaderRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.infrastructure.repository.jdbc</a> &gt; <span class="el_source">JdbcReaderRepository.java</span></div><h1>JdbcReaderRepository.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.infrastructure.repository.jdbc;
+
+import com.thayhoang.quanly.application.repository.ReaderRepository;
+import com.thayhoang.quanly.domain.enums.ReaderStatus;
+import com.thayhoang.quanly.domain.model.Reader;
+import com.thayhoang.quanly.infrastructure.db.DatabaseSupport;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+<span class="fc" id="L16">public final class JdbcReaderRepository implements ReaderRepository {</span>
+    @Override
+    public Optional&lt;Reader&gt; findById(String readerId) throws SQLException {
+<span class="fc" id="L19">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="fc" id="L20">            return findById(connection, readerId);</span>
+        }
+    }
+
+    @Override
+    public Optional&lt;Reader&gt; findById(Connection connection, String readerId) throws SQLException {
+<span class="fc" id="L26">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                SELECT reader_id, full_name, phone, email, max_borrow, status
+                FROM READER
+                WHERE reader_id = ?
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L31">            statement.setString(1, readerId);</span>
+<span class="fc" id="L32">            try (ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">                return resultSet.next() ? Optional.of(mapRow(resultSet)) : Optional.empty();</span>
+            }
+        }
+    }
+
+    @Override
+    public List&lt;Reader&gt; findAll() throws SQLException {
+<span class="fc" id="L40">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="fc" id="L41">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        SELECT reader_id, full_name, phone, email, max_borrow, status
+                        FROM READER
+                        ORDER BY full_name
+                        &quot;&quot;&quot;);
+<span class="fc" id="L46">                ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="fc" id="L47">            List&lt;Reader&gt; readers = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            while (resultSet.next()) {</span>
+<span class="fc" id="L49">                readers.add(mapRow(resultSet));</span>
+            }
+<span class="fc" id="L51">            return List.copyOf(readers);</span>
+        }
+    }
+
+    @Override
+    public Reader save(Reader reader) throws SQLException {
+<span class="fc" id="L57">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="fc" id="L58">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        INSERT INTO READER (reader_id, full_name, phone, email, max_borrow, status)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        &quot;&quot;&quot;)) {
+<span class="fc" id="L62">            bind(statement, reader, false);</span>
+<span class="fc" id="L63">            statement.executeUpdate();</span>
+<span class="fc" id="L64">            return reader;</span>
+        }
+    }
+
+    @Override
+    public Reader update(Reader reader) throws SQLException {
+<span class="fc" id="L70">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="fc" id="L71">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        UPDATE READER
+                        SET full_name = ?, phone = ?, email = ?, max_borrow = ?, status = ?
+                        WHERE reader_id = ?
+                        &quot;&quot;&quot;)) {
+<span class="fc" id="L76">            bind(statement, reader, true);</span>
+<span class="fc" id="L77">            statement.executeUpdate();</span>
+<span class="fc" id="L78">            return reader;</span>
+        }
+    }
+
+    @Override
+    public int count() throws SQLException {
+<span class="nc" id="L84">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="nc" id="L85">                PreparedStatement statement = connection.prepareStatement(&quot;SELECT COUNT(*) FROM READER&quot;);</span>
+<span class="nc" id="L86">                ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            return resultSet.next() ? resultSet.getInt(1) : 0;</span>
+        }
+    }
+
+    private void bind(PreparedStatement statement, Reader reader, boolean forUpdate) throws SQLException {
+<span class="fc" id="L92">        int index = 1;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (!forUpdate) {</span>
+<span class="fc" id="L94">            statement.setString(index++, reader.readerId());</span>
+        }
+<span class="fc" id="L96">        statement.setString(index++, reader.fullName());</span>
+<span class="fc" id="L97">        statement.setString(index++, reader.phone());</span>
+<span class="fc" id="L98">        statement.setString(index++, reader.email());</span>
+<span class="fc" id="L99">        statement.setInt(index++, reader.maxBorrow());</span>
+<span class="fc" id="L100">        statement.setString(index++, reader.status().name());</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (forUpdate) {</span>
+<span class="fc" id="L102">            statement.setString(index, reader.readerId());</span>
+        }
+<span class="fc" id="L104">    }</span>
+
+    private Reader mapRow(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L107">        return new Reader(</span>
+<span class="fc" id="L108">                resultSet.getString(&quot;reader_id&quot;),</span>
+<span class="fc" id="L109">                resultSet.getString(&quot;full_name&quot;),</span>
+<span class="fc" id="L110">                resultSet.getString(&quot;phone&quot;),</span>
+<span class="fc" id="L111">                resultSet.getString(&quot;email&quot;),</span>
+<span class="fc" id="L112">                resultSet.getInt(&quot;max_borrow&quot;),</span>
+<span class="fc" id="L113">                ReaderStatus.valueOf(resultSet.getString(&quot;status&quot;)));</span>
+    }
+
+    @Override
+    public List&lt;Reader&gt; findOverdueReaders(LocalDate today) throws SQLException {
+<span class="fc" id="L118">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="fc" id="L119">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        SELECT r.reader_id, r.full_name, r.phone, r.email, r.max_borrow, r.status
+                        FROM READER r
+                        JOIN LOAN l ON r.reader_id = l.reader_id
+                        WHERE l.due_date &lt; ? AND l.status != 'COMPLETED'
+                        GROUP BY r.reader_id, r.full_name, r.phone, r.email, r.max_borrow, r.status
+                        ORDER BY r.full_name
+                        &quot;&quot;&quot;)) {
+<span class="fc" id="L127">            statement.setString(1, today.toString());</span>
+<span class="fc" id="L128">            try (ResultSet rs = statement.executeQuery()) {</span>
+<span class="fc" id="L129">                List&lt;Reader&gt; readers = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                while (rs.next()) {</span>
+<span class="fc" id="L131">                    readers.add(mapRow(rs));</span>
+                }
+<span class="fc" id="L133">                return List.copyOf(readers);</span>
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

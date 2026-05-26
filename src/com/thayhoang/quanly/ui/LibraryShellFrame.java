@@ -24,6 +24,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableRowSorter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -337,6 +342,7 @@ public final class LibraryShellFrame extends JFrame {
         private final boolean canManage;
         private final JTextField idField = new JTextField(12);
         private final JTextField nameField = new JTextField(20);
+        private final JTextField filterField = new JTextField(20);
         private final JTextField phoneField = new JTextField(16);
         private final JTextField emailField = new JTextField(20);
         private final JTextField maxBorrowField = new JTextField(8);
@@ -362,10 +368,40 @@ public final class LibraryShellFrame extends JFrame {
 
         private void buildUi() {
             JPanel topBar = new JPanel();
+            topBar.add(new JLabel("Tim"));
+            topBar.add(filterField);
             JButton refreshButton = new JButton("Tai lai danh sach");
-            refreshButton.addActionListener(event -> refreshTable());
+            refreshButton.addActionListener(event -> {
+                filterField.setText("");
+                refreshTable();
+            });
             topBar.add(refreshButton);
             add(topBar, BorderLayout.NORTH);
+
+            // enable row sorter so filtering can be applied
+            table.setAutoCreateRowSorter(true);
+            filterField.getDocument().addDocumentListener(new DocumentListener() {
+                private void updateFilter() {
+                    String text = filterField.getText();
+                    RowFilter<DefaultTableModel, Integer> rf = null;
+                    if (text != null && !text.isBlank()) {
+                        rf = RowFilter.regexFilter("(?i)" + Pattern.quote(text), 1);
+                    }
+                    TableRowSorter<?> sorter = (TableRowSorter<?>) table.getRowSorter();
+                    if (sorter != null) {
+                        sorter.setRowFilter(rf);
+                    }
+                }
+
+                @Override
+                public void insertUpdate(DocumentEvent e) { updateFilter(); }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) { updateFilter(); }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) { updateFilter(); }
+            });
 
             table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             table.getSelectionModel().addListSelectionListener(event -> {

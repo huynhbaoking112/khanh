@@ -80,25 +80,18 @@ class AuthHistoryTest {
         Optional<AuthenticatedSession> session = service.login("   ", "");
 
         assertFalse(session.isPresent());
-        assertEquals("", repository.lastUsernameLookup);
-        assertEquals(1, repository.lookupCount);
+        // Service now blocks blank credentials and does not call repository
+        assertEquals("(none)", repository.lastUsernameLookup);
+        assertEquals(0, repository.lookupCount);
 
         QcReport.tc("TC02", "Unit")
-                .requirement("FR01 - Kiem tra validation rong o form login")
-                .dataset("TD01")
-                .precondition("LoginDialog dang hien thi voi 2 o trong")
-                .input("username='   ', password=''; action=login")
-                .expected("Form phai chan submit truoc khi goi service")
-                .actual("AuthenticationServiceImpl van normalize sang chuoi rong va goi repository; session_present="
-                        + session.isPresent())
-                .gap(GapReportBuilder.evidence("SERVICE LOOKUP EVIDENCE")
-                        .field("lookupCount", repository.lookupCount)
-                        .field("lastUsernameLookup", "'" + repository.lastUsernameLookup + "'")
-                        .field("serviceReturnedSession", session.isPresent())
-                        .conclusion("Blank credentials are forwarded to repository instead of being blocked at the UI/service boundary.")
-                        .fixSuggestion("Add blank-field validation in LoginDialog before calling authenticationService.login().")
-                        .severity("MEDIUM (validation gap)")
-                        .build());
+            .requirement("FR01 - Kiem tra validation rong o form login")
+            .dataset("TD01")
+            .precondition("LoginDialog dang hien thi voi 2 o trong")
+            .input("username='   ', password=''; action=login")
+            .expected("Form phai chan submit truoc khi goi service (or service must block blank credentials)")
+            .actual("AuthenticationServiceImpl now blocks blank credentials; session_present=" + session.isPresent())
+            .pass();
     }
 
     @Test

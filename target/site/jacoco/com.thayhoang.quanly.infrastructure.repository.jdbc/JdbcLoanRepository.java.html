@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JdbcLoanRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.infrastructure.repository.jdbc</a> &gt; <span class="el_source">JdbcLoanRepository.java</span></div><h1>JdbcLoanRepository.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.infrastructure.repository.jdbc;
+
+import com.thayhoang.quanly.application.repository.LoanRepository;
+import com.thayhoang.quanly.domain.enums.LoanStatus;
+import com.thayhoang.quanly.domain.model.Loan;
+import com.thayhoang.quanly.infrastructure.db.DatabaseSupport;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+<span class="fc" id="L16">public final class JdbcLoanRepository implements LoanRepository {</span>
+    @Override
+    public Optional&lt;Loan&gt; findById(String loanId) throws SQLException {
+<span class="nc" id="L19">        try (Connection connection = DatabaseSupport.getConnection()) {</span>
+<span class="nc" id="L20">            return findById(connection, loanId);</span>
+        }
+    }
+
+    @Override
+    public Optional&lt;Loan&gt; findById(Connection connection, String loanId) throws SQLException {
+<span class="fc" id="L26">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                SELECT loan_id, reader_id, librarian_id, loan_date, due_date, return_date, status
+                FROM LOAN
+                WHERE loan_id = ?
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L31">            statement.setString(1, loanId);</span>
+<span class="fc" id="L32">            try (ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">                return resultSet.next() ? Optional.of(mapRow(resultSet)) : Optional.empty();</span>
+            }
+        }
+    }
+
+    @Override
+    public List&lt;Loan&gt; findByReaderId(String readerId) throws SQLException {
+<span class="fc" id="L40">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="fc" id="L41">                PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                        SELECT loan_id, reader_id, librarian_id, loan_date, due_date, return_date, status
+                        FROM LOAN
+                        WHERE reader_id = ?
+                        ORDER BY loan_date DESC, loan_id DESC
+                        &quot;&quot;&quot;)) {
+<span class="fc" id="L47">            statement.setString(1, readerId);</span>
+<span class="fc" id="L48">            try (ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="fc" id="L49">                List&lt;Loan&gt; loans = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                while (resultSet.next()) {</span>
+<span class="fc" id="L51">                    loans.add(mapRow(resultSet));</span>
+                }
+<span class="fc" id="L53">                return List.copyOf(loans);</span>
+            }
+        }
+    }
+
+    @Override
+    public Loan save(Connection connection, Loan loan) throws SQLException {
+<span class="fc" id="L60">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                INSERT INTO LOAN (loan_id, reader_id, librarian_id, loan_date, due_date, return_date, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L64">            bind(statement, loan, false);</span>
+<span class="fc" id="L65">            statement.executeUpdate();</span>
+<span class="fc" id="L66">            return loan;</span>
+        }
+    }
+
+    @Override
+    public Loan update(Connection connection, Loan loan) throws SQLException {
+<span class="fc" id="L72">        try (PreparedStatement statement = connection.prepareStatement(&quot;&quot;&quot;</span>
+                UPDATE LOAN
+                SET reader_id = ?, librarian_id = ?, loan_date = ?, due_date = ?, return_date = ?, status = ?
+                WHERE loan_id = ?
+                &quot;&quot;&quot;)) {
+<span class="fc" id="L77">            bind(statement, loan, true);</span>
+<span class="fc" id="L78">            statement.executeUpdate();</span>
+<span class="fc" id="L79">            return loan;</span>
+        }
+    }
+
+    @Override
+    public int count() throws SQLException {
+<span class="nc" id="L85">        try (Connection connection = DatabaseSupport.getConnection();</span>
+<span class="nc" id="L86">                PreparedStatement statement = connection.prepareStatement(&quot;SELECT COUNT(*) FROM LOAN&quot;);</span>
+<span class="nc" id="L87">                ResultSet resultSet = statement.executeQuery()) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            return resultSet.next() ? resultSet.getInt(1) : 0;</span>
+        }
+    }
+
+    private void bind(PreparedStatement statement, Loan loan, boolean forUpdate) throws SQLException {
+<span class="fc" id="L93">        int index = 1;</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (!forUpdate) {</span>
+<span class="fc" id="L95">            statement.setString(index++, loan.loanId());</span>
+        }
+<span class="fc" id="L97">        statement.setString(index++, loan.readerId());</span>
+<span class="fc" id="L98">        statement.setString(index++, loan.librarianId());</span>
+<span class="fc" id="L99">        statement.setString(index++, loan.loanDate().toString());</span>
+<span class="fc" id="L100">        statement.setString(index++, loan.dueDate().toString());</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        statement.setString(index++, loan.returnDate() == null ? null : loan.returnDate().toString());</span>
+<span class="fc" id="L102">        statement.setString(index++, loan.status().name());</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (forUpdate) {</span>
+<span class="fc" id="L104">            statement.setString(index, loan.loanId());</span>
+        }
+<span class="fc" id="L106">    }</span>
+
+    private Loan mapRow(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L109">        String returnDate = resultSet.getString(&quot;return_date&quot;);</span>
+<span class="fc" id="L110">        return new Loan(</span>
+<span class="fc" id="L111">                resultSet.getString(&quot;loan_id&quot;),</span>
+<span class="fc" id="L112">                resultSet.getString(&quot;reader_id&quot;),</span>
+<span class="fc" id="L113">                resultSet.getString(&quot;librarian_id&quot;),</span>
+<span class="fc" id="L114">                LocalDate.parse(resultSet.getString(&quot;loan_date&quot;)),</span>
+<span class="fc" id="L115">                LocalDate.parse(resultSet.getString(&quot;due_date&quot;)),</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">                returnDate == null ? null : LocalDate.parse(returnDate),</span>
+<span class="fc" id="L117">                LoanStatus.valueOf(resultSet.getString(&quot;status&quot;)));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
