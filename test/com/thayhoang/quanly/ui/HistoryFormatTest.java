@@ -22,11 +22,11 @@ public class HistoryFormatTest {
 
     @Test
     public void formatLoanRecordDetails_containsExpectedParts() {
-        Loan loan = new Loan("L1", "R1", "LIB1", LocalDate.of(2026,5,1), LocalDate.of(2026,5,8), null, LoanStatus.ACTIVE);
+        Loan loan = new Loan("L1", "R1", "LIB1", LocalDate.of(2026,5,1), LocalDate.of(2026,5,15), null, LoanStatus.ACTIVE);
         Reader reader = new Reader("R1", "Reader One", "0901", "a@b.com", 3, null);
         Librarian lib = new Librarian("LIB1", "Librarian One", "user", "pw", UserRole.ADMIN);
         LoanDetail d = new LoanDetail("LD1", "L1", "B1", 1, false, "");
-        Fine fine = new Fine("F1", "L1", new BigDecimal(5000), "Late", FinePaymentStatus.UNPAID);
+        Fine fine = new Fine("F1", "L1", new BigDecimal(50000), "Late", FinePaymentStatus.UNPAID);
         LoanRecord rec = new LoanRecord(loan, reader, lib, List.of(d), Optional.of(fine));
 
         String formatted = UiUtils.formatLoanRecordDetails(rec);

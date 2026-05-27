@@ -88,7 +88,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L88">        tabs.addTab(&quot;Luu Thong&quot;, new CirculationPanel(</span>
 <span class="fc" id="L89">                bootstrap.circulationService(),</span>
 <span class="fc" id="L90">                bootstrap.historyService(),</span>
-                session));
+<span class="fc" id="L91">                session));</span>
 <span class="fc" id="L92">        tabs.addTab(&quot;Lich Su&quot;, new HistoryPanel(bootstrap.historyService()));</span>
 
 <span class="fc" id="L94">        return tabs;</span>
@@ -123,7 +123,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L123">            showError(exception.getMessage());</span>
 <span class="fc" id="L124">        } catch (RuntimeException exception) {</span>
 <span class="fc bfc" id="L125" title="All 2 branches covered.">            showError(exception.getMessage() == null ? exception.getClass().getSimpleName() : exception.getMessage());</span>
-<span class="fc" id="L126">        }</span>
+        }
 <span class="fc" id="L127">    }</span>
 
     private static void showInfo(String message) {
@@ -250,7 +250,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L250">                        book.quantityAvailable(),</span>
 <span class="fc" id="L251">                        book.status().name()</span>
                     });
-<span class="fc" id="L253">                }</span>
+                }
 <span class="fc" id="L254">            });</span>
 <span class="fc" id="L255">        }</span>
 
@@ -440,7 +440,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L440">                        reader.status().name(),</span>
 <span class="fc" id="L441">                        service.getCurrentBorrowCount(reader.readerId())</span>
                     });
-<span class="fc" id="L443">                }</span>
+                }
 <span class="fc" id="L444">            });</span>
 <span class="fc" id="L445">        }</span>
 
@@ -588,7 +588,7 @@ public final class LibraryShellFrame extends JFrame {
                 }
 <span class="fc" id="L589">                ReturnReceipt receipt = circulationService.returnBooks(</span>
 <span class="fc" id="L590">                        returnLoanIdField.getText().trim(),</span>
-                        books,
+<span class="fc" id="L591">                        books,</span>
 <span class="fc" id="L592">                        parseDate(returnDateField.getText(), &quot;Ngay tra&quot;));</span>
 <span class="fc" id="L593">                receiptArea.setText(formatReturnReceipt(receipt));</span>
 <span class="fc" id="L594">            }));</span>
@@ -639,7 +639,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc bfc" id="L639" title="All 2 branches covered.">                if (!detail.returned()) {</span>
 <span class="fc" id="L640">                    ids.add(detail.bookId());</span>
                 }
-<span class="fc" id="L642">            }</span>
+            }
 <span class="fc" id="L643">            return ids;</span>
         }
 
@@ -660,7 +660,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L660">                receipt.loan().loanId(),</span>
 <span class="fc" id="L661">                receipt.loan().status().name(),</span>
 <span class="fc bfc" id="L662" title="All 2 branches covered.">                receipt.loan().returnDate() == null ? &quot;&quot; : receipt.loan().returnDate().toString(),</span>
-                fineText);
+<span class="fc" id="L663">                fineText);</span>
         }
     }
 
@@ -733,7 +733,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L733">                        record.loan().status().name(),</span>
 <span class="fc" id="L734">                        record.fine().map(Fine::amount).orElse(java.math.BigDecimal.ZERO)</span>
                     });
-<span class="fc" id="L736">                }</span>
+                }
 <span class="fc" id="L737">                detailArea.setText(&quot;Da tai &quot; + model.getRowCount() + &quot; dong lich su.&quot;);</span>
 <span class="fc" id="L738">            });</span>
 <span class="fc" id="L739">        }</span>
@@ -763,7 +763,7 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L763">                            .append(&quot; | qty=&quot;).append(item.quantity())</span>
 <span class="fc" id="L764">                            .append(&quot; | returned=&quot;).append(item.returned())</span>
 <span class="fc" id="L765">                            .append('\n');</span>
-<span class="fc" id="L766">                }</span>
+                }
 <span class="fc" id="L767">                detail.append('\n');</span>
 <span class="fc" id="L768">                detail.append(&quot;Phat: &quot;).append(loanRecord.fine()</span>
 <span class="fc" id="L769">                        .map(fine -&gt; fine.amount() + &quot; - &quot; + fine.reason() + &quot; - &quot; + fine.paidStatus().name())</span>

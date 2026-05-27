@@ -38,7 +38,7 @@ public class CirculationPanelActionListenersTest {
             @Override
             public LoanReceipt createLoan(String readerId, String librarianId, List<String> bookIds) {
                 called[0] = readerId + "|" + String.join(",", bookIds);
-                Loan loan = new Loan("L1", readerId, librarianId, LocalDate.now(), LocalDate.now().plusDays(7), null, LoanStatus.ACTIVE);
+                Loan loan = new Loan("L1", readerId, librarianId, LocalDate.now(), LocalDate.now().plusDays(14), null, LoanStatus.ACTIVE);
                 LoanDetail detail = new LoanDetail("LD1", "L1", "B1", 1, false, "");
                 return new LoanReceipt(loan, List.of(detail));
             }
@@ -93,7 +93,7 @@ public class CirculationPanelActionListenersTest {
             public ReturnReceipt returnBooks(String loanId, List<String> returnedBookIds, LocalDate returnDate) {
                 returnedBooks[0] = String.join(",", returnedBookIds);
                 Loan loan = new Loan(loanId, "R2", "LIB2", LocalDate.now().minusDays(10), LocalDate.now().minusDays(3), LocalDate.now(), LoanStatus.COMPLETED);
-                Fine fine = new Fine("F1", loanId, BigDecimal.valueOf(15000), "Late", FinePaymentStatus.UNPAID);
+                Fine fine = new Fine("F1", loanId, BigDecimal.valueOf(150000), "Late", FinePaymentStatus.UNPAID);
                 LoanDetail detail = new LoanDetail("LD2", loanId, "B2", 1, true, "");
                 return new ReturnReceipt(loan, List.of(detail), Optional.of(fine));
             }

@@ -39,11 +39,11 @@ public class UiUtilsExtraTest {
 
     @Test
     public void formatLoanRecordDetails_includesDetails_and_fine() {
-        Loan loan = new Loan("L1","R1","LIB", LocalDate.of(2026,5,1), LocalDate.of(2026,5,8), null, com.thayhoang.quanly.domain.enums.LoanStatus.ACTIVE);
+        Loan loan = new Loan("L1","R1","LIB", LocalDate.of(2026,5,1), LocalDate.of(2026,5,15), null, com.thayhoang.quanly.domain.enums.LoanStatus.ACTIVE);
         Reader reader = new Reader("R1","Reader Name","090","e@e",3, com.thayhoang.quanly.domain.enums.ReaderStatus.ACTIVE);
         Librarian librarian = new Librarian("LIB","Lib Name","user","pw", com.thayhoang.quanly.domain.enums.UserRole.LIBRARIAN);
         LoanDetail d = new LoanDetail("D1","L1","B1",1,false, "");
-        Fine fine = new Fine("F1","L1", BigDecimal.valueOf(1000), "late", com.thayhoang.quanly.domain.enums.FinePaymentStatus.UNPAID);
+        Fine fine = new Fine("F1","L1", BigDecimal.valueOf(50000), "late", com.thayhoang.quanly.domain.enums.FinePaymentStatus.UNPAID);
         LoanRecord record = new LoanRecord(loan, reader, librarian, List.of(d), Optional.of(fine));
 
         String out = UiUtils.formatLoanRecordDetails(record);

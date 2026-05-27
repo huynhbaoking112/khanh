@@ -26,7 +26,7 @@ public class HistoryPanelTest {
         HistoryService service = new HistoryService() {
             @Override
             public java.util.List<LoanRecord> getReaderHistory(String readerId) {
-                Loan loan = new Loan("L1", readerId, "LIB", LocalDate.now(), LocalDate.now().plusDays(7), null, null);
+                Loan loan = new Loan("L1", readerId, "LIB", LocalDate.now(), LocalDate.now().plusDays(14), null, null);
                 LoanRecord rec = new LoanRecord(loan, new Reader(readerId, "Name", "", "", 1, null), new Librarian("LIB", "Lib", "libuser", "pwd", com.thayhoang.quanly.domain.enums.UserRole.LIBRARIAN), List.of(new LoanDetail("d1","L1","B1",1,false,"")), Optional.empty());
                 return List.of(rec);
             }
@@ -95,7 +95,7 @@ public class HistoryPanelTest {
 
             @Override
             public Optional<LoanRecord> getLoanRecord(String loanId) {
-                Loan loan = new Loan(loanId, "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), LocalDate.now(), null);
+                Loan loan = new Loan(loanId, "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), LocalDate.now(), null);
                 LoanRecord rec = new LoanRecord(loan, new Reader("R1", "Name", "", "", 1, null), new Librarian("LIB", "Lib", "libuser", "pwd", com.thayhoang.quanly.domain.enums.UserRole.LIBRARIAN), List.of(new LoanDetail("d1","L1","B1",2,true,"note")), Optional.of(new Fine("F1", loanId, BigDecimal.TEN, "reason", com.thayhoang.quanly.domain.enums.FinePaymentStatus.UNPAID)));
                 return Optional.of(rec);
             }

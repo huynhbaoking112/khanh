@@ -31,11 +31,11 @@ public class HistoryPanelLoadLoanRecordTest {
             public Optional<LoanRecord> getLoanRecord(String loanId) {
                 if ("EMPTY".equals(loanId)) return Optional.empty();
                 // else return a populated record
-                Loan loan = new Loan("L1", "R1", "LIB1", LocalDate.now(), LocalDate.now().plusDays(7), null, LoanStatus.ACTIVE);
+                Loan loan = new Loan("L1", "R1", "LIB1", LocalDate.now(), LocalDate.now().plusDays(14), null, LoanStatus.ACTIVE);
                 Reader reader = new Reader("R1", "Reader One", "0901", "r1@example.com", 3, com.thayhoang.quanly.domain.enums.ReaderStatus.ACTIVE);
                 Librarian lib = new Librarian("LIB1", "Lib One", "lib", "pw", com.thayhoang.quanly.domain.enums.UserRole.LIBRARIAN);
                 LoanDetail detail = new LoanDetail("LD1", "L1", "B1", 1, false, "");
-                Fine fine = new Fine("F1", "L1", BigDecimal.valueOf(15000), "Late", FinePaymentStatus.UNPAID);
+                Fine fine = new Fine("F1", "L1", BigDecimal.valueOf(150000), "Late", FinePaymentStatus.UNPAID);
                 LoanRecord record = new LoanRecord(loan, reader, lib, List.of(detail), Optional.of(fine));
                 return Optional.of(record);
             }

@@ -14,8 +14,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public final class CirculationRules {
-    public static final int DEFAULT_LOAN_DAYS = 7;
-    public static final BigDecimal FINE_PER_DAY = BigDecimal.valueOf(5000L);
+    public static final int DEFAULT_LOAN_DAYS = 14;
+    public static final BigDecimal FINE_PER_DAY = BigDecimal.valueOf(50000L);
 
     private CirculationRules() {
     }

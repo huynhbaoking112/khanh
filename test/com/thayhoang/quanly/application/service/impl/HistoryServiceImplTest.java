@@ -31,7 +31,7 @@ public class HistoryServiceImplTest {
     @Test
     public void getReaderHistory_skipsMissingLibrarian_and_returnsRecord() throws SQLException {
         Reader reader = new Reader("R1", "Reader", "090", "r@x", 1, ReaderStatus.ACTIVE);
-        Loan loan = new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), null, LoanStatus.ACTIVE);
+        Loan loan = new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), null, LoanStatus.ACTIVE);
 
         var readerRepo = new com.thayhoang.quanly.util.TestStubs.ReaderRepoStub() {
             @Override public Optional<Reader> findById(String readerId) throws SQLException { return Optional.of(reader); }
@@ -58,7 +58,7 @@ public class HistoryServiceImplTest {
 
     @Test
     public void getLoanRecord_missingAndPresent() throws SQLException {
-        Loan loan = new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), null, LoanStatus.ACTIVE);
+        Loan loan = new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), null, LoanStatus.ACTIVE);
         var loanRepo = new com.thayhoang.quanly.util.TestStubs.LoanRepoStub() {
             @Override public Optional<Loan> findById(String loanId) throws SQLException { return Optional.of(loan); }
         };

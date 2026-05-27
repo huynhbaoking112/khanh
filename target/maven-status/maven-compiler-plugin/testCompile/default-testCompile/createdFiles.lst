@@ -1,4 +1,5 @@
-com\thayhoang\quanly\ui\ReaderFormUtilsTest.class
 com\thayhoang\quanly\ui\UiRowConversionTest.class
 com\thayhoang\quanly\king_auth\LoginDialogTest.class
 com\thayhoang\quanly\ui\BookFormUtilsTest.class
+com\thayhoang\quanly\ui\ReaderFormUtilsTest.class
+com\thayhoang\quanly\application\service\dto\LoanRecord.class

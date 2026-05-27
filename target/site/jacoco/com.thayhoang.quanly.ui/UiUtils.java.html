@@ -47,14 +47,14 @@ public final class UiUtils {
 
     public static String formatLoanReceipt(String loanId, String readerId, String librarianId, String dueDate, int detailsSize) {
 <span class="fc" id="L49">        return String.format(</span>
-                &quot;\nLap phieu muon thanh cong\nMa phieu: %s\nDoc gia: %s\nThu thu: %s\nHan tra: %s\nSo dau sach: %s\n&quot;,
+<span class="fc" id="L50">                &quot;\nLap phieu muon thanh cong\nMa phieu: %s\nDoc gia: %s\nThu thu: %s\nHan tra: %s\nSo dau sach: %s\n&quot;,</span>
 <span class="fc" id="L51">                loanId, readerId, librarianId, dueDate, detailsSize);</span>
     }
 
     public static String formatReturnReceipt(String loanId, String status, String returnDate, String fineText) {
 <span class="fc" id="L55">        return String.format(</span>
-                &quot;\nTra sach thanh cong\nMa phieu: %s\nTrang thai: %s\nNgay tra: %s\n%s\n&quot;,
-                loanId, status, returnDate, fineText);
+<span class="fc" id="L56">                &quot;\nTra sach thanh cong\nMa phieu: %s\nTrang thai: %s\nNgay tra: %s\n%s\n&quot;,</span>
+<span class="fc" id="L57">                loanId, status, returnDate, fineText);</span>
     }
 
     public static Book createBookFromFields(
@@ -74,10 +74,10 @@ public final class UiUtils {
 <span class="pc bpc" id="L74" title="1 of 2 branches missed.">                title == null ? &quot;&quot; : title.trim(),</span>
 <span class="pc bpc" id="L75" title="1 of 2 branches missed.">                author == null ? &quot;&quot; : author.trim(),</span>
 <span class="pc bpc" id="L76" title="1 of 2 branches missed.">                publisher == null ? &quot;&quot; : publisher.trim(),</span>
-                year,
-                total,
-                available,
-                status);
+<span class="fc" id="L77">                year,</span>
+<span class="fc" id="L78">                total,</span>
+<span class="fc" id="L79">                available,</span>
+<span class="fc" id="L80">                status);</span>
     }
 
     public static Reader createReaderFromFields(
@@ -93,8 +93,8 @@ public final class UiUtils {
 <span class="pc bpc" id="L93" title="1 of 2 branches missed.">                fullName == null ? &quot;&quot; : fullName.trim(),</span>
 <span class="pc bpc" id="L94" title="1 of 2 branches missed.">                phone == null ? &quot;&quot; : phone.trim(),</span>
 <span class="pc bpc" id="L95" title="1 of 2 branches missed.">                email == null ? &quot;&quot; : email.trim(),</span>
-                maxBorrow,
-                status);
+<span class="fc" id="L96">                maxBorrow,</span>
+<span class="fc" id="L97">                status);</span>
     }
 
     public static Book createBookFromRow(Object[] row) {
@@ -135,7 +135,7 @@ public final class UiUtils {
 <span class="fc" id="L135">                    .append(&quot; | qty=&quot;).append(item.quantity())</span>
 <span class="fc" id="L136">                    .append(&quot; | returned=&quot;).append(item.returned())</span>
 <span class="fc" id="L137">                    .append('\n');</span>
-<span class="fc" id="L138">        }</span>
+        }
 <span class="fc" id="L139">        detail.append('\n');</span>
 <span class="fc" id="L140">        detail.append(&quot;Phat: &quot;).append(loanRecord.fine()</span>
 <span class="fc" id="L141">                .map(f -&gt; f.amount() + &quot; - &quot; + f.reason() + &quot; - &quot; + f.paidStatus().name())</span>

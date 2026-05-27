@@ -19,7 +19,7 @@ public final class Main {
 <span class="nc" id="L19">                ApplicationBootstrap.initialize();</span>
 <span class="nc" id="L20">            } catch (Exception exception) {</span>
 <span class="nc" id="L21">                handleStartupFailure(exception);</span>
-<span class="nc" id="L22">            }</span>
+            }
 <span class="nc" id="L23">            return;</span>
         }
 
@@ -34,7 +34,7 @@ public final class Main {
 <span class="nc" id="L34">                frame.setVisible(true);</span>
 <span class="nc" id="L35">            } catch (Exception exception) {</span>
 <span class="nc" id="L36">                handleStartupFailure(exception);</span>
-<span class="nc" id="L37">            }</span>
+            }
 <span class="nc" id="L38">        });</span>
 <span class="nc" id="L39">    }</span>
 
@@ -43,10 +43,10 @@ public final class Main {
 
 <span class="nc bnc" id="L44" title="All 2 branches missed.">        if (!GraphicsEnvironment.isHeadless()) {</span>
 <span class="nc" id="L45">            JOptionPane.showMessageDialog(</span>
-                    null,
+<span class="nc" id="L46">                    null,</span>
 <span class="nc" id="L47">                    &quot;Khoi dong ung dung that bai:\n&quot; + exception.getMessage(),</span>
-                    &quot;Startup Error&quot;,
-                    JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L48">                    &quot;Startup Error&quot;,</span>
+<span class="nc" id="L49">                    JOptionPane.ERROR_MESSAGE);</span>
         }
 <span class="nc" id="L51">    }</span>
 }

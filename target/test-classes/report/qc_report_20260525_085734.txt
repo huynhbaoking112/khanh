@@ -1,0 +1,130 @@
+==============================================================================
+QC REPORT - Vu Dinh Khoa - Reader Management (TC13-TC18)
+Generated: Mon May 25 08:57:34 ICT 2026
+Run from: E:\khanh-feat-qc-khoa-reader-manager
+==============================================================================
+
+
+==============================================================================
+[PASS] TC13  |  Level: Integration Testing  |  Requirement: FR06 - Khoi tao moi ho so doc gia  |  Dataset: TD09
+------------------------------------------------------------------------------
+PRECONDITION : DB chua co readerId=R013 (Setup vua DELETE)
+INPUT        : readerId=R013, fullName=Reader Create Valid, phone=0901000013, email=reader.create.valid@example.com, maxBorrow=5, status=ACTIVE; action=bam nut Them moi
+EXPECTED     : Sau INSERT: SELECT R013 tra ve 1 row voi fullName='Reader Create Valid' va status=ACTIVE
+ACTUAL       : INSERT thanh cong; SELECT R013 tra ve: Reader Create Valid, status=ACTIVE
+------------------------------------------------------------------------------
+DB BEFORE    : (not present)
+DB AFTER     : id=R013 | name=Reader Create Valid | phone='0901000013' | email=reader.create.valid@example.com | max=5 | status=ACTIVE
+==============================================================================
+
+==============================================================================
+[PASS] TC14  |  Level: Integration Testing  |  Requirement: FR06 - Rang buoc khoa chinh ma doc gia  |  Dataset: TD10
+------------------------------------------------------------------------------
+PRECONDITION : DB da co reader RT14 (Reader Duplicate Target, vua upsert)
+INPUT        : readerId=RT14 (TRUNG), fullName=Reader Duplicate Attempt, phone=0901999999, email=reader.duplicate.attempt@example.com; action=goi service.createReader(duplicate)
+EXPECTED     : Service NEM BusinessRuleViolationException("Ma doc gia da ton tai"); row RT14 trong DB GIU NGUYEN 'Reader Duplicate Target', khong bi ghi de
+ACTUAL       : Exception ne'm: Ma doc gia da ton tai; RT14 trong DB van la: Reader Duplicate Target
+------------------------------------------------------------------------------
+DB BEFORE    : id=RT14 | name=Reader Duplicate Target | phone='0901014014' | email=reader.duplicate.target@example.com | max=3 | status=ACTIVE
+DB AFTER     : id=RT14 | name=Reader Duplicate Target | phone='0901014014' | email=reader.duplicate.target@example.com | max=3 | status=ACTIVE
+==============================================================================
+
+==============================================================================
+[PASS / GAP] TC18  |  Level: Integration Testing  |  Requirement: FR08 - Truy van doc gia vi pham qua han  |  Dataset: TD12 (3 reader RT18A/B/C + 3 loan LT18A/B/C thuc te trong DB)
+------------------------------------------------------------------------------
+PRECONDITION : DB co 3 test reader (RT18A=Overdue, RT18B=OnTime, RT18C=Completed) va 3 loan LT18A/B/C vua upsert. Ngay tham chieu = 2026-05-23
+INPUT        : readerRepository.findAll() + loanRepository.findByReaderId(...) cho moi reader; loc loan voi status != COMPLETED va dueDate < today
+EXPECTED     : Danh sach overdue chua RT18A (loan LT18A dueDate=2026-05-08 < today), KHONG chua RT18B (con han) va RT18C (da COMPLETED)
+ACTUAL       : Tim duoc 1 overdue reader(s); RT18A trong list = true; RT18B trong list = false; RT18C trong list = false
+------------------------------------------------------------------------------
+DB BEFORE    : LOANs vua setup: loan=LT18A | reader=RT18A | due=2026-05-08 | return=null | status=ACTIVE || loan=LT18B | reader=RT18B | due=2026-05-27 | return=null | status=ACTIVE || loan=LT18C | reader=RT18C | due=2026-04-08 | return=2026-04-15 | status=COMPLETED
+DB AFTER     : LOANs sau test (khong doi vi chi query): loan=LT18A | reader=RT18A | due=2026-05-08 | return=null | status=ACTIVE || loan=LT18B | reader=RT18B | due=2026-05-27 | return=null | status=ACTIVE || loan=LT18C | reader=RT18C | due=2026-04-08 | return=2026-04-15 | status=COMPLETED
+------------------------------------------------------------------------------
+GAP / BUG    :
+  [REPO METHOD + QUERY COUNT EVIDENCE]
+    JdbcReaderRepository.getDeclaredMethods() : [findById, findById, mapRow, update, count, save, findAll, bind]
+    methods_containing_'overdue'              : 0
+    readers_iterated                          : 8
+    findAll_calls                             : 1
+    findByReaderId_calls                      : 8
+    total_DB_round_trips                      : 9 (= 1 findAll + 8 findByReaderId)
+  CONCLUSION:
+    Khong co method 'overdue' chuyen biet trong JdbcReaderRepository => test phai gop tu 9 queries thay vi 1 SQL JOIN duy nhat. N+1 access pattern xuat hien khi so reader tang.
+  FIX SUGGESTION:
+    Bo sung `findOverdueReaders(LocalDate today)` voi 1 SQL JOIN truc tiep vao JdbcReaderRepository (READER JOIN LOAN WHERE due_date < ? AND status != 'COMPLETED').
+  SEVERITY: MEDIUM (chuc nang chay duoc nhung khong toi uu)
+==============================================================================
+
+==============================================================================
+[PASS / GAP] TC15  |  Level: Unit Testing  |  Requirement: FR07 - Chinh sua trang thai the doc gia  |  Dataset: TD11
+------------------------------------------------------------------------------
+PRECONDITION : DB co reader R015 voi status=ACTIVE (vua duoc upsert tu Setup)
+INPUT        : readerId=R015, statusMoi=INACTIVE (= LOCKED theo tai lieu); action=bam nut Luu
+EXPECTED     : UPDATE READER SET status='INACTIVE' WHERE reader_id='R015'; SELECT lai phai tra ve status=INACTIVE
+ACTUAL       : service.updateReader() goi update() thanh cong; SELECT R015 tu DB tra ve status=INACTIVE
+------------------------------------------------------------------------------
+DB BEFORE    : id=R015 | name=Reader Status Lock | phone='0901000015' | email=reader.status.lock@example.com | max=5 | status=ACTIVE
+DB AFTER     : id=R015 | name=Reader Status Lock | phone='0901000015' | email=reader.status.lock@example.com | max=5 | status=INACTIVE
+------------------------------------------------------------------------------
+GAP / BUG    :
+  [ENUM EVIDENCE]
+    ReaderStatus.values()    : [ACTIVE, INACTIVE]
+    spec_required_constant   : 'LOCKED'
+    constant_present_in_code : false
+    status_used_by_test      : INACTIVE
+    status_persisted_in_db   : INACTIVE
+  CONCLUSION:
+    Spec yeu cau enum 'LOCKED' nhung ma nguon dung 'INACTIVE' => naming mismatch giua tai lieu va code.
+  FIX SUGGESTION:
+    Bo sung enum LOCKED vao ReaderStatus.java HOAC cap nhat tai lieu thong nhat ten INACTIVE.
+  SEVERITY: LOW (chi la naming convention)
+==============================================================================
+
+==============================================================================
+[PASS / GAP] TC16  |  Level: Unit Testing  |  Requirement: FR07 - Validate so dien thoai bat buoc  |  Dataset: TD12
+------------------------------------------------------------------------------
+PRECONDITION : DB co reader R016 (Reader With Phone) voi phone='0901000016' (valid)
+INPUT        : readerId=R016, fullName=Reader With Phone, phone="" (rong), email=reader.with.phone@example.com; action=bam nut Cap nhat
+EXPECTED     : Service phai NEM BusinessRuleViolationException va khong duoc UPDATE DB (theo tai lieu V6, phone la truong bat buoc)
+ACTUAL       : service.updateReader() exception_thrown=false ((none)); SELECT R016 sau update -> phone='', is_blank=true
+------------------------------------------------------------------------------
+DB BEFORE    : id=R016 | name=Reader With Phone | phone='0901000016' | email=reader.with.phone@example.com | max=3 | status=ACTIVE
+DB AFTER     : id=R016 | name=Reader With Phone | phone='' | email=reader.with.phone@example.com | max=3 | status=ACTIVE
+------------------------------------------------------------------------------
+GAP / BUG    :
+  [VALIDATION EVIDENCE]
+    phone_before                : '0901000016'
+    phone_input_to_service      : ''
+    service_threw_exception     : false
+    observed_exception          : (none)
+    phone_persisted_in_db       : ''
+    phone_is_blank_after_update : true
+  CONCLUSION:
+    Spec yeu cau service NEM exception khi phone rong, NHUNG observed=khong nem va DB van persist phone rong => validation bi bypass tai tang Service.
+  FIX SUGGESTION:
+    Them `if(isBlank(reader.phone())) throw new BusinessRuleViolationException("So dien thoai bat buoc");` vao ReaderManagementServiceImpl.validate().
+  SEVERITY: MEDIUM (validation gap)
+==============================================================================
+
+==============================================================================
+[PASS / GAP] TC17  |  Level: System Testing  |  Requirement: FR08 - Loc nhanh danh sach doc gia tren JTable  |  Dataset: TD10 (3 readers)
+------------------------------------------------------------------------------
+PRECONDITION : Tab 'Doc Gia' dang mo; JTable da load 3 doc gia tu DB
+INPUT        : readers=[RT17A Reader Khoa Match A, RT17B Reader Mai NoMatch, RT17C Reader Khoa Match B]; thao tac: nguoi dung go tu khoa 'khoa' vao o filter
+EXPECTED     : Bang JTable tu dong loc, chi hien thi cac dong co ho ten chua 'khoa' (khong phan biet chu hoa thuong) -> ket qua mong doi: 2 dong (RT17A, RT17C)
+ACTUAL       : Sau khi setRowFilter('khoa'): JTable.getRowCount()=2; Row[0].name='Reader Khoa Match A' contains 'khoa'=true; Row[1].name='Reader Khoa Match B' contains 'khoa'=true
+------------------------------------------------------------------------------
+GAP / BUG    :
+  [REFLECTION EVIDENCE]
+    inspected_class       : com.thayhoang.quanly.ui.LibraryShellFrame$ReaderPanel
+    constructor_modifiers : private (mod=2)
+    instantiated_panel    : ReaderPanel
+    panel.componentCount  : 2
+    table.rowCount        : 3
+    table.getRowSorter()  : null
+  CONCLUSION:
+    getRowSorter() = null => ReaderPanel hien khong wire TableRowSorter cho doc gia. Test PASS bang cach mo phong TableRowSorter local.
+  FIX SUGGESTION:
+    Them JTextField vao top bar cua ReaderPanel + table.setAutoCreateRowSorter(true) + DocumentListener -> sorter.setRowFilter() de wire up.
+  SEVERITY: MEDIUM (UX issue, khong block chuc nang khac)
+==============================================================================

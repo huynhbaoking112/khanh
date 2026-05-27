@@ -1,0 +1,564 @@
+==============================================================================
+QC REPORT - Library Management Test Suite
+Generated: Wed May 27 16:45:45 ICT 2026
+Run from: D:\SQA_V2
+==============================================================================
+
+
+==============================================================================
+[PASS] AUTO-BookFormUtilsTest.createBookFromFields_invalidNumber  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookFormUtilsTest
+INPUT        : Run JUnit method: createBookFromFields_invalidNumber
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookFromFields_invalidNumber()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookFormUtilsTest.createBookFromFields_valid  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookFormUtilsTest
+INPUT        : Run JUnit method: createBookFromFields_valid
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookFromFields_valid()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelActionsTest.refreshTable_callsSearchBooks_when_searchNonEmpty  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelActionsTest
+INPUT        : Run JUnit method: refreshTable_callsSearchBooks_when_searchNonEmpty
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: refreshTable_callsSearchBooks_when_searchNonEmpty()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelActionsTest.refreshTable_callsListBooks_when_searchEmpty  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelActionsTest
+INPUT        : Run JUnit method: refreshTable_callsListBooks_when_searchEmpty
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: refreshTable_callsListBooks_when_searchEmpty()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelActionsTest.createBook_callsService_createBook_and_updatesTable  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelActionsTest
+INPUT        : Run JUnit method: createBook_callsService_createBook_and_updatesTable
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBook_callsService_createBook_and_updatesTable()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelBranchesTest.readBookFromForm_throwsOnInvalidNumericFields  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelBranchesTest
+INPUT        : Run JUnit method: readBookFromForm_throwsOnInvalidNumericFields
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: readBookFromForm_throwsOnInvalidNumericFields()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelBranchesTest.refreshTable_callsSearchBooks_withAvailableOnlyTrue  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelBranchesTest
+INPUT        : Run JUnit method: refreshTable_callsSearchBooks_withAvailableOnlyTrue
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: refreshTable_callsSearchBooks_withAvailableOnlyTrue()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelCreateServiceExceptionTest.createBook_handlesServiceApplicationException_and_doesNotPropagate  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelCreateServiceExceptionTest
+INPUT        : Run JUnit method: createBook_handlesServiceApplicationException_and_doesNotPropagate
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBook_handlesServiceApplicationException_and_doesNotPropagate()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelReadFormTest.readBookFromForm_parsesValuesCorrectly  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelReadFormTest
+INPUT        : Run JUnit method: readBookFromForm_parsesValuesCorrectly
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: readBookFromForm_parsesValuesCorrectly()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelRunSafelyExceptionTest.runSafely_swallowRuntimeExceptions_and_notThrow  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelRunSafelyExceptionTest
+INPUT        : Run JUnit method: runSafely_swallowRuntimeExceptions_and_notThrow
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: runSafely_swallowRuntimeExceptions_and_notThrow()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelSearchListCombosTest.nonEmptySearch_callsSearchBooks_withTrimmedText  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelSearchListCombosTest
+INPUT        : Run JUnit method: nonEmptySearch_callsSearchBooks_withTrimmedText
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: nonEmptySearch_callsSearchBooks_withTrimmedText()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelSearchListCombosTest.blankSearch_and_availableOnlyTrue_callsSearchBooks  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelSearchListCombosTest
+INPUT        : Run JUnit method: blankSearch_and_availableOnlyTrue_callsSearchBooks
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: blankSearch_and_availableOnlyTrue_callsSearchBooks()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelSearchListCombosTest.blankSearch_and_availableOnlyFalse_callsListBooks  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelSearchListCombosTest
+INPUT        : Run JUnit method: blankSearch_and_availableOnlyFalse_callsListBooks
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: blankSearch_and_availableOnlyFalse_callsListBooks()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelSelectionLoadTest.selectingTableRow_loadsFormFields  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelSelectionLoadTest
+INPUT        : Run JUnit method: selectingTableRow_loadsFormFields
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: selectingTableRow_loadsFormFields()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelServiceCallTest.refreshTable_calls_list_or_search_based_onFields  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelServiceCallTest
+INPUT        : Run JUnit method: refreshTable_calls_list_or_search_based_onFields
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: refreshTable_calls_list_or_search_based_onFields()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelTest.refreshAndCreate  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelTest
+INPUT        : Run JUnit method: refreshAndCreate
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: refreshAndCreate()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelUpdateClearTest.clearForm_clearsAllFields_and_resetsStatus  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelUpdateClearTest
+INPUT        : Run JUnit method: clearForm_clearsAllFields_and_resetsStatus
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: clearForm_clearsAllFields_and_resetsStatus()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelUpdateClearTest.updateBook_callsService_updateBook  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelUpdateClearTest
+INPUT        : Run JUnit method: updateBook_callsService_updateBook
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: updateBook_callsService_updateBook()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-BookPanelValidationBranchesTest.readBookFromForm_throws_onMissingTitle_orInvalidNumbers  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.BookPanelValidationBranchesTest
+INPUT        : Run JUnit method: readBookFromForm_throws_onMissingTitle_orInvalidNumbers
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: readBookFromForm_throws_onMissingTitle_orInvalidNumbers()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelActionListenersTest.returnButton_withProvidedBooks_andNoFine_showsTienPhatZero_andEmptyReturnDate  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelActionListenersTest
+INPUT        : Run JUnit method: returnButton_withProvidedBooks_andNoFine_showsTienPhatZero_andEmptyReturnDate
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: returnButton_withProvidedBooks_andNoFine_showsTienPhatZero_andEmptyReturnDate()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelActionListenersTest.returnButton_withEmptyBooks_usesHistoryServiceAndUpdatesReceipt  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelActionListenersTest
+INPUT        : Run JUnit method: returnButton_withEmptyBooks_usesHistoryServiceAndUpdatesReceipt
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: returnButton_withEmptyBooks_usesHistoryServiceAndUpdatesReceipt()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelActionListenersTest.renewButton_triggersRenewAndShowsSuccess  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelActionListenersTest
+INPUT        : Run JUnit method: renewButton_triggersRenewAndShowsSuccess
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: renewButton_triggersRenewAndShowsSuccess()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelActionListenersTest.createLoanButton_triggersCreateLoanAndUpdatesReceipt  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelActionListenersTest
+INPUT        : Run JUnit method: createLoanButton_triggersCreateLoanAndUpdatesReceipt
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createLoanButton_triggersCreateLoanAndUpdatesReceipt()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelTest.loadUnreturnedBookIds_missingLoan_throws  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelTest
+INPUT        : Run JUnit method: loadUnreturnedBookIds_missingLoan_throws
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadUnreturnedBookIds_missingLoan_throws()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelTest.loadUnreturnedBookIds_returnsOnlyNotReturned  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelTest
+INPUT        : Run JUnit method: loadUnreturnedBookIds_returnsOnlyNotReturned
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadUnreturnedBookIds_returnsOnlyNotReturned()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-CirculationPanelTest.formatLoanAndReturnReceipt_producesText  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.CirculationPanelTest
+INPUT        : Run JUnit method: formatLoanAndReturnReceipt_producesText
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: formatLoanAndReturnReceipt_producesText()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryFormatTest.formatLoanRecordDetails_containsExpectedParts  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryFormatTest
+INPUT        : Run JUnit method: formatLoanRecordDetails_containsExpectedParts
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: formatLoanRecordDetails_containsExpectedParts()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryPanelLoadLoanRecordTest.loadLoanRecord_emptyAndPresent_updatesDetailArea  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryPanelLoadLoanRecordTest
+INPUT        : Run JUnit method: loadLoanRecord_emptyAndPresent_updatesDetailArea
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadLoanRecord_emptyAndPresent_updatesDetailArea()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryPanelLoadReaderHistoryTest.loadReaderHistory_populatesTable  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryPanelLoadReaderHistoryTest
+INPUT        : Run JUnit method: loadReaderHistory_populatesTable
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadReaderHistory_populatesTable()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryPanelSelectionListenerTest.selectingRow_triggersLoanLoad  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryPanelSelectionListenerTest
+INPUT        : Run JUnit method: selectingRow_triggersLoanLoad
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: selectingRow_triggersLoanLoad()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryPanelTest.loadReaderHistory_populatesModelAndDetailArea  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryPanelTest
+INPUT        : Run JUnit method: loadReaderHistory_populatesModelAndDetailArea
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadReaderHistory_populatesModelAndDetailArea()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryPanelTest.loadLoanRecord_displaysDetailsAndFine  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryPanelTest
+INPUT        : Run JUnit method: loadLoanRecord_displaysDetailsAndFine
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadLoanRecord_displaysDetailsAndFine()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-HistoryPanelTest.loadLoanRecord_missingShowsNotFound  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.HistoryPanelTest
+INPUT        : Run JUnit method: loadLoanRecord_missingShowsNotFound
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: loadLoanRecord_missingShowsNotFound()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-LibraryShellFrameCreateTabsTest.createTabs_adminAndNonAdmin_hasFourTabs_and_bookPanelLoadSelectedNoSelection  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.LibraryShellFrameCreateTabsTest
+INPUT        : Run JUnit method: createTabs_adminAndNonAdmin_hasFourTabs_and_bookPanelLoadSelectedNoSelection
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createTabs_adminAndNonAdmin_hasFourTabs_and_bookPanelLoadSelectedNoSelection()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderFormUtilsTest.createReaderFromFields_invalidMax  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderFormUtilsTest
+INPUT        : Run JUnit method: createReaderFromFields_invalidMax
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createReaderFromFields_invalidMax()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderFormUtilsTest.createReaderFromFields_valid  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderFormUtilsTest
+INPUT        : Run JUnit method: createReaderFromFields_valid
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createReaderFromFields_valid()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelDocumentListenerTest.changedUpdate_isHandled_byDocumentListener  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelDocumentListenerTest
+INPUT        : Run JUnit method: changedUpdate_isHandled_byDocumentListener
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: changedUpdate_isHandled_byDocumentListener()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelErrorHandlingTest.updateReader_handlesRuntimeException  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelErrorHandlingTest
+INPUT        : Run JUnit method: updateReader_handlesRuntimeException
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: updateReader_handlesRuntimeException()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelErrorHandlingTest.createReader_handlesServiceException  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelErrorHandlingTest
+INPUT        : Run JUnit method: createReader_handlesServiceException
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createReader_handlesServiceException()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelFilterIntegrationTest.filter_addsAndClearsRowFilter  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelFilterIntegrationTest
+INPUT        : Run JUnit method: filter_addsAndClearsRowFilter
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: filter_addsAndClearsRowFilter()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelFilterTest.filterField_updatesRowFilter_onInsertAndClear  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelFilterTest
+INPUT        : Run JUnit method: filterField_updatesRowFilter_onInsertAndClear
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: filterField_updatesRowFilter_onInsertAndClear()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelReadFormTest.readReaderFromForm_parsesValuesCorrectly  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelReadFormTest
+INPUT        : Run JUnit method: readReaderFromForm_parsesValuesCorrectly
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: readReaderFromForm_parsesValuesCorrectly()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelSelectionLoadTest.selectingTableRow_loadsReaderFormFields  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelSelectionLoadTest
+INPUT        : Run JUnit method: selectingTableRow_loadsReaderFormFields
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: selectingTableRow_loadsReaderFormFields()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-ReaderPanelTest.refreshAndCreateReader  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.ReaderPanelTest
+INPUT        : Run JUnit method: refreshAndCreateReader
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: refreshAndCreateReader()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiRowConversionTest.createBookFromRow_convertsCorrectly  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiRowConversionTest
+INPUT        : Run JUnit method: createBookFromRow_convertsCorrectly
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookFromRow_convertsCorrectly()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiRowConversionTest.createReaderFromRow_convertsCorrectly  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiRowConversionTest
+INPUT        : Run JUnit method: createReaderFromRow_convertsCorrectly
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createReaderFromRow_convertsCorrectly()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.formatLoanRecordDetails_withFine_and_withoutFine  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: formatLoanRecordDetails_withFine_and_withoutFine
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: formatLoanRecordDetails_withFine_and_withoutFine()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.createReaderFromFields_and_fromRow_statusDefault  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: createReaderFromFields_and_fromRow_statusDefault
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createReaderFromFields_and_fromRow_statusDefault()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.formatLoanAndReturnReceipt_variations  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: formatLoanAndReturnReceipt_variations
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: formatLoanAndReturnReceipt_variations()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.parseCsv_nullAndBlank_and_tokens  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: parseCsv_nullAndBlank_and_tokens
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: parseCsv_nullAndBlank_and_tokens()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.parseDate_invalid_throws  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: parseDate_invalid_throws
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: parseDate_invalid_throws()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.createBookFromFields_and_fromRow_statusDefault  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: createBookFromFields_and_fromRow_statusDefault
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookFromFields_and_fromRow_statusDefault()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsCoverageTest.parseInt_invalid_throws  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsCoverageTest
+INPUT        : Run JUnit method: parseInt_invalid_throws
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: parseInt_invalid_throws()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsExtraTest.createBookAndReader_fromFields_nullStatus_usesDefault  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsExtraTest
+INPUT        : Run JUnit method: createBookAndReader_fromFields_nullStatus_usesDefault
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookAndReader_fromFields_nullStatus_usesDefault()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsExtraTest.formatLoanRecordDetails_includesDetails_and_fine  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsExtraTest
+INPUT        : Run JUnit method: formatLoanRecordDetails_includesDetails_and_fine
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: formatLoanRecordDetails_includesDetails_and_fine()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsExtraTest.createBookFromRow_handlesNulls  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsExtraTest
+INPUT        : Run JUnit method: createBookFromRow_handlesNulls
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookFromRow_handlesNulls()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsInvalidStatusTest.createBookFromFields_invalidStatus_throws  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsInvalidStatusTest
+INPUT        : Run JUnit method: createBookFromFields_invalidStatus_throws
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createBookFromFields_invalidStatus_throws()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsInvalidStatusTest.createReaderFromFields_invalidStatus_throws  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsInvalidStatusTest
+INPUT        : Run JUnit method: createReaderFromFields_invalidStatus_throws
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: createReaderFromFields_invalidStatus_throws()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsTest.parseInt_validAndInvalid  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsTest
+INPUT        : Run JUnit method: parseInt_validAndInvalid
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: parseInt_validAndInvalid()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsTest.parseDate_validAndInvalid  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsTest
+INPUT        : Run JUnit method: parseDate_validAndInvalid
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: parseDate_validAndInvalid()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsTest.formatLoanAndReturnReceipt_containsFields  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsTest
+INPUT        : Run JUnit method: formatLoanAndReturnReceipt_containsFields
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: formatLoanAndReturnReceipt_containsFields()
+==============================================================================
+
+==============================================================================
+[PASS] AUTO-UiUtilsTest.parseCsv_splitsAndTrims  |  Level: UI  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
+------------------------------------------------------------------------------
+PRECONDITION : Test class: com.thayhoang.quanly.ui.UiUtilsTest
+INPUT        : Run JUnit method: parseCsv_splitsAndTrims
+EXPECTED     : JUnit assertion result matches the test expectation
+ACTUAL       : JUnit status for display name: parseCsv_splitsAndTrims()
+==============================================================================

@@ -21,12 +21,12 @@ public final class HistoryServiceImpl implements HistoryService {
     private final LoanDetailRepository loanDetailRepository;
     private final FineRepository fineRepository;
 
-    public HistoryServiceImpl(
+<span class="fc" id="L24">    public HistoryServiceImpl(</span>
             ReaderRepository readerRepository,
             LibrarianRepository librarianRepository,
             LoanRepository loanRepository,
             LoanDetailRepository loanDetailRepository,
-<span class="fc" id="L29">            FineRepository fineRepository) {</span>
+            FineRepository fineRepository) {
 <span class="fc" id="L30">        this.readerRepository = readerRepository;</span>
 <span class="fc" id="L31">        this.librarianRepository = librarianRepository;</span>
 <span class="fc" id="L32">        this.loanRepository = loanRepository;</span>
@@ -50,12 +50,12 @@ public final class HistoryServiceImpl implements HistoryService {
 <span class="fc" id="L50">                    continue;</span>
                 }
 <span class="fc" id="L52">                records.add(new LoanRecord(</span>
-                        loan,
+<span class="fc" id="L53">                        loan,</span>
 <span class="fc" id="L54">                        reader.get(),</span>
 <span class="fc" id="L55">                        librarian.get(),</span>
 <span class="fc" id="L56">                        loanDetailRepository.findByLoanId(loan.loanId()),</span>
 <span class="fc" id="L57">                        fineRepository.findByLoanId(loan.loanId())));</span>
-<span class="fc" id="L58">            }</span>
+            }
 <span class="fc" id="L59">            return List.copyOf(records);</span>
 <span class="nc" id="L60">        } catch (SQLException exception) {</span>
 <span class="nc" id="L61">            throw new ApplicationException(&quot;Khong the tai lich su muon cua doc gia&quot;, exception);</span>
@@ -79,7 +79,7 @@ public final class HistoryServiceImpl implements HistoryService {
             }
 
 <span class="fc" id="L81">            return Optional.of(new LoanRecord(</span>
-                    foundLoan,
+<span class="fc" id="L82">                    foundLoan,</span>
 <span class="fc" id="L83">                    reader.get(),</span>
 <span class="fc" id="L84">                    librarian.get(),</span>
 <span class="fc" id="L85">                    loanDetailRepository.findByLoanId(foundLoan.loanId()),</span>

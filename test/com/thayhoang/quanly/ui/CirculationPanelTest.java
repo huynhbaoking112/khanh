@@ -34,7 +34,7 @@ public class CirculationPanelTest {
             @Override
             public Optional<LoanRecord> getLoanRecord(String loanId) {
             return Optional.of(new LoanRecord(
-                new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), null, null),
+                new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), null, null),
                 new Reader("R1", "Reader", "", "", 1, null),
                 new Librarian("LIB", "Lib", "libuser", "pwd", com.thayhoang.quanly.domain.enums.UserRole.LIBRARIAN),
                 List.of(
@@ -87,11 +87,11 @@ public class CirculationPanelTest {
     public void formatLoanAndReturnReceipt_producesText() throws Exception {
         CirculationService circ = new CirculationService() {
             @Override public LoanReceipt createLoan(String readerId, String librarianId, List<String> bookIds) {
-                Loan loan = new Loan("L1", readerId, librarianId, LocalDate.now(), LocalDate.now().plusDays(7), null, null);
+                Loan loan = new Loan("L1", readerId, librarianId, LocalDate.now(), LocalDate.now().plusDays(14), null, null);
                 return new LoanReceipt(loan, List.of(new LoanDetail("d1","L1","B1",1,false,"")));
             }
             @Override public ReturnReceipt returnBooks(String loanId, List<String> returnedBookIds, LocalDate returnDate) {
-                Loan loan = new Loan(loanId, "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), returnDate, com.thayhoang.quanly.domain.enums.LoanStatus.COMPLETED);
+                Loan loan = new Loan(loanId, "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), returnDate, com.thayhoang.quanly.domain.enums.LoanStatus.COMPLETED);
                 return new ReturnReceipt(loan, List.of(), Optional.empty());
             }
             @Override public Loan renewLoan(String loanId, int extraDays, LocalDate referenceDate) { return null; }

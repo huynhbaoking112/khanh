@@ -40,7 +40,7 @@ public class CirculationRulesTest {
         LocalDate due = LocalDate.of(2026, 5, 1);
         assertEquals(BigDecimal.ZERO, CirculationRules.calculateFine(due, LocalDate.of(2026, 5, 1)));
         assertEquals(BigDecimal.ZERO, CirculationRules.calculateFine(due, null));
-        assertTrue(CirculationRules.calculateFine(due, LocalDate.of(2026, 5, 3)).compareTo(BigDecimal.ZERO) > 0);
+        assertEquals(new BigDecimal("100000"), CirculationRules.calculateFine(due, LocalDate.of(2026, 5, 3)));
     }
 
     @Test
@@ -52,13 +52,13 @@ public class CirculationRulesTest {
 
     @Test
     public void validateLoanRenewal_variousChecks() {
-        Loan loan = new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), null, LoanStatus.ACTIVE);
+        Loan loan = new Loan("L1", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), null, LoanStatus.ACTIVE);
         LoanDetail returned = new LoanDetail("D1", "L1", "B1", 1, true, null);
         LoanDetail notReturned = new LoanDetail("D2", "L1", "B2", 1, false, null);
 
         assertThrows(BusinessRuleViolationException.class, () -> CirculationRules.validateLoanRenewal(loan, List.of(notReturned), 0, LocalDate.now()));
 
-        Loan completedLoan = new Loan("L2", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(7), null, LoanStatus.COMPLETED);
+        Loan completedLoan = new Loan("L2", "R1", "LIB", LocalDate.now(), LocalDate.now().plusDays(14), null, LoanStatus.COMPLETED);
         assertThrows(BusinessRuleViolationException.class, () -> CirculationRules.validateLoanRenewal(completedLoan, List.of(notReturned), 1, LocalDate.now()));
 
         Loan overdueLoan = new Loan("L3", "R1", "LIB", LocalDate.now().minusDays(10), LocalDate.now().minusDays(3), null, LoanStatus.ACTIVE);

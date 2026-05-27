@@ -111,8 +111,16 @@ public final class QcReport {
         print("PASS", "");
     }
 
+    public void fail(String failureNote) {
+        print("FAIL", failureNote);
+    }
+
     public void gap(String gapNote) {
         print("PASS / GAP", gapNote);
+    }
+
+    public void skipped(String reason) {
+        print("SKIPPED", reason);
     }
 
     private void print(String status, String gapNote) {

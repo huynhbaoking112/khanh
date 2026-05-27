@@ -76,7 +76,7 @@ public class UiUtilsCoverageTest {
 
     @Test
     public void formatLoanRecordDetails_withFine_and_withoutFine() {
-        Loan loan = new Loan("L1","R1","LIB",LocalDate.now(),LocalDate.now().plusDays(7),null, LoanStatus.ACTIVE);
+        Loan loan = new Loan("L1","R1","LIB",LocalDate.now(),LocalDate.now().plusDays(14),null, LoanStatus.ACTIVE);
         Reader reader = new Reader("R1","Name","090","e@x",1, ReaderStatus.ACTIVE);
         Librarian lib = new Librarian("LIB","L","u","p", com.thayhoang.quanly.domain.enums.UserRole.LIBRARIAN);
         LoanDetail d = new LoanDetail("LD","L1","B1",1,false,"");
