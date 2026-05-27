@@ -18,19 +18,19 @@ public final class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Optional&lt;AuthenticatedSession&gt; login(String username, String password) {
         // Basic validation: block blank username/password early to avoid unnecessary repository calls
-<span class="pc bpc" id="L21" title="1 of 4 branches missed.">        if (isBlank(username) || isBlank(password)) {</span>
+<span class="fc bfc" id="L21" title="All 4 branches covered.">        if (isBlank(username) || isBlank(password)) {</span>
 <span class="fc" id="L22">            return Optional.empty();</span>
         }
 
         try {
 <span class="fc" id="L26">            Optional&lt;Librarian&gt; librarian = librarianRepository.findByUsername(normalize(username));</span>
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">            if (librarian.isEmpty()) {</span>
-<span class="nc" id="L28">                return Optional.empty();</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">            if (librarian.isEmpty()) {</span>
+<span class="fc" id="L28">                return Optional.empty();</span>
             }
 
 <span class="fc" id="L31">            Librarian matched = librarian.get();</span>
-<span class="pc bpc" id="L32" title="1 of 2 branches missed.">            if (!matched.password().equals(password)) {</span>
-<span class="nc" id="L33">                return Optional.empty();</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">            if (!matched.password().equals(password)) {</span>
+<span class="fc" id="L33">                return Optional.empty();</span>
             }
 
 <span class="fc" id="L36">            return Optional.of(new AuthenticatedSession(</span>
@@ -38,8 +38,8 @@ public final class AuthenticationServiceImpl implements AuthenticationService {
 <span class="fc" id="L38">                    matched.fullName(),</span>
 <span class="fc" id="L39">                    matched.username(),</span>
 <span class="fc" id="L40">                    matched.role()));</span>
-<span class="nc" id="L41">        } catch (SQLException exception) {</span>
-<span class="nc" id="L42">            throw new ApplicationException(&quot;Khong the xac thuc tai khoan&quot;, exception);</span>
+<span class="fc" id="L41">        } catch (SQLException exception) {</span>
+<span class="fc" id="L42">            throw new ApplicationException(&quot;Khong the xac thuc tai khoan&quot;, exception);</span>
         }
     }
 

@@ -129,3 +129,60 @@ INPUT        : username=admin, password=admin123; action=login
 EXPECTED     : Tra ve AuthenticatedSession va mo man hinh lam viec chinh
 ACTUAL       : session_present=true, librarianId=LIB001
 ==============================================================================
+
+==============================================================================
+[PASS] TC19  |  Level: Acceptance  |  Requirement: FR09 - Tao phieu muon moi, han 7 ngay  |  Dataset: TD15
+------------------------------------------------------------------------------
+PRECONDITION : Doc gia ACTIVE va sach con kha dung
+INPUT        : readerId=CR19, bookId=CB19; action=Tao phieu muon
+EXPECTED     : due_date = loan_date + 7 va quantity_available giam 1
+ACTUAL       : loanId=LOAN-49DB947F, due=2026-06-02, bookAvailableAfter=1
+------------------------------------------------------------------------------
+DB BEFORE    : id=CR19 | name=Circulation Reader Active | phone='0901090019' | email=circulation.reader.active@example.com | max=5 | status=ACTIVE || id=CB19 | title=Circulation Book Loan | author=Pham Hung Thien | year=2024 | total=2 | available=1 | status=AVAILABLE
+DB AFTER     : id=CR19 | name=Circulation Reader Active | phone='0901090019' | email=circulation.reader.active@example.com | max=5 | status=ACTIVE || id=CB19 | title=Circulation Book Loan | author=Pham Hung Thien | year=2024 | total=2 | available=1 | status=AVAILABLE
+==============================================================================
+
+==============================================================================
+[PASS] TC21  |  Level: Unit  |  Requirement: FR09 - Chan vuot ngưỡng maxBorrow  |  Dataset: TD14
+------------------------------------------------------------------------------
+PRECONDITION : Reader maxBorrow=1, da co 1 loan active
+INPUT        : readerId=CR21, bookId=CB21B; action=Tao phieu muon
+EXPECTED     : Exception: Doc gia da vuot gioi han muon sach
+ACTUAL       : firstLoanId=LOAN-54508AF2, exception=Doc gia da vuot gioi han muon sach
+==============================================================================
+
+==============================================================================
+[PASS] TC20  |  Level: Unit  |  Requirement: FR09 - Chan doc gia khong ACTIVE  |  Dataset: TD13
+------------------------------------------------------------------------------
+PRECONDITION : Reader status=LOCKED/INACTIVE
+INPUT        : readerId=CR20, bookId=CB20; action=Tao phieu muon
+EXPECTED     : BusinessRuleViolationException: Doc gia khong o trang thai hoat dong
+ACTUAL       : exception=Doc gia khong o trang thai hoat dong
+==============================================================================
+
+==============================================================================
+[PASS] TC22  |  Level: Integration  |  Requirement: FR10 - Tra sach dung han va cap nhat kho  |  Dataset: TD15
+------------------------------------------------------------------------------
+PRECONDITION : Loan ACTIVE, sach dang cho muon
+INPUT        : loanId=LOAN-3A8786DA, bookId=CB22; action=Xu ly tra sach
+EXPECTED     : Loan -> COMPLETED, book quantity_available +1
+ACTUAL       : status=COMPLETED, bookAvailableAfter=1
+==============================================================================
+
+==============================================================================
+[PASS] TC23  |  Level: Acceptance  |  Requirement: FR11 - Tinh phat tre han 5000/ngay  |  Dataset: TD15
+------------------------------------------------------------------------------
+PRECONDITION : Loan qua han 3 ngay
+INPUT        : loanId=LOAN-B7BA956E, returnDate=2026-06-05; action=Xu ly tra sach
+EXPECTED     : Tien phat = 3 * 5000 = 15000, status phat UNPAID
+ACTUAL       : fineAmount=15000, fineStatus=UNPAID
+==============================================================================
+
+==============================================================================
+[PASS] TC24  |  Level: Unit  |  Requirement: FR12 - Gia han phieu muon hop le  |  Dataset: TD15
+------------------------------------------------------------------------------
+PRECONDITION : Loan ACTIVE, con sach dang muon
+INPUT        : loanId=LOAN-7CC1FB5C, extraDays=7; action=Gia han
+EXPECTED     : due_date.plusDays(7) va status van ACTIVE
+ACTUAL       : renewedDueDate=2026-06-09, status=ACTIVE
+==============================================================================

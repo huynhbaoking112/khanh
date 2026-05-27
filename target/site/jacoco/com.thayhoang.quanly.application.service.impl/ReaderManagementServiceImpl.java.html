@@ -14,9 +14,9 @@ public final class ReaderManagementServiceImpl implements ReaderManagementServic
     private final ReaderRepository readerRepository;
     private final LoanDetailRepository loanDetailRepository;
 
-<span class="fc" id="L17">    public ReaderManagementServiceImpl(</span>
+    public ReaderManagementServiceImpl(
             ReaderRepository readerRepository,
-            LoanDetailRepository loanDetailRepository) {
+<span class="fc" id="L19">            LoanDetailRepository loanDetailRepository) {</span>
 <span class="fc" id="L20">        this.readerRepository = readerRepository;</span>
 <span class="fc" id="L21">        this.loanDetailRepository = loanDetailRepository;</span>
 <span class="fc" id="L22">    }</span>
@@ -25,8 +25,8 @@ public final class ReaderManagementServiceImpl implements ReaderManagementServic
     public List&lt;Reader&gt; listReaders() {
         try {
 <span class="nc" id="L27">            return readerRepository.findAll();</span>
-<span class="nc" id="L28">        } catch (SQLException exception) {</span>
-<span class="nc" id="L29">            throw new ApplicationException(&quot;Khong the tai danh sach doc gia&quot;, exception);</span>
+<span class="fc" id="L28">        } catch (SQLException exception) {</span>
+<span class="fc" id="L29">            throw new ApplicationException(&quot;Khong the tai danh sach doc gia&quot;, exception);</span>
         }
     }
 
@@ -56,8 +56,8 @@ public final class ReaderManagementServiceImpl implements ReaderManagementServic
     public Reader updateReader(Reader reader) {
 <span class="fc" id="L57">        validate(reader);</span>
         try {
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">            if (readerRepository.findById(reader.readerId()).isEmpty()) {</span>
-<span class="nc" id="L60">                throw new BusinessRuleViolationException(&quot;Khong tim thay doc gia can cap nhat&quot;);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (readerRepository.findById(reader.readerId()).isEmpty()) {</span>
+<span class="fc" id="L60">                throw new BusinessRuleViolationException(&quot;Khong tim thay doc gia can cap nhat&quot;);</span>
             }
 <span class="fc" id="L62">            return readerRepository.update(reader);</span>
 <span class="nc" id="L63">        } catch (SQLException exception) {</span>
@@ -69,14 +69,14 @@ public final class ReaderManagementServiceImpl implements ReaderManagementServic
     public int getCurrentBorrowCount(String readerId) {
         try {
 <span class="nc" id="L71">            return loanDetailRepository.countActiveBorrowedBooksForReader(readerId);</span>
-<span class="nc" id="L72">        } catch (SQLException exception) {</span>
-<span class="nc" id="L73">            throw new ApplicationException(&quot;Khong the tinh so sach dang muon&quot;, exception);</span>
+<span class="fc" id="L72">        } catch (SQLException exception) {</span>
+<span class="fc" id="L73">            throw new ApplicationException(&quot;Khong the tinh so sach dang muon&quot;, exception);</span>
         }
     }
 
     private void validate(Reader reader) {
-<span class="pc bpc" id="L78" title="3 of 6 branches missed.">        if (reader == null || isBlank(reader.readerId()) || isBlank(reader.fullName())) {</span>
-<span class="nc" id="L79">            throw new BusinessRuleViolationException(&quot;Thong tin doc gia khong hop le&quot;);</span>
+<span class="pc bpc" id="L78" title="2 of 6 branches missed.">        if (reader == null || isBlank(reader.readerId()) || isBlank(reader.fullName())) {</span>
+<span class="fc" id="L79">            throw new BusinessRuleViolationException(&quot;Thong tin doc gia khong hop le&quot;);</span>
         }
         // Phone is required according to spec V6
 <span class="fc bfc" id="L82" title="All 2 branches covered.">        if (isBlank(reader.phone())) {</span>

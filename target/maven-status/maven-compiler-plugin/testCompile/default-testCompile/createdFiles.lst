@@ -1,7 +1,4 @@
-com\thayhoang\quanly\thien_circulation\CirculationTest.class
-com\thayhoang\quanly\king_auth\AuthHistoryTest$StubAuthenticationService.class
-com\thayhoang\quanly\king_auth\AuthHistoryTest$RecordingLibrarianRepository.class
-com\thayhoang\quanly\king_auth\AuthHistoryTest.class
-com\thayhoang\quanly\testsupport\GapReportBuilder.class
-com\thayhoang\quanly\khanh_book\BookCatalogTest.class
-com\thayhoang\quanly\testsupport\QcReport.class
+com\thayhoang\quanly\ui\ReaderFormUtilsTest.class
+com\thayhoang\quanly\ui\UiRowConversionTest.class
+com\thayhoang\quanly\king_auth\LoginDialogTest.class
+com\thayhoang\quanly\ui\BookFormUtilsTest.class

@@ -53,45 +53,45 @@ import javax.swing.table.DefaultTableModel;
 
 public final class LibraryShellFrame extends JFrame {
     public LibraryShellFrame(ApplicationBootstrap bootstrap, AuthenticatedSession session) {
-<span class="nc" id="L56">        super(&quot;Quan Ly Thu Vien&quot;);</span>
-<span class="nc" id="L57">        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
-<span class="nc" id="L58">        setMinimumSize(new Dimension(1180, 760));</span>
-<span class="nc" id="L59">        setLocationRelativeTo(null);</span>
-<span class="nc" id="L60">        setLayout(new BorderLayout(12, 12));</span>
+<span class="fc" id="L56">        super(&quot;Quan Ly Thu Vien&quot;);</span>
+<span class="fc" id="L57">        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="fc" id="L58">        setMinimumSize(new Dimension(1180, 760));</span>
+<span class="fc" id="L59">        setLocationRelativeTo(null);</span>
+<span class="fc" id="L60">        setLayout(new BorderLayout(12, 12));</span>
 
-<span class="nc" id="L62">        add(createHeader(bootstrap, session), BorderLayout.NORTH);</span>
-<span class="nc" id="L63">        add(createTabs(bootstrap, session), BorderLayout.CENTER);</span>
-<span class="nc" id="L64">    }</span>
+<span class="fc" id="L62">        add(createHeader(bootstrap, session), BorderLayout.NORTH);</span>
+<span class="fc" id="L63">        add(createTabs(bootstrap, session), BorderLayout.CENTER);</span>
+<span class="fc" id="L64">    }</span>
 
     private JPanel createHeader(ApplicationBootstrap bootstrap, AuthenticatedSession session) {
-<span class="nc" id="L67">        JPanel panel = new JPanel(new BorderLayout());</span>
-<span class="nc" id="L68">        panel.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));</span>
+<span class="fc" id="L67">        JPanel panel = new JPanel(new BorderLayout());</span>
+<span class="fc" id="L68">        panel.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));</span>
 
-<span class="nc" id="L70">        panel.add(new JLabel(&quot;Library Management Desktop&quot;, SwingConstants.LEFT), BorderLayout.WEST);</span>
+<span class="fc" id="L70">        panel.add(new JLabel(&quot;Library Management Desktop&quot;, SwingConstants.LEFT), BorderLayout.WEST);</span>
 
-<span class="nc" id="L72">        JTextArea info = new JTextArea(&quot;&quot;&quot;</span>
+<span class="fc" id="L72">        JTextArea info = new JTextArea(&quot;&quot;&quot;</span>
                 Dang nhap: %s (%s)
                 Co so du lieu: %s
-<span class="nc" id="L75">                &quot;&quot;&quot;.formatted(session.fullName(), session.role().name(), bootstrap.databasePath().toAbsolutePath()));</span>
-<span class="nc" id="L76">        info.setEditable(false);</span>
-<span class="nc" id="L77">        info.setOpaque(false);</span>
-<span class="nc" id="L78">        panel.add(info, BorderLayout.EAST);</span>
-<span class="nc" id="L79">        return panel;</span>
+<span class="fc" id="L75">                &quot;&quot;&quot;.formatted(session.fullName(), session.role().name(), bootstrap.databasePath().toAbsolutePath()));</span>
+<span class="fc" id="L76">        info.setEditable(false);</span>
+<span class="fc" id="L77">        info.setOpaque(false);</span>
+<span class="fc" id="L78">        panel.add(info, BorderLayout.EAST);</span>
+<span class="fc" id="L79">        return panel;</span>
     }
 
     private JTabbedPane createTabs(ApplicationBootstrap bootstrap, AuthenticatedSession session) {
-<span class="nc" id="L83">        JTabbedPane tabs = new JTabbedPane();</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        boolean admin = session.role() == UserRole.ADMIN;</span>
+<span class="fc" id="L83">        JTabbedPane tabs = new JTabbedPane();</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        boolean admin = session.role() == UserRole.ADMIN;</span>
 
-<span class="nc" id="L86">        tabs.addTab(&quot;Sach&quot;, new BookPanel(bootstrap.bookCatalogService(), admin));</span>
-<span class="nc" id="L87">        tabs.addTab(&quot;Doc Gia&quot;, new ReaderPanel(bootstrap.readerManagementService(), admin));</span>
-<span class="nc" id="L88">        tabs.addTab(&quot;Luu Thong&quot;, new CirculationPanel(</span>
-<span class="nc" id="L89">                bootstrap.circulationService(),</span>
-<span class="nc" id="L90">                bootstrap.historyService(),</span>
-<span class="nc" id="L91">                session));</span>
-<span class="nc" id="L92">        tabs.addTab(&quot;Lich Su&quot;, new HistoryPanel(bootstrap.historyService()));</span>
+<span class="fc" id="L86">        tabs.addTab(&quot;Sach&quot;, new BookPanel(bootstrap.bookCatalogService(), admin));</span>
+<span class="fc" id="L87">        tabs.addTab(&quot;Doc Gia&quot;, new ReaderPanel(bootstrap.readerManagementService(), admin));</span>
+<span class="fc" id="L88">        tabs.addTab(&quot;Luu Thong&quot;, new CirculationPanel(</span>
+<span class="fc" id="L89">                bootstrap.circulationService(),</span>
+<span class="fc" id="L90">                bootstrap.historyService(),</span>
+                session));
+<span class="fc" id="L92">        tabs.addTab(&quot;Lich Su&quot;, new HistoryPanel(bootstrap.historyService()));</span>
 
-<span class="nc" id="L94">        return tabs;</span>
+<span class="fc" id="L94">        return tabs;</span>
     }
 
     private static GridBagConstraints createConstraints() {
@@ -112,704 +112,665 @@ public final class LibraryShellFrame extends JFrame {
 <span class="fc" id="L112">        gbc.weightx = 1;</span>
 <span class="fc" id="L113">        panel.add(component, gbc);</span>
 <span class="fc" id="L114">    }</span>
-
-    private static int parseInt(String value, String fieldName) {
-        try {
-<span class="nc" id="L118">            return Integer.parseInt(value.trim());</span>
-<span class="nc" id="L119">        } catch (NumberFormatException exception) {</span>
-<span class="nc" id="L120">            throw new ApplicationException(fieldName + &quot; khong hop le.&quot;);</span>
-        }
-    }
-
-    private static LocalDate parseDate(String value, String fieldName) {
-        try {
-<span class="nc" id="L126">            return LocalDate.parse(value.trim());</span>
-<span class="nc" id="L127">        } catch (DateTimeParseException exception) {</span>
-<span class="nc" id="L128">            throw new ApplicationException(fieldName + &quot; phai theo dinh dang yyyy-MM-dd.&quot;);</span>
-        }
-    }
-
-    private static List&lt;String&gt; parseCsv(String input) {
-<span class="nc" id="L133">        List&lt;String&gt; values = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L134" title="All 4 branches missed.">        if (input == null || input.isBlank()) {</span>
-<span class="nc" id="L135">            return values;</span>
-        }
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        for (String token : input.split(&quot;,&quot;)) {</span>
-<span class="nc" id="L138">            String value = token.trim();</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (!value.isEmpty()) {</span>
-<span class="nc" id="L140">                values.add(value);</span>
-            }
-        }
-<span class="nc" id="L143">        return values;</span>
-    }
+<span class="fc" id="L115">    private static int parseInt(String value, String fieldName) { return UiUtils.parseInt(value, fieldName); }</span>
+<span class="fc" id="L116">    private static LocalDate parseDate(String value, String fieldName) { return UiUtils.parseDate(value, fieldName); }</span>
+<span class="fc" id="L117">    private static java.util.List&lt;String&gt; parseCsv(String input) { return UiUtils.parseCsv(input); }</span>
 
     private static void runSafely(Runnable runnable) {
         try {
-<span class="fc" id="L148">            runnable.run();</span>
-<span class="pc" id="L149">        } catch (ApplicationException exception) {</span>
-<span class="nc" id="L150">            showError(exception.getMessage());</span>
-<span class="nc" id="L151">        } catch (RuntimeException exception) {</span>
-<span class="nc bnc" id="L152" title="All 2 branches missed.">            showError(exception.getMessage() == null ? exception.getClass().getSimpleName() : exception.getMessage());</span>
-        }
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L121">            runnable.run();</span>
+<span class="fc" id="L122">        } catch (ApplicationException exception) {</span>
+<span class="fc" id="L123">            showError(exception.getMessage());</span>
+<span class="fc" id="L124">        } catch (RuntimeException exception) {</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            showError(exception.getMessage() == null ? exception.getClass().getSimpleName() : exception.getMessage());</span>
+<span class="fc" id="L126">        }</span>
+<span class="fc" id="L127">    }</span>
 
     private static void showInfo(String message) {
-<span class="nc" id="L157">        JOptionPane.showMessageDialog(null, message, &quot;Thong bao&quot;, JOptionPane.INFORMATION_MESSAGE);</span>
-<span class="nc" id="L158">    }</span>
+<span class="fc" id="L130">        JOptionPane.showMessageDialog(null, message, &quot;Thong bao&quot;, JOptionPane.INFORMATION_MESSAGE);</span>
+<span class="fc" id="L131">    }</span>
 
     private static void showError(String message) {
-<span class="nc" id="L161">        JOptionPane.showMessageDialog(null, message, &quot;Loi&quot;, JOptionPane.ERROR_MESSAGE);</span>
-<span class="nc" id="L162">    }</span>
+<span class="fc" id="L134">        JOptionPane.showMessageDialog(null, message, &quot;Loi&quot;, JOptionPane.ERROR_MESSAGE);</span>
+<span class="fc" id="L135">    }</span>
 
-    private static final class BookPanel extends JPanel {
+    static final class BookPanel extends JPanel {
         private final BookCatalogService service;
         private final boolean canManage;
-<span class="nc" id="L167">        private final JTextField searchField = new JTextField(20);</span>
-<span class="nc" id="L168">        private final JCheckBox availableOnlyCheck = new JCheckBox(&quot;Chi sach con kha dung&quot;);</span>
-<span class="nc" id="L169">        private final JTextField idField = new JTextField(12);</span>
-<span class="nc" id="L170">        private final JTextField titleField = new JTextField(20);</span>
-<span class="nc" id="L171">        private final JTextField authorField = new JTextField(20);</span>
-<span class="nc" id="L172">        private final JTextField publisherField = new JTextField(20);</span>
-<span class="nc" id="L173">        private final JTextField yearField = new JTextField(10);</span>
-<span class="nc" id="L174">        private final JTextField totalField = new JTextField(10);</span>
-<span class="nc" id="L175">        private final JTextField availableField = new JTextField(10);</span>
-<span class="nc" id="L176">        private final JComboBox&lt;BookStatus&gt; statusBox = new JComboBox&lt;&gt;(BookStatus.values());</span>
-<span class="nc" id="L177">        private final DefaultTableModel model = new DefaultTableModel(</span>
-<span class="nc" id="L178">                new Object[] {&quot;Ma&quot;, &quot;Ten Sach&quot;, &quot;Tac Gia&quot;, &quot;NXB&quot;, &quot;Nam&quot;, &quot;Tong&quot;, &quot;Kha Dung&quot;, &quot;Trang Thai&quot;}, 0) {</span>
+<span class="fc" id="L140">        private final JTextField searchField = new JTextField(20);</span>
+<span class="fc" id="L141">        private final JCheckBox availableOnlyCheck = new JCheckBox(&quot;Chi sach con kha dung&quot;);</span>
+<span class="fc" id="L142">        private final JTextField idField = new JTextField(12);</span>
+<span class="fc" id="L143">        private final JTextField titleField = new JTextField(20);</span>
+<span class="fc" id="L144">        private final JTextField authorField = new JTextField(20);</span>
+<span class="fc" id="L145">        private final JTextField publisherField = new JTextField(20);</span>
+<span class="fc" id="L146">        private final JTextField yearField = new JTextField(10);</span>
+<span class="fc" id="L147">        private final JTextField totalField = new JTextField(10);</span>
+<span class="fc" id="L148">        private final JTextField availableField = new JTextField(10);</span>
+<span class="fc" id="L149">        private final JComboBox&lt;BookStatus&gt; statusBox = new JComboBox&lt;&gt;(BookStatus.values());</span>
+<span class="fc" id="L150">        private final DefaultTableModel model = new DefaultTableModel(</span>
+<span class="fc" id="L151">                new Object[] {&quot;Ma&quot;, &quot;Ten Sach&quot;, &quot;Tac Gia&quot;, &quot;NXB&quot;, &quot;Nam&quot;, &quot;Tong&quot;, &quot;Kha Dung&quot;, &quot;Trang Thai&quot;}, 0) {</span>
             @Override
             public boolean isCellEditable(int row, int column) {
-<span class="nc" id="L181">                return false;</span>
+<span class="nc" id="L154">                return false;</span>
             }
         };
-<span class="nc" id="L184">        private final JTable table = new JTable(model);</span>
+<span class="fc" id="L157">        private final JTable table = new JTable(model);</span>
 
-        private BookPanel(BookCatalogService service, boolean canManage) {
-<span class="nc" id="L187">            super(new BorderLayout(12, 12));</span>
-<span class="nc" id="L188">            this.service = service;</span>
-<span class="nc" id="L189">            this.canManage = canManage;</span>
-<span class="nc" id="L190">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
-<span class="nc" id="L191">            buildUi();</span>
-<span class="nc" id="L192">            refreshTable();</span>
-<span class="nc" id="L193">        }</span>
+        BookPanel(BookCatalogService service, boolean canManage) {
+<span class="fc" id="L160">            super(new BorderLayout(12, 12));</span>
+<span class="fc" id="L161">            this.service = service;</span>
+<span class="fc" id="L162">            this.canManage = canManage;</span>
+<span class="fc" id="L163">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
+<span class="fc" id="L164">            buildUi();</span>
+<span class="fc" id="L165">            refreshTable();</span>
+<span class="fc" id="L166">        }</span>
 
         private void buildUi() {
-<span class="nc" id="L196">            JPanel topBar = new JPanel();</span>
-<span class="nc" id="L197">            topBar.add(new JLabel(&quot;Tim&quot;));</span>
-<span class="nc" id="L198">            topBar.add(searchField);</span>
-<span class="nc" id="L199">            topBar.add(availableOnlyCheck);</span>
+<span class="fc" id="L169">            JPanel topBar = new JPanel();</span>
+<span class="fc" id="L170">            topBar.add(new JLabel(&quot;Tim&quot;));</span>
+<span class="fc" id="L171">            topBar.add(searchField);</span>
+<span class="fc" id="L172">            topBar.add(availableOnlyCheck);</span>
 
-<span class="nc" id="L201">            JButton searchButton = new JButton(&quot;Tra cuu&quot;);</span>
-<span class="nc" id="L202">            searchButton.addActionListener(event -&gt; refreshTable());</span>
-<span class="nc" id="L203">            JButton refreshButton = new JButton(&quot;Tai lai&quot;);</span>
-<span class="nc" id="L204">            refreshButton.addActionListener(event -&gt; {</span>
-<span class="nc" id="L205">                searchField.setText(&quot;&quot;);</span>
-<span class="nc" id="L206">                availableOnlyCheck.setSelected(false);</span>
-<span class="nc" id="L207">                refreshTable();</span>
-<span class="nc" id="L208">            });</span>
-<span class="nc" id="L209">            topBar.add(searchButton);</span>
-<span class="nc" id="L210">            topBar.add(refreshButton);</span>
-<span class="nc" id="L211">            add(topBar, BorderLayout.NORTH);</span>
+<span class="fc" id="L174">            JButton searchButton = new JButton(&quot;Tra cuu&quot;);</span>
+<span class="fc" id="L175">            searchButton.addActionListener(event -&gt; refreshTable());</span>
+<span class="fc" id="L176">            JButton refreshButton = new JButton(&quot;Tai lai&quot;);</span>
+<span class="fc" id="L177">            refreshButton.addActionListener(event -&gt; {</span>
+<span class="nc" id="L178">                searchField.setText(&quot;&quot;);</span>
+<span class="nc" id="L179">                availableOnlyCheck.setSelected(false);</span>
+<span class="nc" id="L180">                refreshTable();</span>
+<span class="nc" id="L181">            });</span>
+<span class="fc" id="L182">            topBar.add(searchButton);</span>
+<span class="fc" id="L183">            topBar.add(refreshButton);</span>
+<span class="fc" id="L184">            add(topBar, BorderLayout.NORTH);</span>
 
-<span class="nc" id="L213">            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
-<span class="nc" id="L214">            table.getSelectionModel().addListSelectionListener(event -&gt; {</span>
-<span class="nc bnc" id="L215" title="All 2 branches missed.">                if (!event.getValueIsAdjusting()) {</span>
-<span class="nc" id="L216">                    loadSelectedBook();</span>
+<span class="fc" id="L186">            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
+<span class="fc" id="L187">            table.getSelectionModel().addListSelectionListener(event -&gt; {</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">                if (!event.getValueIsAdjusting()) {</span>
+<span class="fc" id="L189">                    loadSelectedBook();</span>
                 }
-<span class="nc" id="L218">            });</span>
+<span class="fc" id="L191">            });</span>
 
-<span class="nc" id="L220">            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);</span>
-<span class="nc" id="L221">            splitPane.setResizeWeight(0.65);</span>
-<span class="nc" id="L222">            splitPane.setLeftComponent(new JScrollPane(table));</span>
-<span class="nc" id="L223">            splitPane.setRightComponent(createFormPanel());</span>
-<span class="nc" id="L224">            add(splitPane, BorderLayout.CENTER);</span>
-<span class="nc" id="L225">        }</span>
+<span class="fc" id="L193">            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);</span>
+<span class="fc" id="L194">            splitPane.setResizeWeight(0.65);</span>
+<span class="fc" id="L195">            splitPane.setLeftComponent(new JScrollPane(table));</span>
+<span class="fc" id="L196">            splitPane.setRightComponent(createFormPanel());</span>
+<span class="fc" id="L197">            add(splitPane, BorderLayout.CENTER);</span>
+<span class="fc" id="L198">        }</span>
 
         private JPanel createFormPanel() {
-<span class="nc" id="L228">            JPanel panel = new JPanel(new GridBagLayout());</span>
-<span class="nc bnc" id="L229" title="All 2 branches missed.">            panel.setBorder(BorderFactory.createTitledBorder(canManage ? &quot;Quan ly sach&quot; : &quot;Thong tin sach&quot;));</span>
-<span class="nc" id="L230">            GridBagConstraints gbc = createConstraints();</span>
+<span class="fc" id="L201">            JPanel panel = new JPanel(new GridBagLayout());</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">            panel.setBorder(BorderFactory.createTitledBorder(canManage ? &quot;Quan ly sach&quot; : &quot;Thong tin sach&quot;));</span>
+<span class="fc" id="L203">            GridBagConstraints gbc = createConstraints();</span>
 
-<span class="nc" id="L232">            addField(panel, gbc, 0, &quot;Ma sach&quot;, idField);</span>
-<span class="nc" id="L233">            addField(panel, gbc, 1, &quot;Ten sach&quot;, titleField);</span>
-<span class="nc" id="L234">            addField(panel, gbc, 2, &quot;Tac gia&quot;, authorField);</span>
-<span class="nc" id="L235">            addField(panel, gbc, 3, &quot;Nha xuat ban&quot;, publisherField);</span>
-<span class="nc" id="L236">            addField(panel, gbc, 4, &quot;Nam xuat ban&quot;, yearField);</span>
-<span class="nc" id="L237">            addField(panel, gbc, 5, &quot;So luong tong&quot;, totalField);</span>
-<span class="nc" id="L238">            addField(panel, gbc, 6, &quot;So luong kha dung&quot;, availableField);</span>
-<span class="nc" id="L239">            addField(panel, gbc, 7, &quot;Trang thai&quot;, statusBox);</span>
+<span class="fc" id="L205">            addField(panel, gbc, 0, &quot;Ma sach&quot;, idField);</span>
+<span class="fc" id="L206">            addField(panel, gbc, 1, &quot;Ten sach&quot;, titleField);</span>
+<span class="fc" id="L207">            addField(panel, gbc, 2, &quot;Tac gia&quot;, authorField);</span>
+<span class="fc" id="L208">            addField(panel, gbc, 3, &quot;Nha xuat ban&quot;, publisherField);</span>
+<span class="fc" id="L209">            addField(panel, gbc, 4, &quot;Nam xuat ban&quot;, yearField);</span>
+<span class="fc" id="L210">            addField(panel, gbc, 5, &quot;So luong tong&quot;, totalField);</span>
+<span class="fc" id="L211">            addField(panel, gbc, 6, &quot;So luong kha dung&quot;, availableField);</span>
+<span class="fc" id="L212">            addField(panel, gbc, 7, &quot;Trang thai&quot;, statusBox);</span>
 
-<span class="nc" id="L241">            JButton createButton = new JButton(&quot;Them moi&quot;);</span>
-<span class="nc" id="L242">            createButton.setEnabled(canManage);</span>
-<span class="nc" id="L243">            createButton.addActionListener(event -&gt; createBook());</span>
+<span class="fc" id="L214">            JButton createButton = new JButton(&quot;Them moi&quot;);</span>
+<span class="fc" id="L215">            createButton.setEnabled(canManage);</span>
+<span class="fc" id="L216">            createButton.addActionListener(event -&gt; createBook());</span>
 
-<span class="nc" id="L245">            JButton updateButton = new JButton(&quot;Cap nhat&quot;);</span>
-<span class="nc" id="L246">            updateButton.setEnabled(canManage);</span>
-<span class="nc" id="L247">            updateButton.addActionListener(event -&gt; updateBook());</span>
+<span class="fc" id="L218">            JButton updateButton = new JButton(&quot;Cap nhat&quot;);</span>
+<span class="fc" id="L219">            updateButton.setEnabled(canManage);</span>
+<span class="pc" id="L220">            updateButton.addActionListener(event -&gt; updateBook());</span>
 
-<span class="nc" id="L249">            JButton clearButton = new JButton(&quot;Xoa form&quot;);</span>
-<span class="nc" id="L250">            clearButton.addActionListener(event -&gt; clearForm());</span>
+<span class="fc" id="L222">            JButton clearButton = new JButton(&quot;Xoa form&quot;);</span>
+<span class="pc" id="L223">            clearButton.addActionListener(event -&gt; clearForm());</span>
 
-<span class="nc" id="L252">            gbc.gridx = 0;</span>
-<span class="nc" id="L253">            gbc.gridy = 8;</span>
-<span class="nc" id="L254">            gbc.gridwidth = 2;</span>
-<span class="nc" id="L255">            JPanel buttons = new JPanel();</span>
-<span class="nc" id="L256">            buttons.add(createButton);</span>
-<span class="nc" id="L257">            buttons.add(updateButton);</span>
-<span class="nc" id="L258">            buttons.add(clearButton);</span>
-<span class="nc" id="L259">            panel.add(buttons, gbc);</span>
-<span class="nc" id="L260">            return panel;</span>
+<span class="fc" id="L225">            gbc.gridx = 0;</span>
+<span class="fc" id="L226">            gbc.gridy = 8;</span>
+<span class="fc" id="L227">            gbc.gridwidth = 2;</span>
+<span class="fc" id="L228">            JPanel buttons = new JPanel();</span>
+<span class="fc" id="L229">            buttons.add(createButton);</span>
+<span class="fc" id="L230">            buttons.add(updateButton);</span>
+<span class="fc" id="L231">            buttons.add(clearButton);</span>
+<span class="fc" id="L232">            panel.add(buttons, gbc);</span>
+<span class="fc" id="L233">            return panel;</span>
         }
 
         private void refreshTable() {
-<span class="nc" id="L264">            runSafely(() -&gt; {</span>
-<span class="nc" id="L265">                model.setRowCount(0);</span>
-<span class="nc bnc" id="L266" title="All 4 branches missed.">                List&lt;Book&gt; books = searchField.getText().isBlank() &amp;&amp; !availableOnlyCheck.isSelected()</span>
-<span class="nc" id="L267">                        ? service.listBooks()</span>
-<span class="nc" id="L268">                        : service.searchBooks(searchField.getText().trim(), availableOnlyCheck.isSelected());</span>
-<span class="nc bnc" id="L269" title="All 2 branches missed.">                for (Book book : books) {</span>
-<span class="nc" id="L270">                    model.addRow(new Object[] {</span>
-<span class="nc" id="L271">                        book.bookId(),</span>
-<span class="nc" id="L272">                        book.title(),</span>
-<span class="nc" id="L273">                        book.author(),</span>
-<span class="nc" id="L274">                        book.publisher(),</span>
-<span class="nc" id="L275">                        book.yearPublish(),</span>
-<span class="nc" id="L276">                        book.quantityTotal(),</span>
-<span class="nc" id="L277">                        book.quantityAvailable(),</span>
-<span class="nc" id="L278">                        book.status().name()</span>
+<span class="fc" id="L237">            runSafely(() -&gt; {</span>
+<span class="fc" id="L238">                model.setRowCount(0);</span>
+<span class="fc bfc" id="L239" title="All 4 branches covered.">                List&lt;Book&gt; books = searchField.getText().isBlank() &amp;&amp; !availableOnlyCheck.isSelected()</span>
+<span class="fc" id="L240">                        ? service.listBooks()</span>
+<span class="fc" id="L241">                        : service.searchBooks(searchField.getText().trim(), availableOnlyCheck.isSelected());</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">                for (Book book : books) {</span>
+<span class="fc" id="L243">                    model.addRow(new Object[] {</span>
+<span class="fc" id="L244">                        book.bookId(),</span>
+<span class="fc" id="L245">                        book.title(),</span>
+<span class="fc" id="L246">                        book.author(),</span>
+<span class="fc" id="L247">                        book.publisher(),</span>
+<span class="fc" id="L248">                        book.yearPublish(),</span>
+<span class="fc" id="L249">                        book.quantityTotal(),</span>
+<span class="fc" id="L250">                        book.quantityAvailable(),</span>
+<span class="fc" id="L251">                        book.status().name()</span>
                     });
-                }
-<span class="nc" id="L281">            });</span>
-<span class="nc" id="L282">        }</span>
+<span class="fc" id="L253">                }</span>
+<span class="fc" id="L254">            });</span>
+<span class="fc" id="L255">        }</span>
 
         private void loadSelectedBook() {
-<span class="nc" id="L285">            int selectedRow = table.getSelectedRow();</span>
-<span class="nc bnc" id="L286" title="All 2 branches missed.">            if (selectedRow &lt; 0) {</span>
-<span class="nc" id="L287">                return;</span>
+<span class="fc" id="L258">            int selectedRow = table.getSelectedRow();</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">            if (selectedRow &lt; 0) {</span>
+<span class="fc" id="L260">                return;</span>
             }
-<span class="nc" id="L289">            idField.setText(String.valueOf(model.getValueAt(selectedRow, 0)));</span>
-<span class="nc" id="L290">            titleField.setText(String.valueOf(model.getValueAt(selectedRow, 1)));</span>
-<span class="nc" id="L291">            authorField.setText(String.valueOf(model.getValueAt(selectedRow, 2)));</span>
-<span class="nc" id="L292">            publisherField.setText(String.valueOf(model.getValueAt(selectedRow, 3)));</span>
-<span class="nc" id="L293">            yearField.setText(String.valueOf(model.getValueAt(selectedRow, 4)));</span>
-<span class="nc" id="L294">            totalField.setText(String.valueOf(model.getValueAt(selectedRow, 5)));</span>
-<span class="nc" id="L295">            availableField.setText(String.valueOf(model.getValueAt(selectedRow, 6)));</span>
-<span class="nc" id="L296">            statusBox.setSelectedItem(BookStatus.valueOf(String.valueOf(model.getValueAt(selectedRow, 7))));</span>
-<span class="nc" id="L297">        }</span>
+<span class="fc" id="L262">            idField.setText(String.valueOf(model.getValueAt(selectedRow, 0)));</span>
+<span class="fc" id="L263">            titleField.setText(String.valueOf(model.getValueAt(selectedRow, 1)));</span>
+<span class="fc" id="L264">            authorField.setText(String.valueOf(model.getValueAt(selectedRow, 2)));</span>
+<span class="fc" id="L265">            publisherField.setText(String.valueOf(model.getValueAt(selectedRow, 3)));</span>
+<span class="fc" id="L266">            yearField.setText(String.valueOf(model.getValueAt(selectedRow, 4)));</span>
+<span class="fc" id="L267">            totalField.setText(String.valueOf(model.getValueAt(selectedRow, 5)));</span>
+<span class="fc" id="L268">            availableField.setText(String.valueOf(model.getValueAt(selectedRow, 6)));</span>
+<span class="fc" id="L269">            statusBox.setSelectedItem(BookStatus.valueOf(String.valueOf(model.getValueAt(selectedRow, 7))));</span>
+<span class="fc" id="L270">        }</span>
 
         private void createBook() {
-<span class="nc" id="L300">            runSafely(() -&gt; {</span>
-<span class="nc" id="L301">                service.createBook(readBookFromForm());</span>
-<span class="nc" id="L302">                refreshTable();</span>
-<span class="nc" id="L303">                clearForm();</span>
-<span class="nc" id="L304">                showInfo(&quot;Da tao sach moi.&quot;);</span>
-<span class="nc" id="L305">            });</span>
-<span class="nc" id="L306">        }</span>
+<span class="fc" id="L273">            runSafely(() -&gt; {</span>
+<span class="fc" id="L274">                service.createBook(readBookFromForm());</span>
+<span class="fc" id="L275">                refreshTable();</span>
+<span class="fc" id="L276">                clearForm();</span>
+<span class="fc" id="L277">                showInfo(&quot;Da tao sach moi.&quot;);</span>
+<span class="fc" id="L278">            });</span>
+<span class="fc" id="L279">        }</span>
 
         private void updateBook() {
-<span class="nc" id="L309">            runSafely(() -&gt; {</span>
-<span class="nc" id="L310">                service.updateBook(readBookFromForm());</span>
-<span class="nc" id="L311">                refreshTable();</span>
-<span class="nc" id="L312">                showInfo(&quot;Da cap nhat sach.&quot;);</span>
-<span class="nc" id="L313">            });</span>
-<span class="nc" id="L314">        }</span>
+<span class="fc" id="L282">            runSafely(() -&gt; {</span>
+<span class="fc" id="L283">                service.updateBook(readBookFromForm());</span>
+<span class="fc" id="L284">                refreshTable();</span>
+<span class="fc" id="L285">                showInfo(&quot;Da cap nhat sach.&quot;);</span>
+<span class="fc" id="L286">            });</span>
+<span class="fc" id="L287">        }</span>
 
         private Book readBookFromForm() {
-<span class="nc" id="L317">            return new Book(</span>
-<span class="nc" id="L318">                    idField.getText().trim(),</span>
-<span class="nc" id="L319">                    titleField.getText().trim(),</span>
-<span class="nc" id="L320">                    authorField.getText().trim(),</span>
-<span class="nc" id="L321">                    publisherField.getText().trim(),</span>
-<span class="nc" id="L322">                    parseInt(yearField.getText(), &quot;Nam xuat ban&quot;),</span>
-<span class="nc" id="L323">                    parseInt(totalField.getText(), &quot;So luong tong&quot;),</span>
-<span class="nc" id="L324">                    parseInt(availableField.getText(), &quot;So luong kha dung&quot;),</span>
-<span class="nc" id="L325">                    (BookStatus) statusBox.getSelectedItem());</span>
+<span class="fc" id="L290">            return new Book(</span>
+<span class="fc" id="L291">                    idField.getText().trim(),</span>
+<span class="fc" id="L292">                    titleField.getText().trim(),</span>
+<span class="fc" id="L293">                    authorField.getText().trim(),</span>
+<span class="fc" id="L294">                    publisherField.getText().trim(),</span>
+<span class="fc" id="L295">                    parseInt(yearField.getText(), &quot;Nam xuat ban&quot;),</span>
+<span class="fc" id="L296">                    parseInt(totalField.getText(), &quot;So luong tong&quot;),</span>
+<span class="fc" id="L297">                    parseInt(availableField.getText(), &quot;So luong kha dung&quot;),</span>
+<span class="fc" id="L298">                    (BookStatus) statusBox.getSelectedItem());</span>
         }
 
         private void clearForm() {
-<span class="nc" id="L329">            idField.setText(&quot;&quot;);</span>
-<span class="nc" id="L330">            titleField.setText(&quot;&quot;);</span>
-<span class="nc" id="L331">            authorField.setText(&quot;&quot;);</span>
-<span class="nc" id="L332">            publisherField.setText(&quot;&quot;);</span>
-<span class="nc" id="L333">            yearField.setText(&quot;&quot;);</span>
-<span class="nc" id="L334">            totalField.setText(&quot;&quot;);</span>
-<span class="nc" id="L335">            availableField.setText(&quot;&quot;);</span>
-<span class="nc" id="L336">            statusBox.setSelectedItem(BookStatus.AVAILABLE);</span>
-<span class="nc" id="L337">        }</span>
+<span class="fc" id="L302">            idField.setText(&quot;&quot;);</span>
+<span class="fc" id="L303">            titleField.setText(&quot;&quot;);</span>
+<span class="fc" id="L304">            authorField.setText(&quot;&quot;);</span>
+<span class="fc" id="L305">            publisherField.setText(&quot;&quot;);</span>
+<span class="fc" id="L306">            yearField.setText(&quot;&quot;);</span>
+<span class="fc" id="L307">            totalField.setText(&quot;&quot;);</span>
+<span class="fc" id="L308">            availableField.setText(&quot;&quot;);</span>
+<span class="fc" id="L309">            statusBox.setSelectedItem(BookStatus.AVAILABLE);</span>
+<span class="fc" id="L310">        }</span>
     }
 
-    private static final class ReaderPanel extends JPanel {
+    static final class ReaderPanel extends JPanel {
         private final ReaderManagementService service;
         private final boolean canManage;
-<span class="fc" id="L343">        private final JTextField idField = new JTextField(12);</span>
-<span class="fc" id="L344">        private final JTextField nameField = new JTextField(20);</span>
-<span class="fc" id="L345">        private final JTextField filterField = new JTextField(20);</span>
-<span class="fc" id="L346">        private final JTextField phoneField = new JTextField(16);</span>
-<span class="fc" id="L347">        private final JTextField emailField = new JTextField(20);</span>
-<span class="fc" id="L348">        private final JTextField maxBorrowField = new JTextField(8);</span>
-<span class="fc" id="L349">        private final JComboBox&lt;ReaderStatus&gt; statusBox = new JComboBox&lt;&gt;(ReaderStatus.values());</span>
-<span class="fc" id="L350">        private final JTextField currentBorrowField = new JTextField(8);</span>
-<span class="fc" id="L351">        private final DefaultTableModel model = new DefaultTableModel(</span>
-<span class="fc" id="L352">                new Object[] {&quot;Ma&quot;, &quot;Ho ten&quot;, &quot;Phone&quot;, &quot;Email&quot;, &quot;Max&quot;, &quot;Trang thai&quot;, &quot;Dang muon&quot;}, 0) {</span>
+<span class="fc" id="L316">        private final JTextField idField = new JTextField(12);</span>
+<span class="fc" id="L317">        private final JTextField nameField = new JTextField(20);</span>
+<span class="fc" id="L318">        private final JTextField filterField = new JTextField(20);</span>
+<span class="fc" id="L319">        private final JTextField phoneField = new JTextField(16);</span>
+<span class="fc" id="L320">        private final JTextField emailField = new JTextField(20);</span>
+<span class="fc" id="L321">        private final JTextField maxBorrowField = new JTextField(8);</span>
+<span class="fc" id="L322">        private final JComboBox&lt;ReaderStatus&gt; statusBox = new JComboBox&lt;&gt;(ReaderStatus.values());</span>
+<span class="fc" id="L323">        private final JTextField currentBorrowField = new JTextField(8);</span>
+<span class="fc" id="L324">        private final DefaultTableModel model = new DefaultTableModel(</span>
+<span class="fc" id="L325">                new Object[] {&quot;Ma&quot;, &quot;Ho ten&quot;, &quot;Phone&quot;, &quot;Email&quot;, &quot;Max&quot;, &quot;Trang thai&quot;, &quot;Dang muon&quot;}, 0) {</span>
             @Override
             public boolean isCellEditable(int row, int column) {
-<span class="nc" id="L355">                return false;</span>
+<span class="nc" id="L328">                return false;</span>
             }
         };
-<span class="fc" id="L358">        private final JTable table = new JTable(model);</span>
+<span class="fc" id="L331">        private final JTable table = new JTable(model);</span>
 
-        private ReaderPanel(ReaderManagementService service, boolean canManage) {
-<span class="fc" id="L361">            super(new BorderLayout(12, 12));</span>
-<span class="fc" id="L362">            this.service = service;</span>
-<span class="fc" id="L363">            this.canManage = canManage;</span>
-<span class="fc" id="L364">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
-<span class="fc" id="L365">            buildUi();</span>
-<span class="fc" id="L366">            refreshTable();</span>
-<span class="fc" id="L367">        }</span>
+        ReaderPanel(ReaderManagementService service, boolean canManage) {
+<span class="fc" id="L334">            super(new BorderLayout(12, 12));</span>
+<span class="fc" id="L335">            this.service = service;</span>
+<span class="fc" id="L336">            this.canManage = canManage;</span>
+<span class="fc" id="L337">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
+<span class="fc" id="L338">            buildUi();</span>
+<span class="fc" id="L339">            refreshTable();</span>
+<span class="fc" id="L340">        }</span>
 
         private void buildUi() {
-<span class="fc" id="L370">            JPanel topBar = new JPanel();</span>
-<span class="fc" id="L371">            topBar.add(new JLabel(&quot;Tim&quot;));</span>
-<span class="fc" id="L372">            topBar.add(filterField);</span>
-<span class="fc" id="L373">            JButton refreshButton = new JButton(&quot;Tai lai danh sach&quot;);</span>
-<span class="fc" id="L374">            refreshButton.addActionListener(event -&gt; {</span>
-<span class="nc" id="L375">                filterField.setText(&quot;&quot;);</span>
-<span class="nc" id="L376">                refreshTable();</span>
-<span class="nc" id="L377">            });</span>
-<span class="fc" id="L378">            topBar.add(refreshButton);</span>
-<span class="fc" id="L379">            add(topBar, BorderLayout.NORTH);</span>
+<span class="fc" id="L343">            JPanel topBar = new JPanel();</span>
+<span class="fc" id="L344">            topBar.add(new JLabel(&quot;Tim&quot;));</span>
+<span class="fc" id="L345">            topBar.add(filterField);</span>
+<span class="fc" id="L346">            JButton refreshButton = new JButton(&quot;Tai lai danh sach&quot;);</span>
+<span class="fc" id="L347">            refreshButton.addActionListener(event -&gt; {</span>
+<span class="nc" id="L348">                filterField.setText(&quot;&quot;);</span>
+<span class="nc" id="L349">                refreshTable();</span>
+<span class="nc" id="L350">            });</span>
+<span class="fc" id="L351">            topBar.add(refreshButton);</span>
+<span class="fc" id="L352">            add(topBar, BorderLayout.NORTH);</span>
 
             // enable row sorter so filtering can be applied
-<span class="fc" id="L382">            table.setAutoCreateRowSorter(true);</span>
-<span class="fc" id="L383">            filterField.getDocument().addDocumentListener(new DocumentListener() {</span>
+<span class="fc" id="L355">            table.setAutoCreateRowSorter(true);</span>
+<span class="fc" id="L356">            filterField.getDocument().addDocumentListener(new DocumentListener() {</span>
                 private void updateFilter() {
-                    String text = filterField.getText();
-                    RowFilter&lt;DefaultTableModel, Integer&gt; rf = null;
-                    if (text != null &amp;&amp; !text.isBlank()) {
-                        rf = RowFilter.regexFilter(&quot;(?i)&quot; + Pattern.quote(text), 1);
+<span class="fc" id="L358">                    String text = filterField.getText();</span>
+<span class="fc" id="L359">                    RowFilter&lt;DefaultTableModel, Integer&gt; rf = null;</span>
+<span class="pc bpc" id="L360" title="1 of 4 branches missed.">                    if (text != null &amp;&amp; !text.isBlank()) {</span>
+<span class="fc" id="L361">                        rf = RowFilter.regexFilter(&quot;(?i)&quot; + Pattern.quote(text), 1);</span>
                     }
-                    TableRowSorter&lt;?&gt; sorter = (TableRowSorter&lt;?&gt;) table.getRowSorter();
-                    if (sorter != null) {
-<span class="nc" id="L392">                        sorter.setRowFilter(rf);</span>
+                    @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L364">                    TableRowSorter&lt;DefaultTableModel&gt; sorter = (TableRowSorter&lt;DefaultTableModel&gt;) table.getRowSorter();</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">                    if (sorter != null) {</span>
+<span class="fc" id="L366">                        sorter.setRowFilter((RowFilter&lt;? super DefaultTableModel, ? super Integer&gt;) rf);</span>
                     }
-                }
+<span class="fc" id="L368">                }</span>
 
                 @Override
-<span class="nc" id="L397">                public void insertUpdate(DocumentEvent e) { updateFilter(); }</span>
+<span class="fc" id="L371">                public void insertUpdate(DocumentEvent e) { updateFilter(); }</span>
 
                 @Override
-<span class="nc" id="L400">                public void removeUpdate(DocumentEvent e) { updateFilter(); }</span>
+<span class="fc" id="L374">                public void removeUpdate(DocumentEvent e) { updateFilter(); }</span>
 
                 @Override
-<span class="nc" id="L403">                public void changedUpdate(DocumentEvent e) { updateFilter(); }</span>
+<span class="fc" id="L377">                public void changedUpdate(DocumentEvent e) { updateFilter(); }</span>
             });
 
-<span class="fc" id="L406">            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
-<span class="fc" id="L407">            table.getSelectionModel().addListSelectionListener(event -&gt; {</span>
-<span class="nc bnc" id="L408" title="All 2 branches missed.">                if (!event.getValueIsAdjusting()) {</span>
-<span class="nc" id="L409">                    loadSelectedReader();</span>
+<span class="fc" id="L380">            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
+<span class="fc" id="L381">            table.getSelectionModel().addListSelectionListener(event -&gt; {</span>
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">                if (!event.getValueIsAdjusting()) {</span>
+<span class="fc" id="L383">                    loadSelectedReader();</span>
                 }
-<span class="nc" id="L411">            });</span>
+<span class="fc" id="L385">            });</span>
 
-<span class="fc" id="L413">            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);</span>
-<span class="fc" id="L414">            splitPane.setResizeWeight(0.65);</span>
-<span class="fc" id="L415">            splitPane.setLeftComponent(new JScrollPane(table));</span>
-<span class="fc" id="L416">            splitPane.setRightComponent(createFormPanel());</span>
-<span class="fc" id="L417">            add(splitPane, BorderLayout.CENTER);</span>
-<span class="fc" id="L418">        }</span>
+<span class="fc" id="L387">            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);</span>
+<span class="fc" id="L388">            splitPane.setResizeWeight(0.65);</span>
+<span class="fc" id="L389">            splitPane.setLeftComponent(new JScrollPane(table));</span>
+<span class="fc" id="L390">            splitPane.setRightComponent(createFormPanel());</span>
+<span class="fc" id="L391">            add(splitPane, BorderLayout.CENTER);</span>
+<span class="fc" id="L392">        }</span>
 
         private JPanel createFormPanel() {
-<span class="fc" id="L421">            JPanel panel = new JPanel(new GridBagLayout());</span>
-<span class="pc bpc" id="L422" title="1 of 2 branches missed.">            panel.setBorder(BorderFactory.createTitledBorder(canManage ? &quot;Quan ly doc gia&quot; : &quot;Thong tin doc gia&quot;));</span>
-<span class="fc" id="L423">            GridBagConstraints gbc = createConstraints();</span>
+<span class="fc" id="L395">            JPanel panel = new JPanel(new GridBagLayout());</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">            panel.setBorder(BorderFactory.createTitledBorder(canManage ? &quot;Quan ly doc gia&quot; : &quot;Thong tin doc gia&quot;));</span>
+<span class="fc" id="L397">            GridBagConstraints gbc = createConstraints();</span>
 
-<span class="fc" id="L425">            addField(panel, gbc, 0, &quot;Ma doc gia&quot;, idField);</span>
-<span class="fc" id="L426">            addField(panel, gbc, 1, &quot;Ho ten&quot;, nameField);</span>
-<span class="fc" id="L427">            addField(panel, gbc, 2, &quot;So dien thoai&quot;, phoneField);</span>
-<span class="fc" id="L428">            addField(panel, gbc, 3, &quot;Email&quot;, emailField);</span>
-<span class="fc" id="L429">            addField(panel, gbc, 4, &quot;Gioi han muon&quot;, maxBorrowField);</span>
-<span class="fc" id="L430">            addField(panel, gbc, 5, &quot;Trang thai&quot;, statusBox);</span>
-<span class="fc" id="L431">            currentBorrowField.setEditable(false);</span>
-<span class="fc" id="L432">            addField(panel, gbc, 6, &quot;Dang muon&quot;, currentBorrowField);</span>
+<span class="fc" id="L399">            addField(panel, gbc, 0, &quot;Ma doc gia&quot;, idField);</span>
+<span class="fc" id="L400">            addField(panel, gbc, 1, &quot;Ho ten&quot;, nameField);</span>
+<span class="fc" id="L401">            addField(panel, gbc, 2, &quot;So dien thoai&quot;, phoneField);</span>
+<span class="fc" id="L402">            addField(panel, gbc, 3, &quot;Email&quot;, emailField);</span>
+<span class="fc" id="L403">            addField(panel, gbc, 4, &quot;Gioi han muon&quot;, maxBorrowField);</span>
+<span class="fc" id="L404">            addField(panel, gbc, 5, &quot;Trang thai&quot;, statusBox);</span>
+<span class="fc" id="L405">            currentBorrowField.setEditable(false);</span>
+<span class="fc" id="L406">            addField(panel, gbc, 6, &quot;Dang muon&quot;, currentBorrowField);</span>
 
-<span class="fc" id="L434">            JButton createButton = new JButton(&quot;Them moi&quot;);</span>
-<span class="fc" id="L435">            createButton.setEnabled(canManage);</span>
-<span class="pc" id="L436">            createButton.addActionListener(event -&gt; createReader());</span>
+<span class="fc" id="L408">            JButton createButton = new JButton(&quot;Them moi&quot;);</span>
+<span class="fc" id="L409">            createButton.setEnabled(canManage);</span>
+<span class="pc" id="L410">            createButton.addActionListener(event -&gt; createReader());</span>
 
-<span class="fc" id="L438">            JButton updateButton = new JButton(&quot;Cap nhat&quot;);</span>
-<span class="fc" id="L439">            updateButton.setEnabled(canManage);</span>
-<span class="pc" id="L440">            updateButton.addActionListener(event -&gt; updateReader());</span>
+<span class="fc" id="L412">            JButton updateButton = new JButton(&quot;Cap nhat&quot;);</span>
+<span class="fc" id="L413">            updateButton.setEnabled(canManage);</span>
+<span class="pc" id="L414">            updateButton.addActionListener(event -&gt; updateReader());</span>
 
-<span class="fc" id="L442">            JButton clearButton = new JButton(&quot;Xoa form&quot;);</span>
-<span class="pc" id="L443">            clearButton.addActionListener(event -&gt; clearForm());</span>
+<span class="fc" id="L416">            JButton clearButton = new JButton(&quot;Xoa form&quot;);</span>
+<span class="pc" id="L417">            clearButton.addActionListener(event -&gt; clearForm());</span>
 
-<span class="fc" id="L445">            gbc.gridx = 0;</span>
-<span class="fc" id="L446">            gbc.gridy = 7;</span>
-<span class="fc" id="L447">            gbc.gridwidth = 2;</span>
-<span class="fc" id="L448">            JPanel buttons = new JPanel();</span>
-<span class="fc" id="L449">            buttons.add(createButton);</span>
-<span class="fc" id="L450">            buttons.add(updateButton);</span>
-<span class="fc" id="L451">            buttons.add(clearButton);</span>
-<span class="fc" id="L452">            panel.add(buttons, gbc);</span>
-<span class="fc" id="L453">            return panel;</span>
+<span class="fc" id="L419">            gbc.gridx = 0;</span>
+<span class="fc" id="L420">            gbc.gridy = 7;</span>
+<span class="fc" id="L421">            gbc.gridwidth = 2;</span>
+<span class="fc" id="L422">            JPanel buttons = new JPanel();</span>
+<span class="fc" id="L423">            buttons.add(createButton);</span>
+<span class="fc" id="L424">            buttons.add(updateButton);</span>
+<span class="fc" id="L425">            buttons.add(clearButton);</span>
+<span class="fc" id="L426">            panel.add(buttons, gbc);</span>
+<span class="fc" id="L427">            return panel;</span>
         }
 
         private void refreshTable() {
-<span class="fc" id="L457">            runSafely(() -&gt; {</span>
-<span class="fc" id="L458">                model.setRowCount(0);</span>
-<span class="fc bfc" id="L459" title="All 2 branches covered.">                for (Reader reader : service.listReaders()) {</span>
-<span class="fc" id="L460">                    model.addRow(new Object[] {</span>
-<span class="fc" id="L461">                        reader.readerId(),</span>
-<span class="fc" id="L462">                        reader.fullName(),</span>
-<span class="fc" id="L463">                        reader.phone(),</span>
-<span class="fc" id="L464">                        reader.email(),</span>
-<span class="fc" id="L465">                        reader.maxBorrow(),</span>
-<span class="fc" id="L466">                        reader.status().name(),</span>
-<span class="fc" id="L467">                        service.getCurrentBorrowCount(reader.readerId())</span>
+<span class="fc" id="L431">            runSafely(() -&gt; {</span>
+<span class="fc" id="L432">                model.setRowCount(0);</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">                for (Reader reader : service.listReaders()) {</span>
+<span class="fc" id="L434">                    model.addRow(new Object[] {</span>
+<span class="fc" id="L435">                        reader.readerId(),</span>
+<span class="fc" id="L436">                        reader.fullName(),</span>
+<span class="fc" id="L437">                        reader.phone(),</span>
+<span class="fc" id="L438">                        reader.email(),</span>
+<span class="fc" id="L439">                        reader.maxBorrow(),</span>
+<span class="fc" id="L440">                        reader.status().name(),</span>
+<span class="fc" id="L441">                        service.getCurrentBorrowCount(reader.readerId())</span>
                     });
-                }
-<span class="fc" id="L470">            });</span>
-<span class="fc" id="L471">        }</span>
+<span class="fc" id="L443">                }</span>
+<span class="fc" id="L444">            });</span>
+<span class="fc" id="L445">        }</span>
 
         private void loadSelectedReader() {
-<span class="nc" id="L474">            int selectedRow = table.getSelectedRow();</span>
-<span class="nc bnc" id="L475" title="All 2 branches missed.">            if (selectedRow &lt; 0) {</span>
-<span class="nc" id="L476">                return;</span>
+<span class="fc" id="L448">            int selectedRow = table.getSelectedRow();</span>
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">            if (selectedRow &lt; 0) {</span>
+<span class="nc" id="L450">                return;</span>
             }
-<span class="nc" id="L478">            idField.setText(String.valueOf(model.getValueAt(selectedRow, 0)));</span>
-<span class="nc" id="L479">            nameField.setText(String.valueOf(model.getValueAt(selectedRow, 1)));</span>
-<span class="nc" id="L480">            phoneField.setText(String.valueOf(model.getValueAt(selectedRow, 2)));</span>
-<span class="nc" id="L481">            emailField.setText(String.valueOf(model.getValueAt(selectedRow, 3)));</span>
-<span class="nc" id="L482">            maxBorrowField.setText(String.valueOf(model.getValueAt(selectedRow, 4)));</span>
-<span class="nc" id="L483">            statusBox.setSelectedItem(ReaderStatus.valueOf(String.valueOf(model.getValueAt(selectedRow, 5))));</span>
-<span class="nc" id="L484">            currentBorrowField.setText(String.valueOf(model.getValueAt(selectedRow, 6)));</span>
-<span class="nc" id="L485">        }</span>
+<span class="fc" id="L452">            idField.setText(String.valueOf(model.getValueAt(selectedRow, 0)));</span>
+<span class="fc" id="L453">            nameField.setText(String.valueOf(model.getValueAt(selectedRow, 1)));</span>
+<span class="fc" id="L454">            phoneField.setText(String.valueOf(model.getValueAt(selectedRow, 2)));</span>
+<span class="fc" id="L455">            emailField.setText(String.valueOf(model.getValueAt(selectedRow, 3)));</span>
+<span class="fc" id="L456">            maxBorrowField.setText(String.valueOf(model.getValueAt(selectedRow, 4)));</span>
+<span class="fc" id="L457">            statusBox.setSelectedItem(ReaderStatus.valueOf(String.valueOf(model.getValueAt(selectedRow, 5))));</span>
+<span class="fc" id="L458">            currentBorrowField.setText(String.valueOf(model.getValueAt(selectedRow, 6)));</span>
+<span class="fc" id="L459">        }</span>
 
         private void createReader() {
-<span class="nc" id="L488">            runSafely(() -&gt; {</span>
-<span class="nc" id="L489">                service.createReader(readReaderFromForm());</span>
-<span class="nc" id="L490">                refreshTable();</span>
-<span class="nc" id="L491">                clearForm();</span>
-<span class="nc" id="L492">                showInfo(&quot;Da tao doc gia moi.&quot;);</span>
-<span class="nc" id="L493">            });</span>
-<span class="nc" id="L494">        }</span>
+<span class="fc" id="L462">            runSafely(() -&gt; {</span>
+<span class="fc" id="L463">                service.createReader(readReaderFromForm());</span>
+<span class="fc" id="L464">                refreshTable();</span>
+<span class="fc" id="L465">                clearForm();</span>
+<span class="fc" id="L466">                showInfo(&quot;Da tao doc gia moi.&quot;);</span>
+<span class="fc" id="L467">            });</span>
+<span class="fc" id="L468">        }</span>
 
         private void updateReader() {
-<span class="nc" id="L497">            runSafely(() -&gt; {</span>
-<span class="nc" id="L498">                service.updateReader(readReaderFromForm());</span>
-<span class="nc" id="L499">                refreshTable();</span>
-<span class="nc" id="L500">                showInfo(&quot;Da cap nhat doc gia.&quot;);</span>
-<span class="nc" id="L501">            });</span>
-<span class="nc" id="L502">        }</span>
+<span class="fc" id="L471">            runSafely(() -&gt; {</span>
+<span class="nc" id="L472">                service.updateReader(readReaderFromForm());</span>
+<span class="nc" id="L473">                refreshTable();</span>
+<span class="nc" id="L474">                showInfo(&quot;Da cap nhat doc gia.&quot;);</span>
+<span class="nc" id="L475">            });</span>
+<span class="fc" id="L476">        }</span>
 
         private Reader readReaderFromForm() {
-<span class="nc" id="L505">            return new Reader(</span>
-<span class="nc" id="L506">                    idField.getText().trim(),</span>
-<span class="nc" id="L507">                    nameField.getText().trim(),</span>
-<span class="nc" id="L508">                    phoneField.getText().trim(),</span>
-<span class="nc" id="L509">                    emailField.getText().trim(),</span>
-<span class="nc" id="L510">                    parseInt(maxBorrowField.getText(), &quot;Gioi han muon&quot;),</span>
-<span class="nc" id="L511">                    (ReaderStatus) statusBox.getSelectedItem());</span>
+<span class="fc" id="L479">            return new Reader(</span>
+<span class="fc" id="L480">                    idField.getText().trim(),</span>
+<span class="fc" id="L481">                    nameField.getText().trim(),</span>
+<span class="fc" id="L482">                    phoneField.getText().trim(),</span>
+<span class="fc" id="L483">                    emailField.getText().trim(),</span>
+<span class="fc" id="L484">                    parseInt(maxBorrowField.getText(), &quot;Gioi han muon&quot;),</span>
+<span class="fc" id="L485">                    (ReaderStatus) statusBox.getSelectedItem());</span>
         }
 
         private void clearForm() {
-<span class="nc" id="L515">            idField.setText(&quot;&quot;);</span>
-<span class="nc" id="L516">            nameField.setText(&quot;&quot;);</span>
-<span class="nc" id="L517">            phoneField.setText(&quot;&quot;);</span>
-<span class="nc" id="L518">            emailField.setText(&quot;&quot;);</span>
-<span class="nc" id="L519">            maxBorrowField.setText(&quot;&quot;);</span>
-<span class="nc" id="L520">            currentBorrowField.setText(&quot;&quot;);</span>
-<span class="nc" id="L521">            statusBox.setSelectedItem(ReaderStatus.ACTIVE);</span>
-<span class="nc" id="L522">        }</span>
+<span class="fc" id="L489">            idField.setText(&quot;&quot;);</span>
+<span class="fc" id="L490">            nameField.setText(&quot;&quot;);</span>
+<span class="fc" id="L491">            phoneField.setText(&quot;&quot;);</span>
+<span class="fc" id="L492">            emailField.setText(&quot;&quot;);</span>
+<span class="fc" id="L493">            maxBorrowField.setText(&quot;&quot;);</span>
+<span class="fc" id="L494">            currentBorrowField.setText(&quot;&quot;);</span>
+<span class="fc" id="L495">            statusBox.setSelectedItem(ReaderStatus.ACTIVE);</span>
+<span class="fc" id="L496">        }</span>
     }
 
-    private static final class CirculationPanel extends JPanel {
+    static final class CirculationPanel extends JPanel {
         private final CirculationService circulationService;
         private final HistoryService historyService;
         private final AuthenticatedSession session;
-<span class="nc" id="L529">        private final JTextField loanReaderField = new JTextField(12);</span>
-<span class="nc" id="L530">        private final JTextField loanBooksField = new JTextField(24);</span>
-<span class="nc" id="L531">        private final JTextArea receiptArea = new JTextArea();</span>
-<span class="nc" id="L532">        private final JTextField returnLoanIdField = new JTextField(12);</span>
-<span class="nc" id="L533">        private final JTextField returnBooksField = new JTextField(24);</span>
-<span class="nc" id="L534">        private final JTextField returnDateField = new JTextField(LocalDate.now().toString(), 12);</span>
-<span class="nc" id="L535">        private final JTextField renewLoanIdField = new JTextField(12);</span>
-<span class="nc" id="L536">        private final JTextField renewDaysField = new JTextField(&quot;7&quot;, 8);</span>
-<span class="nc" id="L537">        private final JTextField renewDateField = new JTextField(LocalDate.now().toString(), 12);</span>
+<span class="fc" id="L503">        private final JTextField loanReaderField = new JTextField(12);</span>
+<span class="fc" id="L504">        private final JTextField loanBooksField = new JTextField(24);</span>
+<span class="fc" id="L505">        private final JTextArea receiptArea = new JTextArea();</span>
+<span class="fc" id="L506">        private final JTextField returnLoanIdField = new JTextField(12);</span>
+<span class="fc" id="L507">        private final JTextField returnBooksField = new JTextField(24);</span>
+<span class="fc" id="L508">        private final JTextField returnDateField = new JTextField(LocalDate.now().toString(), 12);</span>
+<span class="fc" id="L509">        private final JTextField renewLoanIdField = new JTextField(12);</span>
+<span class="fc" id="L510">        private final JTextField renewDaysField = new JTextField(&quot;7&quot;, 8);</span>
+<span class="fc" id="L511">        private final JTextField renewDateField = new JTextField(LocalDate.now().toString(), 12);</span>
 
-        private CirculationPanel(
+        CirculationPanel(
                 CirculationService circulationService,
                 HistoryService historyService,
                 AuthenticatedSession session) {
-<span class="nc" id="L543">            super(new BorderLayout(12, 12));</span>
-<span class="nc" id="L544">            this.circulationService = circulationService;</span>
-<span class="nc" id="L545">            this.historyService = historyService;</span>
-<span class="nc" id="L546">            this.session = session;</span>
-<span class="nc" id="L547">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
-<span class="nc" id="L548">            buildUi();</span>
-<span class="nc" id="L549">        }</span>
+<span class="fc" id="L517">            super(new BorderLayout(12, 12));</span>
+<span class="fc" id="L518">            this.circulationService = circulationService;</span>
+<span class="fc" id="L519">            this.historyService = historyService;</span>
+<span class="fc" id="L520">            this.session = session;</span>
+<span class="fc" id="L521">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
+<span class="fc" id="L522">            buildUi();</span>
+<span class="fc" id="L523">        }</span>
 
         private void buildUi() {
-<span class="nc" id="L552">            JPanel forms = new JPanel(new GridBagLayout());</span>
-<span class="nc" id="L553">            GridBagConstraints gbc = createConstraints();</span>
-<span class="nc" id="L554">            gbc.gridx = 0;</span>
-<span class="nc" id="L555">            gbc.gridy = 0;</span>
-<span class="nc" id="L556">            gbc.weightx = 1;</span>
-<span class="nc" id="L557">            forms.add(createLoanPanel(), gbc);</span>
+<span class="fc" id="L526">            JPanel forms = new JPanel(new GridBagLayout());</span>
+<span class="fc" id="L527">            GridBagConstraints gbc = createConstraints();</span>
+<span class="fc" id="L528">            gbc.gridx = 0;</span>
+<span class="fc" id="L529">            gbc.gridy = 0;</span>
+<span class="fc" id="L530">            gbc.weightx = 1;</span>
+<span class="fc" id="L531">            forms.add(createLoanPanel(), gbc);</span>
 
-<span class="nc" id="L559">            gbc.gridy = 1;</span>
-<span class="nc" id="L560">            forms.add(createReturnPanel(), gbc);</span>
+<span class="fc" id="L533">            gbc.gridy = 1;</span>
+<span class="fc" id="L534">            forms.add(createReturnPanel(), gbc);</span>
 
-<span class="nc" id="L562">            gbc.gridy = 2;</span>
-<span class="nc" id="L563">            forms.add(createRenewPanel(), gbc);</span>
+<span class="fc" id="L536">            gbc.gridy = 2;</span>
+<span class="fc" id="L537">            forms.add(createRenewPanel(), gbc);</span>
 
-<span class="nc" id="L565">            receiptArea.setEditable(false);</span>
-<span class="nc" id="L566">            receiptArea.setLineWrap(true);</span>
-<span class="nc" id="L567">            receiptArea.setWrapStyleWord(true);</span>
-<span class="nc" id="L568">            receiptArea.setBorder(BorderFactory.createTitledBorder(&quot;Ket qua nghiep vu&quot;));</span>
-<span class="nc" id="L569">            receiptArea.setText(&quot;Thu thu dang dang nhap: %s (%s)&quot;.formatted(session.fullName(), session.librarianId()));</span>
+<span class="fc" id="L539">            receiptArea.setEditable(false);</span>
+<span class="fc" id="L540">            receiptArea.setLineWrap(true);</span>
+<span class="fc" id="L541">            receiptArea.setWrapStyleWord(true);</span>
+<span class="fc" id="L542">            receiptArea.setBorder(BorderFactory.createTitledBorder(&quot;Ket qua nghiep vu&quot;));</span>
+<span class="fc" id="L543">            receiptArea.setText(&quot;Thu thu dang dang nhap: %s (%s)&quot;.formatted(session.fullName(), session.librarianId()));</span>
 
-<span class="nc" id="L571">            JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(forms), new JScrollPane(receiptArea));</span>
-<span class="nc" id="L572">            split.setResizeWeight(0.72);</span>
-<span class="nc" id="L573">            add(split, BorderLayout.CENTER);</span>
-<span class="nc" id="L574">        }</span>
+<span class="fc" id="L545">            JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(forms), new JScrollPane(receiptArea));</span>
+<span class="fc" id="L546">            split.setResizeWeight(0.72);</span>
+<span class="fc" id="L547">            add(split, BorderLayout.CENTER);</span>
+<span class="fc" id="L548">        }</span>
 
         private JPanel createLoanPanel() {
-<span class="nc" id="L577">            JPanel panel = new JPanel(new GridBagLayout());</span>
-<span class="nc" id="L578">            panel.setBorder(BorderFactory.createTitledBorder(&quot;Lap phieu muon&quot;));</span>
-<span class="nc" id="L579">            GridBagConstraints gbc = createConstraints();</span>
-<span class="nc" id="L580">            addField(panel, gbc, 0, &quot;Ma doc gia&quot;, loanReaderField);</span>
-<span class="nc" id="L581">            addField(panel, gbc, 1, &quot;Danh sach sach&quot;, loanBooksField);</span>
+<span class="fc" id="L551">            JPanel panel = new JPanel(new GridBagLayout());</span>
+<span class="fc" id="L552">            panel.setBorder(BorderFactory.createTitledBorder(&quot;Lap phieu muon&quot;));</span>
+<span class="fc" id="L553">            GridBagConstraints gbc = createConstraints();</span>
+<span class="fc" id="L554">            addField(panel, gbc, 0, &quot;Ma doc gia&quot;, loanReaderField);</span>
+<span class="fc" id="L555">            addField(panel, gbc, 1, &quot;Danh sach sach&quot;, loanBooksField);</span>
 
-<span class="nc" id="L583">            JButton createButton = new JButton(&quot;Tao phieu muon&quot;);</span>
-<span class="nc" id="L584">            createButton.addActionListener(event -&gt; runSafely(() -&gt; {</span>
-<span class="nc" id="L585">                LoanReceipt receipt = circulationService.createLoan(</span>
-<span class="nc" id="L586">                        loanReaderField.getText().trim(),</span>
-<span class="nc" id="L587">                        session.librarianId(),</span>
-<span class="nc" id="L588">                        parseCsv(loanBooksField.getText()));</span>
-<span class="nc" id="L589">                receiptArea.setText(formatLoanReceipt(receipt));</span>
-<span class="nc" id="L590">                loanReaderField.setText(&quot;&quot;);</span>
-<span class="nc" id="L591">                loanBooksField.setText(&quot;&quot;);</span>
-<span class="nc" id="L592">            }));</span>
+<span class="fc" id="L557">            JButton createButton = new JButton(&quot;Tao phieu muon&quot;);</span>
+<span class="fc" id="L558">            createButton.addActionListener(event -&gt; runSafely(() -&gt; {</span>
+<span class="fc" id="L559">                LoanReceipt receipt = circulationService.createLoan(</span>
+<span class="fc" id="L560">                        loanReaderField.getText().trim(),</span>
+<span class="fc" id="L561">                        session.librarianId(),</span>
+<span class="fc" id="L562">                        parseCsv(loanBooksField.getText()));</span>
+<span class="fc" id="L563">                receiptArea.setText(formatLoanReceipt(receipt));</span>
+<span class="fc" id="L564">                loanReaderField.setText(&quot;&quot;);</span>
+<span class="fc" id="L565">                loanBooksField.setText(&quot;&quot;);</span>
+<span class="fc" id="L566">            }));</span>
 
-<span class="nc" id="L594">            gbc.gridx = 0;</span>
-<span class="nc" id="L595">            gbc.gridy = 2;</span>
-<span class="nc" id="L596">            gbc.gridwidth = 2;</span>
-<span class="nc" id="L597">            panel.add(createButton, gbc);</span>
-<span class="nc" id="L598">            return panel;</span>
+<span class="fc" id="L568">            gbc.gridx = 0;</span>
+<span class="fc" id="L569">            gbc.gridy = 2;</span>
+<span class="fc" id="L570">            gbc.gridwidth = 2;</span>
+<span class="fc" id="L571">            panel.add(createButton, gbc);</span>
+<span class="fc" id="L572">            return panel;</span>
         }
 
         private JPanel createReturnPanel() {
-<span class="nc" id="L602">            JPanel panel = new JPanel(new GridBagLayout());</span>
-<span class="nc" id="L603">            panel.setBorder(BorderFactory.createTitledBorder(&quot;Tra sach&quot;));</span>
-<span class="nc" id="L604">            GridBagConstraints gbc = createConstraints();</span>
-<span class="nc" id="L605">            addField(panel, gbc, 0, &quot;Ma phieu muon&quot;, returnLoanIdField);</span>
-<span class="nc" id="L606">            addField(panel, gbc, 1, &quot;Sach tra (bo trong = tat ca)&quot;, returnBooksField);</span>
-<span class="nc" id="L607">            addField(panel, gbc, 2, &quot;Ngay tra&quot;, returnDateField);</span>
+<span class="fc" id="L576">            JPanel panel = new JPanel(new GridBagLayout());</span>
+<span class="fc" id="L577">            panel.setBorder(BorderFactory.createTitledBorder(&quot;Tra sach&quot;));</span>
+<span class="fc" id="L578">            GridBagConstraints gbc = createConstraints();</span>
+<span class="fc" id="L579">            addField(panel, gbc, 0, &quot;Ma phieu muon&quot;, returnLoanIdField);</span>
+<span class="fc" id="L580">            addField(panel, gbc, 1, &quot;Sach tra (bo trong = tat ca)&quot;, returnBooksField);</span>
+<span class="fc" id="L581">            addField(panel, gbc, 2, &quot;Ngay tra&quot;, returnDateField);</span>
 
-<span class="nc" id="L609">            JButton returnButton = new JButton(&quot;Xu ly tra sach&quot;);</span>
-<span class="nc" id="L610">            returnButton.addActionListener(event -&gt; runSafely(() -&gt; {</span>
-<span class="nc" id="L611">                List&lt;String&gt; books = parseCsv(returnBooksField.getText());</span>
-<span class="nc bnc" id="L612" title="All 2 branches missed.">                if (books.isEmpty()) {</span>
-<span class="nc" id="L613">                    books = loadUnreturnedBookIds(returnLoanIdField.getText().trim());</span>
+<span class="fc" id="L583">            JButton returnButton = new JButton(&quot;Xu ly tra sach&quot;);</span>
+<span class="fc" id="L584">            returnButton.addActionListener(event -&gt; runSafely(() -&gt; {</span>
+<span class="fc" id="L585">                List&lt;String&gt; books = parseCsv(returnBooksField.getText());</span>
+<span class="fc bfc" id="L586" title="All 2 branches covered.">                if (books.isEmpty()) {</span>
+<span class="fc" id="L587">                    books = loadUnreturnedBookIds(returnLoanIdField.getText().trim());</span>
                 }
-<span class="nc" id="L615">                ReturnReceipt receipt = circulationService.returnBooks(</span>
-<span class="nc" id="L616">                        returnLoanIdField.getText().trim(),</span>
-<span class="nc" id="L617">                        books,</span>
-<span class="nc" id="L618">                        parseDate(returnDateField.getText(), &quot;Ngay tra&quot;));</span>
-<span class="nc" id="L619">                receiptArea.setText(formatReturnReceipt(receipt));</span>
-<span class="nc" id="L620">            }));</span>
+<span class="fc" id="L589">                ReturnReceipt receipt = circulationService.returnBooks(</span>
+<span class="fc" id="L590">                        returnLoanIdField.getText().trim(),</span>
+                        books,
+<span class="fc" id="L592">                        parseDate(returnDateField.getText(), &quot;Ngay tra&quot;));</span>
+<span class="fc" id="L593">                receiptArea.setText(formatReturnReceipt(receipt));</span>
+<span class="fc" id="L594">            }));</span>
 
-<span class="nc" id="L622">            gbc.gridx = 0;</span>
-<span class="nc" id="L623">            gbc.gridy = 3;</span>
-<span class="nc" id="L624">            gbc.gridwidth = 2;</span>
-<span class="nc" id="L625">            panel.add(returnButton, gbc);</span>
-<span class="nc" id="L626">            return panel;</span>
+<span class="fc" id="L596">            gbc.gridx = 0;</span>
+<span class="fc" id="L597">            gbc.gridy = 3;</span>
+<span class="fc" id="L598">            gbc.gridwidth = 2;</span>
+<span class="fc" id="L599">            panel.add(returnButton, gbc);</span>
+<span class="fc" id="L600">            return panel;</span>
         }
 
         private JPanel createRenewPanel() {
-<span class="nc" id="L630">            JPanel panel = new JPanel(new GridBagLayout());</span>
-<span class="nc" id="L631">            panel.setBorder(BorderFactory.createTitledBorder(&quot;Gia han&quot;));</span>
-<span class="nc" id="L632">            GridBagConstraints gbc = createConstraints();</span>
-<span class="nc" id="L633">            addField(panel, gbc, 0, &quot;Ma phieu muon&quot;, renewLoanIdField);</span>
-<span class="nc" id="L634">            addField(panel, gbc, 1, &quot;So ngay gia han&quot;, renewDaysField);</span>
-<span class="nc" id="L635">            addField(panel, gbc, 2, &quot;Ngay tham chieu&quot;, renewDateField);</span>
+<span class="fc" id="L604">            JPanel panel = new JPanel(new GridBagLayout());</span>
+<span class="fc" id="L605">            panel.setBorder(BorderFactory.createTitledBorder(&quot;Gia han&quot;));</span>
+<span class="fc" id="L606">            GridBagConstraints gbc = createConstraints();</span>
+<span class="fc" id="L607">            addField(panel, gbc, 0, &quot;Ma phieu muon&quot;, renewLoanIdField);</span>
+<span class="fc" id="L608">            addField(panel, gbc, 1, &quot;So ngay gia han&quot;, renewDaysField);</span>
+<span class="fc" id="L609">            addField(panel, gbc, 2, &quot;Ngay tham chieu&quot;, renewDateField);</span>
 
-<span class="nc" id="L637">            JButton renewButton = new JButton(&quot;Gia han&quot;);</span>
-<span class="nc" id="L638">            renewButton.addActionListener(event -&gt; runSafely(() -&gt; {</span>
-<span class="nc" id="L639">                Loan loan = circulationService.renewLoan(</span>
-<span class="nc" id="L640">                        renewLoanIdField.getText().trim(),</span>
-<span class="nc" id="L641">                        parseInt(renewDaysField.getText(), &quot;So ngay gia han&quot;),</span>
-<span class="nc" id="L642">                        parseDate(renewDateField.getText(), &quot;Ngay tham chieu&quot;));</span>
-<span class="nc" id="L643">                receiptArea.setText(&quot;&quot;&quot;</span>
+<span class="fc" id="L611">            JButton renewButton = new JButton(&quot;Gia han&quot;);</span>
+<span class="fc" id="L612">            renewButton.addActionListener(event -&gt; runSafely(() -&gt; {</span>
+<span class="fc" id="L613">                Loan loan = circulationService.renewLoan(</span>
+<span class="fc" id="L614">                        renewLoanIdField.getText().trim(),</span>
+<span class="fc" id="L615">                        parseInt(renewDaysField.getText(), &quot;So ngay gia han&quot;),</span>
+<span class="fc" id="L616">                        parseDate(renewDateField.getText(), &quot;Ngay tham chieu&quot;));</span>
+<span class="fc" id="L617">                receiptArea.setText(&quot;&quot;&quot;</span>
                         Gia han thanh cong
                         Phieu muon: %s
                         Han tra moi: %s
                         Trang thai: %s
-<span class="nc" id="L648">                        &quot;&quot;&quot;.formatted(loan.loanId(), loan.dueDate(), loan.status().name()));</span>
-<span class="nc" id="L649">            }));</span>
+<span class="fc" id="L622">                        &quot;&quot;&quot;.formatted(loan.loanId(), loan.dueDate(), loan.status().name()));</span>
+<span class="fc" id="L623">            }));</span>
 
-<span class="nc" id="L651">            gbc.gridx = 0;</span>
-<span class="nc" id="L652">            gbc.gridy = 3;</span>
-<span class="nc" id="L653">            gbc.gridwidth = 2;</span>
-<span class="nc" id="L654">            panel.add(renewButton, gbc);</span>
-<span class="nc" id="L655">            return panel;</span>
+<span class="fc" id="L625">            gbc.gridx = 0;</span>
+<span class="fc" id="L626">            gbc.gridy = 3;</span>
+<span class="fc" id="L627">            gbc.gridwidth = 2;</span>
+<span class="fc" id="L628">            panel.add(renewButton, gbc);</span>
+<span class="fc" id="L629">            return panel;</span>
         }
 
         private List&lt;String&gt; loadUnreturnedBookIds(String loanId) {
-<span class="nc" id="L659">            Optional&lt;com.thayhoang.quanly.application.service.dto.LoanRecord&gt; record = historyService.getLoanRecord(loanId);</span>
-<span class="nc bnc" id="L660" title="All 2 branches missed.">            if (record.isEmpty()) {</span>
-<span class="nc" id="L661">                throw new ApplicationException(&quot;Khong tim thay phieu muon de lay danh sach sach tra&quot;);</span>
+<span class="fc" id="L633">            Optional&lt;com.thayhoang.quanly.application.service.dto.LoanRecord&gt; record = historyService.getLoanRecord(loanId);</span>
+<span class="fc bfc" id="L634" title="All 2 branches covered.">            if (record.isEmpty()) {</span>
+<span class="fc" id="L635">                throw new ApplicationException(&quot;Khong tim thay phieu muon de lay danh sach sach tra&quot;);</span>
             }
-<span class="nc" id="L663">            List&lt;String&gt; ids = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L664" title="All 2 branches missed.">            for (LoanDetail detail : record.get().details()) {</span>
-<span class="nc bnc" id="L665" title="All 2 branches missed.">                if (!detail.returned()) {</span>
-<span class="nc" id="L666">                    ids.add(detail.bookId());</span>
+<span class="fc" id="L637">            List&lt;String&gt; ids = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L638" title="All 2 branches covered.">            for (LoanDetail detail : record.get().details()) {</span>
+<span class="fc bfc" id="L639" title="All 2 branches covered.">                if (!detail.returned()) {</span>
+<span class="fc" id="L640">                    ids.add(detail.bookId());</span>
                 }
-            }
-<span class="nc" id="L669">            return ids;</span>
+<span class="fc" id="L642">            }</span>
+<span class="fc" id="L643">            return ids;</span>
         }
 
         private String formatLoanReceipt(LoanReceipt receipt) {
-<span class="nc" id="L673">            return &quot;&quot;&quot;</span>
-                    Lap phieu muon thanh cong
-                    Ma phieu: %s
-                    Doc gia: %s
-                    Thu thu: %s
-                    Han tra: %s
-                    So dau sach: %s
-<span class="nc" id="L680">                    &quot;&quot;&quot;.formatted(</span>
-<span class="nc" id="L681">                    receipt.loan().loanId(),</span>
-<span class="nc" id="L682">                    receipt.loan().readerId(),</span>
-<span class="nc" id="L683">                    receipt.loan().librarianId(),</span>
-<span class="nc" id="L684">                    receipt.loan().dueDate(),</span>
-<span class="nc" id="L685">                    receipt.details().size());</span>
+<span class="fc" id="L647">            return UiUtils.formatLoanReceipt(</span>
+<span class="fc" id="L648">                receipt.loan().loanId(),</span>
+<span class="fc" id="L649">                receipt.loan().readerId(),</span>
+<span class="fc" id="L650">                receipt.loan().librarianId(),</span>
+<span class="fc" id="L651">                receipt.loan().dueDate().toString(),</span>
+<span class="fc" id="L652">                receipt.details().size());</span>
         }
 
         private String formatReturnReceipt(ReturnReceipt receipt) {
-<span class="nc" id="L689">            String fineText = receipt.fine()</span>
-<span class="nc" id="L690">                    .map(fine -&gt; &quot;Tien phat: %s (%s)&quot;.formatted(fine.amount(), fine.paidStatus().name()))</span>
-<span class="nc" id="L691">                    .orElse(&quot;Tien phat: 0&quot;);</span>
-<span class="nc" id="L692">            return &quot;&quot;&quot;</span>
-                    Tra sach thanh cong
-                    Ma phieu: %s
-                    Trang thai: %s
-                    Ngay tra: %s
-                    %s
-<span class="nc" id="L698">                    &quot;&quot;&quot;.formatted(</span>
-<span class="nc" id="L699">                    receipt.loan().loanId(),</span>
-<span class="nc" id="L700">                    receipt.loan().status().name(),</span>
-<span class="nc" id="L701">                    receipt.loan().returnDate(),</span>
-<span class="nc" id="L702">                    fineText);</span>
+<span class="fc" id="L656">            String fineText = receipt.fine()</span>
+<span class="fc" id="L657">                .map(fine -&gt; &quot;Tien phat: %s (%s)&quot;.formatted(fine.amount(), fine.paidStatus().name()))</span>
+<span class="fc" id="L658">                .orElse(&quot;Tien phat: 0&quot;);</span>
+<span class="fc" id="L659">            return UiUtils.formatReturnReceipt(</span>
+<span class="fc" id="L660">                receipt.loan().loanId(),</span>
+<span class="fc" id="L661">                receipt.loan().status().name(),</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">                receipt.loan().returnDate() == null ? &quot;&quot; : receipt.loan().returnDate().toString(),</span>
+                fineText);
         }
     }
 
-    private static final class HistoryPanel extends JPanel {
+    static final class HistoryPanel extends JPanel {
         private final HistoryService service;
-<span class="nc" id="L708">        private final DefaultTableModel model = new DefaultTableModel(</span>
-<span class="nc" id="L709">                new Object[] {&quot;Loan&quot;, &quot;Reader&quot;, &quot;Librarian&quot;, &quot;Loan Date&quot;, &quot;Due&quot;, &quot;Return&quot;, &quot;Status&quot;, &quot;Fine&quot;}, 0) {</span>
+<span class="fc" id="L669">        private final DefaultTableModel model = new DefaultTableModel(</span>
+<span class="fc" id="L670">                new Object[] {&quot;Loan&quot;, &quot;Reader&quot;, &quot;Librarian&quot;, &quot;Loan Date&quot;, &quot;Due&quot;, &quot;Return&quot;, &quot;Status&quot;, &quot;Fine&quot;}, 0) {</span>
             @Override
             public boolean isCellEditable(int row, int column) {
-<span class="nc" id="L712">                return false;</span>
+<span class="nc" id="L673">                return false;</span>
             }
         };
-<span class="nc" id="L715">        private final JTable table = new JTable(model);</span>
-<span class="nc" id="L716">        private final JTextField readerIdField = new JTextField(12);</span>
-<span class="nc" id="L717">        private final JTextField loanIdField = new JTextField(12);</span>
-<span class="nc" id="L718">        private final JTextArea detailArea = new JTextArea();</span>
+<span class="fc" id="L676">        private final JTable table = new JTable(model);</span>
+<span class="fc" id="L677">        private final JTextField readerIdField = new JTextField(12);</span>
+<span class="fc" id="L678">        private final JTextField loanIdField = new JTextField(12);</span>
+<span class="fc" id="L679">        private final JTextArea detailArea = new JTextArea();</span>
 
-        private HistoryPanel(HistoryService service) {
-<span class="nc" id="L721">            super(new BorderLayout(12, 12));</span>
-<span class="nc" id="L722">            this.service = service;</span>
-<span class="nc" id="L723">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
-<span class="nc" id="L724">            buildUi();</span>
-<span class="nc" id="L725">        }</span>
+        HistoryPanel(HistoryService service) {
+<span class="fc" id="L682">            super(new BorderLayout(12, 12));</span>
+<span class="fc" id="L683">            this.service = service;</span>
+<span class="fc" id="L684">            setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));</span>
+<span class="fc" id="L685">            buildUi();</span>
+<span class="fc" id="L686">        }</span>
 
         private void buildUi() {
-<span class="nc" id="L728">            JPanel topBar = new JPanel();</span>
-<span class="nc" id="L729">            topBar.add(new JLabel(&quot;Theo doc gia&quot;));</span>
-<span class="nc" id="L730">            topBar.add(readerIdField);</span>
+<span class="fc" id="L689">            JPanel topBar = new JPanel();</span>
+<span class="fc" id="L690">            topBar.add(new JLabel(&quot;Theo doc gia&quot;));</span>
+<span class="fc" id="L691">            topBar.add(readerIdField);</span>
 
-<span class="nc" id="L732">            JButton loadReaderButton = new JButton(&quot;Tai lich su&quot;);</span>
-<span class="nc" id="L733">            loadReaderButton.addActionListener(event -&gt; loadReaderHistory());</span>
-<span class="nc" id="L734">            topBar.add(loadReaderButton);</span>
+<span class="fc" id="L693">            JButton loadReaderButton = new JButton(&quot;Tai lich su&quot;);</span>
+<span class="pc" id="L694">            loadReaderButton.addActionListener(event -&gt; loadReaderHistory());</span>
+<span class="fc" id="L695">            topBar.add(loadReaderButton);</span>
 
-<span class="nc" id="L736">            topBar.add(new JLabel(&quot;Theo loan&quot;));</span>
-<span class="nc" id="L737">            topBar.add(loanIdField);</span>
+<span class="fc" id="L697">            topBar.add(new JLabel(&quot;Theo loan&quot;));</span>
+<span class="fc" id="L698">            topBar.add(loanIdField);</span>
 
-<span class="nc" id="L739">            JButton loadLoanButton = new JButton(&quot;Xem chi tiet&quot;);</span>
-<span class="nc" id="L740">            loadLoanButton.addActionListener(event -&gt; loadLoanRecord());</span>
-<span class="nc" id="L741">            topBar.add(loadLoanButton);</span>
-<span class="nc" id="L742">            add(topBar, BorderLayout.NORTH);</span>
+<span class="fc" id="L700">            JButton loadLoanButton = new JButton(&quot;Xem chi tiet&quot;);</span>
+<span class="pc" id="L701">            loadLoanButton.addActionListener(event -&gt; loadLoanRecord());</span>
+<span class="fc" id="L702">            topBar.add(loadLoanButton);</span>
+<span class="fc" id="L703">            add(topBar, BorderLayout.NORTH);</span>
 
-<span class="nc" id="L744">            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
-<span class="nc" id="L745">            table.getSelectionModel().addListSelectionListener(event -&gt; {</span>
-<span class="nc bnc" id="L746" title="All 4 branches missed.">                if (!event.getValueIsAdjusting() &amp;&amp; table.getSelectedRow() &gt;= 0) {</span>
-<span class="nc" id="L747">                    loanIdField.setText(String.valueOf(model.getValueAt(table.getSelectedRow(), 0)));</span>
-<span class="nc" id="L748">                    loadLoanRecord();</span>
+<span class="fc" id="L705">            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
+<span class="fc" id="L706">            table.getSelectionModel().addListSelectionListener(event -&gt; {</span>
+<span class="pc bpc" id="L707" title="2 of 4 branches missed.">                if (!event.getValueIsAdjusting() &amp;&amp; table.getSelectedRow() &gt;= 0) {</span>
+<span class="fc" id="L708">                    loanIdField.setText(String.valueOf(model.getValueAt(table.getSelectedRow(), 0)));</span>
+<span class="fc" id="L709">                    loadLoanRecord();</span>
                 }
-<span class="nc" id="L750">            });</span>
+<span class="fc" id="L711">            });</span>
 
-<span class="nc" id="L752">            detailArea.setEditable(false);</span>
-<span class="nc" id="L753">            detailArea.setLineWrap(true);</span>
-<span class="nc" id="L754">            detailArea.setWrapStyleWord(true);</span>
+<span class="fc" id="L713">            detailArea.setEditable(false);</span>
+<span class="fc" id="L714">            detailArea.setLineWrap(true);</span>
+<span class="fc" id="L715">            detailArea.setWrapStyleWord(true);</span>
 
-<span class="nc" id="L756">            JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(table), new JScrollPane(detailArea));</span>
-<span class="nc" id="L757">            split.setResizeWeight(0.6);</span>
-<span class="nc" id="L758">            add(split, BorderLayout.CENTER);</span>
-<span class="nc" id="L759">        }</span>
+<span class="fc" id="L717">            JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(table), new JScrollPane(detailArea));</span>
+<span class="fc" id="L718">            split.setResizeWeight(0.6);</span>
+<span class="fc" id="L719">            add(split, BorderLayout.CENTER);</span>
+<span class="fc" id="L720">        }</span>
 
         private void loadReaderHistory() {
-<span class="nc" id="L762">            runSafely(() -&gt; {</span>
-<span class="nc" id="L763">                model.setRowCount(0);</span>
-<span class="nc bnc" id="L764" title="All 2 branches missed.">                for (com.thayhoang.quanly.application.service.dto.LoanRecord record : service.getReaderHistory(readerIdField.getText().trim())) {</span>
-<span class="nc" id="L765">                    model.addRow(new Object[] {</span>
-<span class="nc" id="L766">                        record.loan().loanId(),</span>
-<span class="nc" id="L767">                        record.reader().fullName(),</span>
-<span class="nc" id="L768">                        record.librarian().fullName(),</span>
-<span class="nc" id="L769">                        record.loan().loanDate(),</span>
-<span class="nc" id="L770">                        record.loan().dueDate(),</span>
-<span class="nc" id="L771">                        record.loan().returnDate(),</span>
-<span class="nc" id="L772">                        record.loan().status().name(),</span>
-<span class="nc" id="L773">                        record.fine().map(Fine::amount).orElse(java.math.BigDecimal.ZERO)</span>
+<span class="fc" id="L723">            runSafely(() -&gt; {</span>
+<span class="fc" id="L724">                model.setRowCount(0);</span>
+<span class="fc bfc" id="L725" title="All 2 branches covered.">                for (com.thayhoang.quanly.application.service.dto.LoanRecord record : service.getReaderHistory(readerIdField.getText().trim())) {</span>
+<span class="fc" id="L726">                    model.addRow(new Object[] {</span>
+<span class="fc" id="L727">                        record.loan().loanId(),</span>
+<span class="fc" id="L728">                        record.reader().fullName(),</span>
+<span class="fc" id="L729">                        record.librarian().fullName(),</span>
+<span class="fc" id="L730">                        record.loan().loanDate(),</span>
+<span class="fc" id="L731">                        record.loan().dueDate(),</span>
+<span class="fc" id="L732">                        record.loan().returnDate(),</span>
+<span class="fc" id="L733">                        record.loan().status().name(),</span>
+<span class="fc" id="L734">                        record.fine().map(Fine::amount).orElse(java.math.BigDecimal.ZERO)</span>
                     });
-                }
-<span class="nc" id="L776">                detailArea.setText(&quot;Da tai &quot; + model.getRowCount() + &quot; dong lich su.&quot;);</span>
-<span class="nc" id="L777">            });</span>
-<span class="nc" id="L778">        }</span>
+<span class="fc" id="L736">                }</span>
+<span class="fc" id="L737">                detailArea.setText(&quot;Da tai &quot; + model.getRowCount() + &quot; dong lich su.&quot;);</span>
+<span class="fc" id="L738">            });</span>
+<span class="fc" id="L739">        }</span>
 
         private void loadLoanRecord() {
-<span class="nc" id="L781">            runSafely(() -&gt; {</span>
-<span class="nc" id="L782">                Optional&lt;com.thayhoang.quanly.application.service.dto.LoanRecord&gt; record =</span>
-<span class="nc" id="L783">                        service.getLoanRecord(loanIdField.getText().trim());</span>
-<span class="nc bnc" id="L784" title="All 2 branches missed.">                if (record.isEmpty()) {</span>
-<span class="nc" id="L785">                    detailArea.setText(&quot;Khong tim thay phieu muon.&quot;);</span>
-<span class="nc" id="L786">                    return;</span>
+<span class="fc" id="L742">            runSafely(() -&gt; {</span>
+<span class="fc" id="L743">                Optional&lt;com.thayhoang.quanly.application.service.dto.LoanRecord&gt; record =</span>
+<span class="fc" id="L744">                        service.getLoanRecord(loanIdField.getText().trim());</span>
+<span class="fc bfc" id="L745" title="All 2 branches covered.">                if (record.isEmpty()) {</span>
+<span class="fc" id="L746">                    detailArea.setText(&quot;Khong tim thay phieu muon.&quot;);</span>
+<span class="fc" id="L747">                    return;</span>
                 }
 
-<span class="nc" id="L789">                var loanRecord = record.get();</span>
-<span class="nc" id="L790">                StringBuilder detail = new StringBuilder();</span>
-<span class="nc" id="L791">                detail.append(&quot;Phieu muon: &quot;).append(loanRecord.loan().loanId()).append('\n');</span>
-<span class="nc" id="L792">                detail.append(&quot;Doc gia: &quot;).append(loanRecord.reader().fullName()).append(&quot; (&quot;)</span>
-<span class="nc" id="L793">                        .append(loanRecord.reader().readerId()).append(&quot;)\n&quot;);</span>
-<span class="nc" id="L794">                detail.append(&quot;Thu thu: &quot;).append(loanRecord.librarian().fullName()).append('\n');</span>
-<span class="nc" id="L795">                detail.append(&quot;Ngay muon: &quot;).append(loanRecord.loan().loanDate()).append('\n');</span>
-<span class="nc" id="L796">                detail.append(&quot;Han tra: &quot;).append(loanRecord.loan().dueDate()).append('\n');</span>
-<span class="nc" id="L797">                detail.append(&quot;Ngay tra: &quot;).append(loanRecord.loan().returnDate()).append('\n');</span>
-<span class="nc" id="L798">                detail.append(&quot;Trang thai: &quot;).append(loanRecord.loan().status().name()).append(&quot;\n\n&quot;);</span>
-<span class="nc" id="L799">                detail.append(&quot;Chi tiet sach:\n&quot;);</span>
-<span class="nc bnc" id="L800" title="All 2 branches missed.">                for (LoanDetail item : loanRecord.details()) {</span>
-<span class="nc" id="L801">                    detail.append(&quot;- &quot;).append(item.bookId())</span>
-<span class="nc" id="L802">                            .append(&quot; | qty=&quot;).append(item.quantity())</span>
-<span class="nc" id="L803">                            .append(&quot; | returned=&quot;).append(item.returned())</span>
-<span class="nc" id="L804">                            .append('\n');</span>
-                }
-<span class="nc" id="L806">                detail.append('\n');</span>
-<span class="nc" id="L807">                detail.append(&quot;Phat: &quot;).append(loanRecord.fine()</span>
-<span class="nc" id="L808">                        .map(fine -&gt; fine.amount() + &quot; - &quot; + fine.reason() + &quot; - &quot; + fine.paidStatus().name())</span>
-<span class="nc" id="L809">                        .orElse(&quot;Khong co&quot;));</span>
-<span class="nc" id="L810">                detailArea.setText(detail.toString());</span>
-<span class="nc" id="L811">            });</span>
-<span class="nc" id="L812">        }</span>
+<span class="fc" id="L750">                var loanRecord = record.get();</span>
+<span class="fc" id="L751">                StringBuilder detail = new StringBuilder();</span>
+<span class="fc" id="L752">                detail.append(&quot;Phieu muon: &quot;).append(loanRecord.loan().loanId()).append('\n');</span>
+<span class="fc" id="L753">                detail.append(&quot;Doc gia: &quot;).append(loanRecord.reader().fullName()).append(&quot; (&quot;)</span>
+<span class="fc" id="L754">                        .append(loanRecord.reader().readerId()).append(&quot;)\n&quot;);</span>
+<span class="fc" id="L755">                detail.append(&quot;Thu thu: &quot;).append(loanRecord.librarian().fullName()).append('\n');</span>
+<span class="fc" id="L756">                detail.append(&quot;Ngay muon: &quot;).append(loanRecord.loan().loanDate()).append('\n');</span>
+<span class="fc" id="L757">                detail.append(&quot;Han tra: &quot;).append(loanRecord.loan().dueDate()).append('\n');</span>
+<span class="fc" id="L758">                detail.append(&quot;Ngay tra: &quot;).append(loanRecord.loan().returnDate()).append('\n');</span>
+<span class="fc" id="L759">                detail.append(&quot;Trang thai: &quot;).append(loanRecord.loan().status().name()).append(&quot;\n\n&quot;);</span>
+<span class="fc" id="L760">                detail.append(&quot;Chi tiet sach:\n&quot;);</span>
+<span class="fc bfc" id="L761" title="All 2 branches covered.">                for (LoanDetail item : loanRecord.details()) {</span>
+<span class="fc" id="L762">                    detail.append(&quot;- &quot;).append(item.bookId())</span>
+<span class="fc" id="L763">                            .append(&quot; | qty=&quot;).append(item.quantity())</span>
+<span class="fc" id="L764">                            .append(&quot; | returned=&quot;).append(item.returned())</span>
+<span class="fc" id="L765">                            .append('\n');</span>
+<span class="fc" id="L766">                }</span>
+<span class="fc" id="L767">                detail.append('\n');</span>
+<span class="fc" id="L768">                detail.append(&quot;Phat: &quot;).append(loanRecord.fine()</span>
+<span class="fc" id="L769">                        .map(fine -&gt; fine.amount() + &quot; - &quot; + fine.reason() + &quot; - &quot; + fine.paidStatus().name())</span>
+<span class="fc" id="L770">                        .orElse(&quot;Khong co&quot;));</span>
+<span class="fc" id="L771">                detailArea.setText(detail.toString());</span>
+<span class="fc" id="L772">            });</span>
+<span class="fc" id="L773">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

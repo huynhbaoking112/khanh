@@ -112,36 +112,9 @@ public final class LibraryShellFrame extends JFrame {
         gbc.weightx = 1;
         panel.add(component, gbc);
     }
-
-    private static int parseInt(String value, String fieldName) {
-        try {
-            return Integer.parseInt(value.trim());
-        } catch (NumberFormatException exception) {
-            throw new ApplicationException(fieldName + " khong hop le.");
-        }
-    }
-
-    private static LocalDate parseDate(String value, String fieldName) {
-        try {
-            return LocalDate.parse(value.trim());
-        } catch (DateTimeParseException exception) {
-            throw new ApplicationException(fieldName + " phai theo dinh dang yyyy-MM-dd.");
-        }
-    }
-
-    private static List<String> parseCsv(String input) {
-        List<String> values = new ArrayList<>();
-        if (input == null || input.isBlank()) {
-            return values;
-        }
-        for (String token : input.split(",")) {
-            String value = token.trim();
-            if (!value.isEmpty()) {
-                values.add(value);
-            }
-        }
-        return values;
-    }
+    private static int parseInt(String value, String fieldName) { return UiUtils.parseInt(value, fieldName); }
+    private static LocalDate parseDate(String value, String fieldName) { return UiUtils.parseDate(value, fieldName); }
+    private static java.util.List<String> parseCsv(String input) { return UiUtils.parseCsv(input); }
 
     private static void runSafely(Runnable runnable) {
         try {
@@ -161,7 +134,7 @@ public final class LibraryShellFrame extends JFrame {
         JOptionPane.showMessageDialog(null, message, "Loi", JOptionPane.ERROR_MESSAGE);
     }
 
-    private static final class BookPanel extends JPanel {
+    static final class BookPanel extends JPanel {
         private final BookCatalogService service;
         private final boolean canManage;
         private final JTextField searchField = new JTextField(20);
@@ -183,7 +156,7 @@ public final class LibraryShellFrame extends JFrame {
         };
         private final JTable table = new JTable(model);
 
-        private BookPanel(BookCatalogService service, boolean canManage) {
+        BookPanel(BookCatalogService service, boolean canManage) {
             super(new BorderLayout(12, 12));
             this.service = service;
             this.canManage = canManage;
@@ -337,7 +310,7 @@ public final class LibraryShellFrame extends JFrame {
         }
     }
 
-    private static final class ReaderPanel extends JPanel {
+    static final class ReaderPanel extends JPanel {
         private final ReaderManagementService service;
         private final boolean canManage;
         private final JTextField idField = new JTextField(12);
@@ -357,7 +330,7 @@ public final class LibraryShellFrame extends JFrame {
         };
         private final JTable table = new JTable(model);
 
-        private ReaderPanel(ReaderManagementService service, boolean canManage) {
+        ReaderPanel(ReaderManagementService service, boolean canManage) {
             super(new BorderLayout(12, 12));
             this.service = service;
             this.canManage = canManage;
@@ -387,9 +360,10 @@ public final class LibraryShellFrame extends JFrame {
                     if (text != null && !text.isBlank()) {
                         rf = RowFilter.regexFilter("(?i)" + Pattern.quote(text), 1);
                     }
-                    TableRowSorter<?> sorter = (TableRowSorter<?>) table.getRowSorter();
+                    @SuppressWarnings("unchecked")
+                    TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) table.getRowSorter();
                     if (sorter != null) {
-                        sorter.setRowFilter(rf);
+                        sorter.setRowFilter((RowFilter<? super DefaultTableModel, ? super Integer>) rf);
                     }
                 }
 
@@ -522,7 +496,7 @@ public final class LibraryShellFrame extends JFrame {
         }
     }
 
-    private static final class CirculationPanel extends JPanel {
+    static final class CirculationPanel extends JPanel {
         private final CirculationService circulationService;
         private final HistoryService historyService;
         private final AuthenticatedSession session;
@@ -536,7 +510,7 @@ public final class LibraryShellFrame extends JFrame {
         private final JTextField renewDaysField = new JTextField("7", 8);
         private final JTextField renewDateField = new JTextField(LocalDate.now().toString(), 12);
 
-        private CirculationPanel(
+        CirculationPanel(
                 CirculationService circulationService,
                 HistoryService historyService,
                 AuthenticatedSession session) {
@@ -670,40 +644,27 @@ public final class LibraryShellFrame extends JFrame {
         }
 
         private String formatLoanReceipt(LoanReceipt receipt) {
-            return """
-                    Lap phieu muon thanh cong
-                    Ma phieu: %s
-                    Doc gia: %s
-                    Thu thu: %s
-                    Han tra: %s
-                    So dau sach: %s
-                    """.formatted(
-                    receipt.loan().loanId(),
-                    receipt.loan().readerId(),
-                    receipt.loan().librarianId(),
-                    receipt.loan().dueDate(),
-                    receipt.details().size());
+            return UiUtils.formatLoanReceipt(
+                receipt.loan().loanId(),
+                receipt.loan().readerId(),
+                receipt.loan().librarianId(),
+                receipt.loan().dueDate().toString(),
+                receipt.details().size());
         }
 
         private String formatReturnReceipt(ReturnReceipt receipt) {
             String fineText = receipt.fine()
-                    .map(fine -> "Tien phat: %s (%s)".formatted(fine.amount(), fine.paidStatus().name()))
-                    .orElse("Tien phat: 0");
-            return """
-                    Tra sach thanh cong
-                    Ma phieu: %s
-                    Trang thai: %s
-                    Ngay tra: %s
-                    %s
-                    """.formatted(
-                    receipt.loan().loanId(),
-                    receipt.loan().status().name(),
-                    receipt.loan().returnDate(),
-                    fineText);
+                .map(fine -> "Tien phat: %s (%s)".formatted(fine.amount(), fine.paidStatus().name()))
+                .orElse("Tien phat: 0");
+            return UiUtils.formatReturnReceipt(
+                receipt.loan().loanId(),
+                receipt.loan().status().name(),
+                receipt.loan().returnDate() == null ? "" : receipt.loan().returnDate().toString(),
+                fineText);
         }
     }
 
-    private static final class HistoryPanel extends JPanel {
+    static final class HistoryPanel extends JPanel {
         private final HistoryService service;
         private final DefaultTableModel model = new DefaultTableModel(
                 new Object[] {"Loan", "Reader", "Librarian", "Loan Date", "Due", "Return", "Status", "Fine"}, 0) {
@@ -717,7 +678,7 @@ public final class LibraryShellFrame extends JFrame {
         private final JTextField loanIdField = new JTextField(12);
         private final JTextArea detailArea = new JTextArea();
 
-        private HistoryPanel(HistoryService service) {
+        HistoryPanel(HistoryService service) {
             super(new BorderLayout(12, 12));
             this.service = service;
             setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));

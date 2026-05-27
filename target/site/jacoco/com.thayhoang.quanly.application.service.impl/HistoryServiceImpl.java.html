@@ -21,12 +21,12 @@ public final class HistoryServiceImpl implements HistoryService {
     private final LoanDetailRepository loanDetailRepository;
     private final FineRepository fineRepository;
 
-<span class="fc" id="L24">    public HistoryServiceImpl(</span>
+    public HistoryServiceImpl(
             ReaderRepository readerRepository,
             LibrarianRepository librarianRepository,
             LoanRepository loanRepository,
             LoanDetailRepository loanDetailRepository,
-            FineRepository fineRepository) {
+<span class="fc" id="L29">            FineRepository fineRepository) {</span>
 <span class="fc" id="L30">        this.readerRepository = readerRepository;</span>
 <span class="fc" id="L31">        this.librarianRepository = librarianRepository;</span>
 <span class="fc" id="L32">        this.loanRepository = loanRepository;</span>
@@ -38,24 +38,24 @@ public final class HistoryServiceImpl implements HistoryService {
     public List&lt;LoanRecord&gt; getReaderHistory(String readerId) {
         try {
 <span class="fc" id="L40">            Optional&lt;com.thayhoang.quanly.domain.model.Reader&gt; reader = readerRepository.findById(readerId);</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (reader.isEmpty()) {</span>
-<span class="nc" id="L42">                return List.of();</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (reader.isEmpty()) {</span>
+<span class="fc" id="L42">                return List.of();</span>
             }
 
 <span class="fc" id="L45">            List&lt;LoanRecord&gt; records = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L46" title="All 2 branches covered.">            for (Loan loan : loanRepository.findByReaderId(readerId)) {</span>
 <span class="fc" id="L47">                Optional&lt;com.thayhoang.quanly.domain.model.Librarian&gt; librarian =</span>
 <span class="fc" id="L48">                        librarianRepository.findById(loan.librarianId());</span>
-<span class="pc bpc" id="L49" title="1 of 2 branches missed.">                if (librarian.isEmpty()) {</span>
-<span class="nc" id="L50">                    continue;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                if (librarian.isEmpty()) {</span>
+<span class="fc" id="L50">                    continue;</span>
                 }
 <span class="fc" id="L52">                records.add(new LoanRecord(</span>
-<span class="fc" id="L53">                        loan,</span>
+                        loan,
 <span class="fc" id="L54">                        reader.get(),</span>
 <span class="fc" id="L55">                        librarian.get(),</span>
 <span class="fc" id="L56">                        loanDetailRepository.findByLoanId(loan.loanId()),</span>
 <span class="fc" id="L57">                        fineRepository.findByLoanId(loan.loanId())));</span>
-            }
+<span class="fc" id="L58">            }</span>
 <span class="fc" id="L59">            return List.copyOf(records);</span>
 <span class="nc" id="L60">        } catch (SQLException exception) {</span>
 <span class="nc" id="L61">            throw new ApplicationException(&quot;Khong the tai lich su muon cua doc gia&quot;, exception);</span>
@@ -65,25 +65,25 @@ public final class HistoryServiceImpl implements HistoryService {
     @Override
     public Optional&lt;LoanRecord&gt; getLoanRecord(String loanId) {
         try {
-<span class="nc" id="L68">            Optional&lt;Loan&gt; loan = loanRepository.findById(loanId);</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (loan.isEmpty()) {</span>
+<span class="fc" id="L68">            Optional&lt;Loan&gt; loan = loanRepository.findById(loanId);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            if (loan.isEmpty()) {</span>
 <span class="nc" id="L70">                return Optional.empty();</span>
             }
 
-<span class="nc" id="L73">            Loan foundLoan = loan.get();</span>
-<span class="nc" id="L74">            Optional&lt;com.thayhoang.quanly.domain.model.Reader&gt; reader = readerRepository.findById(foundLoan.readerId());</span>
-<span class="nc" id="L75">            Optional&lt;com.thayhoang.quanly.domain.model.Librarian&gt; librarian =</span>
-<span class="nc" id="L76">                    librarianRepository.findById(foundLoan.librarianId());</span>
-<span class="nc bnc" id="L77" title="All 4 branches missed.">            if (reader.isEmpty() || librarian.isEmpty()) {</span>
-<span class="nc" id="L78">                return Optional.empty();</span>
+<span class="fc" id="L73">            Loan foundLoan = loan.get();</span>
+<span class="fc" id="L74">            Optional&lt;com.thayhoang.quanly.domain.model.Reader&gt; reader = readerRepository.findById(foundLoan.readerId());</span>
+<span class="fc" id="L75">            Optional&lt;com.thayhoang.quanly.domain.model.Librarian&gt; librarian =</span>
+<span class="fc" id="L76">                    librarianRepository.findById(foundLoan.librarianId());</span>
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">            if (reader.isEmpty() || librarian.isEmpty()) {</span>
+<span class="fc" id="L78">                return Optional.empty();</span>
             }
 
-<span class="nc" id="L81">            return Optional.of(new LoanRecord(</span>
-<span class="nc" id="L82">                    foundLoan,</span>
-<span class="nc" id="L83">                    reader.get(),</span>
-<span class="nc" id="L84">                    librarian.get(),</span>
-<span class="nc" id="L85">                    loanDetailRepository.findByLoanId(foundLoan.loanId()),</span>
-<span class="nc" id="L86">                    fineRepository.findByLoanId(foundLoan.loanId())));</span>
+<span class="fc" id="L81">            return Optional.of(new LoanRecord(</span>
+                    foundLoan,
+<span class="fc" id="L83">                    reader.get(),</span>
+<span class="fc" id="L84">                    librarian.get(),</span>
+<span class="fc" id="L85">                    loanDetailRepository.findByLoanId(foundLoan.loanId()),</span>
+<span class="fc" id="L86">                    fineRepository.findByLoanId(foundLoan.loanId())));</span>
 <span class="nc" id="L87">        } catch (SQLException exception) {</span>
 <span class="nc" id="L88">            throw new ApplicationException(&quot;Khong the tai chi tiet phieu muon&quot;, exception);</span>
         }

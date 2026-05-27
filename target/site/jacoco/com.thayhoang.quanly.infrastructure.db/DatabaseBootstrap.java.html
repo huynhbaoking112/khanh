@@ -108,17 +108,17 @@ public final class DatabaseBootstrap {
     private static void ensureDataDirectory() throws SQLException {
         try {
 <span class="fc" id="L110">            Files.createDirectories(DatabaseConfig.dataDirectory());</span>
-<span class="pc" id="L111">        } catch (IOException exception) {</span>
+<span class="nc" id="L111">        } catch (IOException exception) {</span>
 <span class="nc" id="L112">            throw new SQLException(&quot;Khong the tao thu muc du lieu SQLite&quot;, exception);</span>
-        }
+<span class="fc" id="L113">        }</span>
 <span class="fc" id="L114">    }</span>
 
     private static void ensureDriver() throws SQLException {
         try {
 <span class="fc" id="L118">            Class.forName(&quot;org.sqlite.JDBC&quot;);</span>
-<span class="pc" id="L119">        } catch (ClassNotFoundException exception) {</span>
+<span class="nc" id="L119">        } catch (ClassNotFoundException exception) {</span>
 <span class="nc" id="L120">            throw new SQLException(&quot;Khong tim thay SQLite JDBC driver trong thu muc lib&quot;, exception);</span>
-        }
+<span class="fc" id="L121">        }</span>
 <span class="fc" id="L122">    }</span>
 
     private static void seedData(Connection connection) throws SQLException {

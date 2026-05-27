@@ -1,0 +1,5 @@
+# Created at 2026-05-27T08:33:04.804
+Boot Manifest-JAR contains absolute paths in classpath 'E:\khanh-feat-qc-khoa-reader-manager\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

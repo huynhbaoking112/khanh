@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UiUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quanly-library-swing</a> &gt; <a href="index.source.html" class="el_package">com.thayhoang.quanly.ui</a> &gt; <span class="el_source">UiUtils.java</span></div><h1>UiUtils.java</h1><pre class="source lang-java linenums">package com.thayhoang.quanly.ui;
+
+import com.thayhoang.quanly.application.exception.ApplicationException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import com.thayhoang.quanly.domain.model.Book;
+import com.thayhoang.quanly.domain.enums.BookStatus;
+import com.thayhoang.quanly.domain.model.Reader;
+import com.thayhoang.quanly.domain.enums.ReaderStatus;
+import com.thayhoang.quanly.application.service.dto.LoanRecord;
+import com.thayhoang.quanly.domain.model.LoanDetail;
+
+public final class UiUtils {
+    private UiUtils() {}
+
+    public static int parseInt(String value, String fieldName) {
+        try {
+<span class="fc" id="L20">            return Integer.parseInt(value.trim());</span>
+<span class="fc" id="L21">        } catch (NumberFormatException exception) {</span>
+<span class="fc" id="L22">            throw new ApplicationException(fieldName + &quot; khong hop le.&quot;);</span>
+        }
+    }
+
+    public static LocalDate parseDate(String value, String fieldName) {
+        try {
+<span class="fc" id="L28">            return LocalDate.parse(value.trim());</span>
+<span class="fc" id="L29">        } catch (DateTimeParseException exception) {</span>
+<span class="fc" id="L30">            throw new ApplicationException(fieldName + &quot; phai theo dinh dang yyyy-MM-dd.&quot;);</span>
+        }
+    }
+
+    public static List&lt;String&gt; parseCsv(String input) {
+<span class="fc" id="L35">        List&lt;String&gt; values = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L36" title="All 4 branches covered.">        if (input == null || input.isBlank()) {</span>
+<span class="fc" id="L37">            return values;</span>
+        }
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (String token : input.split(&quot;,&quot;)) {</span>
+<span class="fc" id="L40">            String value = token.trim();</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (!value.isEmpty()) {</span>
+<span class="fc" id="L42">                values.add(value);</span>
+            }
+        }
+<span class="fc" id="L45">        return values;</span>
+    }
+
+    public static String formatLoanReceipt(String loanId, String readerId, String librarianId, String dueDate, int detailsSize) {
+<span class="fc" id="L49">        return String.format(</span>
+                &quot;\nLap phieu muon thanh cong\nMa phieu: %s\nDoc gia: %s\nThu thu: %s\nHan tra: %s\nSo dau sach: %s\n&quot;,
+<span class="fc" id="L51">                loanId, readerId, librarianId, dueDate, detailsSize);</span>
+    }
+
+    public static String formatReturnReceipt(String loanId, String status, String returnDate, String fineText) {
+<span class="fc" id="L55">        return String.format(</span>
+                &quot;\nTra sach thanh cong\nMa phieu: %s\nTrang thai: %s\nNgay tra: %s\n%s\n&quot;,
+                loanId, status, returnDate, fineText);
+    }
+
+    public static Book createBookFromFields(
+            String id,
+            String title,
+            String author,
+            String publisher,
+            String yearText,
+            String totalText,
+            String availableText,
+            String statusText) {
+<span class="fc" id="L69">        int year = parseInt(yearText, &quot;Nam xuat ban&quot;);</span>
+<span class="fc" id="L70">        int total = parseInt(totalText, &quot;So luong tong&quot;);</span>
+<span class="fc" id="L71">        int available = parseInt(availableText, &quot;So luong kha dung&quot;);</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">        BookStatus status = BookStatus.valueOf(statusText == null || statusText.isBlank() ? BookStatus.AVAILABLE.name() : statusText);</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        return new Book(id == null ? &quot;&quot; : id.trim(),</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                title == null ? &quot;&quot; : title.trim(),</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                author == null ? &quot;&quot; : author.trim(),</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                publisher == null ? &quot;&quot; : publisher.trim(),</span>
+                year,
+                total,
+                available,
+                status);
+    }
+
+    public static Reader createReaderFromFields(
+            String id,
+            String fullName,
+            String phone,
+            String email,
+            String maxBorrowText,
+            String statusText) {
+<span class="fc" id="L90">        int maxBorrow = parseInt(maxBorrowText, &quot;Gioi han muon&quot;);</span>
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">        ReaderStatus status = ReaderStatus.valueOf(statusText == null || statusText.isBlank() ? ReaderStatus.ACTIVE.name() : statusText);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        return new Reader(id == null ? &quot;&quot; : id.trim(),</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                fullName == null ? &quot;&quot; : fullName.trim(),</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                phone == null ? &quot;&quot; : phone.trim(),</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                email == null ? &quot;&quot; : email.trim(),</span>
+                maxBorrow,
+                status);
+    }
+
+    public static Book createBookFromRow(Object[] row) {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        String id = row[0] == null ? &quot;&quot; : String.valueOf(row[0]);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        String title = row[1] == null ? &quot;&quot; : String.valueOf(row[1]);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        String author = row[2] == null ? &quot;&quot; : String.valueOf(row[2]);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        String publisher = row[3] == null ? &quot;&quot; : String.valueOf(row[3]);</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        String yearText = row[4] == null ? &quot;0&quot; : String.valueOf(row[4]);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        String totalText = row[5] == null ? &quot;0&quot; : String.valueOf(row[5]);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        String availableText = row[6] == null ? &quot;0&quot; : String.valueOf(row[6]);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        String statusText = row[7] == null ? BookStatus.AVAILABLE.name() : String.valueOf(row[7]);</span>
+<span class="fc" id="L109">        return createBookFromFields(id, title, author, publisher, yearText, totalText, availableText, statusText);</span>
+    }
+
+    public static Reader createReaderFromRow(Object[] row) {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        String id = row[0] == null ? &quot;&quot; : String.valueOf(row[0]);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        String fullName = row[1] == null ? &quot;&quot; : String.valueOf(row[1]);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        String phone = row[2] == null ? &quot;&quot; : String.valueOf(row[2]);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        String email = row[3] == null ? &quot;&quot; : String.valueOf(row[3]);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        String maxBorrowText = row[4] == null ? &quot;0&quot; : String.valueOf(row[4]);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        String statusText = row[5] == null ? ReaderStatus.ACTIVE.name() : String.valueOf(row[5]);</span>
+<span class="fc" id="L119">        return createReaderFromFields(id, fullName, phone, email, maxBorrowText, statusText);</span>
+    }
+
+    public static String formatLoanRecordDetails(LoanRecord loanRecord) {
+<span class="fc" id="L123">        StringBuilder detail = new StringBuilder();</span>
+<span class="fc" id="L124">        detail.append(&quot;Phieu muon: &quot;).append(loanRecord.loan().loanId()).append('\n');</span>
+<span class="fc" id="L125">        detail.append(&quot;Doc gia: &quot;).append(loanRecord.reader().fullName()).append(&quot; (&quot;)</span>
+<span class="fc" id="L126">                .append(loanRecord.reader().readerId()).append(&quot;)\n&quot;);</span>
+<span class="fc" id="L127">        detail.append(&quot;Thu thu: &quot;).append(loanRecord.librarian().fullName()).append('\n');</span>
+<span class="fc" id="L128">        detail.append(&quot;Ngay muon: &quot;).append(loanRecord.loan().loanDate()).append('\n');</span>
+<span class="fc" id="L129">        detail.append(&quot;Han tra: &quot;).append(loanRecord.loan().dueDate()).append('\n');</span>
+<span class="fc" id="L130">        detail.append(&quot;Ngay tra: &quot;).append(loanRecord.loan().returnDate()).append('\n');</span>
+<span class="fc" id="L131">        detail.append(&quot;Trang thai: &quot;).append(loanRecord.loan().status().name()).append(&quot;\n\n&quot;);</span>
+<span class="fc" id="L132">        detail.append(&quot;Chi tiet sach:\n&quot;);</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for (LoanDetail item : loanRecord.details()) {</span>
+<span class="fc" id="L134">            detail.append(&quot;- &quot;).append(item.bookId())</span>
+<span class="fc" id="L135">                    .append(&quot; | qty=&quot;).append(item.quantity())</span>
+<span class="fc" id="L136">                    .append(&quot; | returned=&quot;).append(item.returned())</span>
+<span class="fc" id="L137">                    .append('\n');</span>
+<span class="fc" id="L138">        }</span>
+<span class="fc" id="L139">        detail.append('\n');</span>
+<span class="fc" id="L140">        detail.append(&quot;Phat: &quot;).append(loanRecord.fine()</span>
+<span class="fc" id="L141">                .map(f -&gt; f.amount() + &quot; - &quot; + f.reason() + &quot; - &quot; + f.paidStatus().name())</span>
+<span class="fc" id="L142">                .orElse(&quot;Khong co&quot;));</span>
+<span class="fc" id="L143">        return detail.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
