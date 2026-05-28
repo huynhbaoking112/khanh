@@ -1,54 +1,9 @@
 ==============================================================================
 QC REPORT - Library Management Test Suite
-Generated: Wed May 27 17:26:25 ICT 2026
+Generated: Thu May 28 17:40:29 ICT 2026
 Run from: D:\SQA_V2
 ==============================================================================
 
-
-==============================================================================
-[PASS] AUTO-CirculationRulesTest.validateLoanRenewal_variousChecks  |  Level: Unit  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
-------------------------------------------------------------------------------
-PRECONDITION : Test class: com.thayhoang.quanly.domain.rules.CirculationRulesTest
-INPUT        : Run JUnit method: validateLoanRenewal_variousChecks
-EXPECTED     : JUnit assertion result matches the test expectation
-ACTUAL       : JUnit status for display name: validateLoanRenewal_variousChecks()
-==============================================================================
-
-==============================================================================
-[PASS] AUTO-CirculationRulesTest.validateReaderForBorrowing_checksStatusAndLimit  |  Level: Unit  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
-------------------------------------------------------------------------------
-PRECONDITION : Test class: com.thayhoang.quanly.domain.rules.CirculationRulesTest
-INPUT        : Run JUnit method: validateReaderForBorrowing_checksStatusAndLimit
-EXPECTED     : JUnit assertion result matches the test expectation
-ACTUAL       : JUnit status for display name: validateReaderForBorrowing_checksStatusAndLimit()
-==============================================================================
-
-==============================================================================
-[PASS] AUTO-CirculationRulesTest.validateBookAvailability_checksStatusAndQuantity  |  Level: Unit  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
-------------------------------------------------------------------------------
-PRECONDITION : Test class: com.thayhoang.quanly.domain.rules.CirculationRulesTest
-INPUT        : Run JUnit method: validateBookAvailability_checksStatusAndQuantity
-EXPECTED     : JUnit assertion result matches the test expectation
-ACTUAL       : JUnit status for display name: validateBookAvailability_checksStatusAndQuantity()
-==============================================================================
-
-==============================================================================
-[PASS] AUTO-CirculationRulesTest.resolveLoanStatusAfterReturn_various  |  Level: Unit  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
-------------------------------------------------------------------------------
-PRECONDITION : Test class: com.thayhoang.quanly.domain.rules.CirculationRulesTest
-INPUT        : Run JUnit method: resolveLoanStatusAfterReturn_various
-EXPECTED     : JUnit assertion result matches the test expectation
-ACTUAL       : JUnit status for display name: resolveLoanStatusAfterReturn_various()
-==============================================================================
-
-==============================================================================
-[PASS] AUTO-CirculationRulesTest.calculateFine_returnsZeroOrPositive  |  Level: Unit  |  Requirement: Auto report for JUnit test without manual QcReport entry  |  Dataset: N/A
-------------------------------------------------------------------------------
-PRECONDITION : Test class: com.thayhoang.quanly.domain.rules.CirculationRulesTest
-INPUT        : Run JUnit method: calculateFine_returnsZeroOrPositive
-EXPECTED     : JUnit assertion result matches the test expectation
-ACTUAL       : JUnit status for display name: calculateFine_returnsZeroOrPositive()
-==============================================================================
 
 ==============================================================================
 [PASS] TC21  |  Level: Unit  |  Requirement: FR09 - Chan vuot ngÆ°á»¡ng maxBorrow  |  Dataset: TD14
@@ -56,7 +11,7 @@ ACTUAL       : JUnit status for display name: calculateFine_returnsZeroOrPositiv
 PRECONDITION : Reader maxBorrow=1, da co 1 loan active
 INPUT        : readerId=CR21, bookId=CB21B; action=Tao phieu muon
 EXPECTED     : Exception: Doc gia da vuot gioi han muon sach
-ACTUAL       : firstLoanId=LOAN-2B2D1C8E, exception=Doc gia da vuot gioi han muon sach
+ACTUAL       : firstLoanId=LOAN-F7279499, exception=Doc gia da vuot gioi han muon sach
 ==============================================================================
 
 ==============================================================================
@@ -74,26 +29,44 @@ ACTUAL       : exception=Doc gia khong o trang thai hoat dong
 PRECONDITION : Doc gia ACTIVE va sach con kha dung
 INPUT        : readerId=CR19, bookId=CB19; action=Tao phieu muon
 EXPECTED     : due_date = loan_date + 14 va quantity_available giam 1
-ACTUAL       : loanId=LOAN-BCC2D569, due=2026-06-10, bookAvailableAfter=1
+ACTUAL       : loanId=LOAN-A4DF90AB, due=2026-06-11, bookAvailableAfter=1
 ------------------------------------------------------------------------------
 DB BEFORE    : id=CR19 | name=Circulation Reader Active | phone='0901090019' | email=circulation.reader.active@example.com | max=5 | status=ACTIVE || id=CB19 | title=Circulation Book Loan | author=Pham Hung Thien | year=2024 | total=2 | available=1 | status=AVAILABLE
 DB AFTER     : id=CR19 | name=Circulation Reader Active | phone='0901090019' | email=circulation.reader.active@example.com | max=5 | status=ACTIVE || id=CB19 | title=Circulation Book Loan | author=Pham Hung Thien | year=2024 | total=2 | available=1 | status=AVAILABLE
 ==============================================================================
 
 ==============================================================================
+[PASS] TC32  |  Level: Improvement  |  Requirement: FR08 - Loai bo N+1 query khi truy van doc gia vi pham qua han  |  Dataset: TD32 (17 readers CR32R01..CR32R17 + overdue loan/detail rows)
+------------------------------------------------------------------------------
+PRECONDITION : Seed DB co simulated data cua 17 doc gia voi sach dang muon qua han
+INPUT        : Query danh sach doc gia vi pham qua han tai today=2026-05-28
+EXPECTED     : Retrieval chay qua 1 cau SQL JOIN duy nhat, DB call count = 1
+ACTUAL       : violatingReaders_TC32=17, SQL query_count=1
+==============================================================================
+
+==============================================================================
+[PASS] TC31  |  Level: Improvement  |  Requirement: FR12 - Chan gia han co chu dich khi phieu muon da qua han  |  Dataset: TD31
+------------------------------------------------------------------------------
+PRECONDITION : Loan ticket co status OVERDUE trong he thong
+INPUT        : loanId=LOAN-74F6694A, status=OVERDUE, action=Gia han
+EXPECTED     : Reject time extension va nem BusinessRuleViolationException
+ACTUAL       : Exception thrown=BusinessRuleViolationException, message="Không được phép gia hạn phiếu mượn đã quá hạn trả sách!"
+==============================================================================
+
+==============================================================================
 [PASS] TC24  |  Level: Unit  |  Requirement: FR12 - Gia han phieu muon hop le  |  Dataset: TD15
 ------------------------------------------------------------------------------
 PRECONDITION : Loan ACTIVE, con sach dang muon
-INPUT        : loanId=LOAN-8901CF86, extraDays=7; action=Gia han
+INPUT        : loanId=LOAN-CC562E64, extraDays=7; action=Gia han
 EXPECTED     : due_date.plusDays(7) va status van ACTIVE
-ACTUAL       : renewedDueDate=2026-06-17, status=ACTIVE
+ACTUAL       : renewedDueDate=2026-06-18, status=ACTIVE
 ==============================================================================
 
 ==============================================================================
 [PASS] TC22  |  Level: Integration  |  Requirement: FR10 - Tra sach dung han va cap nhat kho  |  Dataset: TD15
 ------------------------------------------------------------------------------
 PRECONDITION : Loan ACTIVE, sach dang cho muon
-INPUT        : loanId=LOAN-5D2F4046, bookId=CB22; action=Xu ly tra sach
+INPUT        : loanId=LOAN-CAEB731B, bookId=CB22; action=Xu ly tra sach
 EXPECTED     : Loan -> COMPLETED, book quantity_available +1
 ACTUAL       : status=COMPLETED, bookAvailableAfter=1
 ==============================================================================
@@ -102,7 +75,16 @@ ACTUAL       : status=COMPLETED, bookAvailableAfter=1
 [PASS] TC23  |  Level: Acceptance  |  Requirement: FR11 - Tinh phat tre han 50000/ngay  |  Dataset: TD15
 ------------------------------------------------------------------------------
 PRECONDITION : Loan qua han 3 ngay
-INPUT        : loanId=LOAN-D8E2B5C6, returnDate=2026-06-13; action=Xu ly tra sach
+INPUT        : loanId=LOAN-13B07DC1, returnDate=2026-06-14; action=Xu ly tra sach
 EXPECTED     : Tien phat = 3 * 50000 = 150000, status phat UNPAID
 ACTUAL       : fineAmount=150000, fineStatus=UNPAID
+==============================================================================
+
+==============================================================================
+[PASS] TC30  |  Level: Improvement  |  Requirement: FR11 - Dong bo quy tac phat qua han nghiem ngat 50000 VND/ngay  |  Dataset: TD30
+------------------------------------------------------------------------------
+PRECONDITION : Source code da cap nhat progressive fine rule = 50000 VND/ngay
+INPUT        : loanId=LOAN-2083566D, returnDate=dueDate.plusDays(3)=2026-06-14; action=Xu ly tra sach
+EXPECTED     : Tinh dung tien phat vi pham: 3 ngay * 50000 VND = 150000 VND
+ACTUAL       : SQLite saved FINE amount=150000.00, status=UNPAID
 ==============================================================================

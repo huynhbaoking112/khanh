@@ -9,7 +9,7 @@ quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcRea
 quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcBookRepository,43,260,4,10,8,56,5,15,2,11
 quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcLibrarianRepository,94,93,5,3,20,18,6,6,3,5
 quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcLoanDetailRepository,40,215,7,7,6,42,8,9,2,8
-quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcFineRepository,53,77,5,1,11,15,5,4,2,4
+quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcFineRepository,24,106,3,3,4,22,3,6,1,5
 quanly-library-swing,com.thayhoang.quanly.infrastructure.repository.jdbc,JdbcLoanRepository,34,203,3,11,6,42,4,12,2,7
 quanly-library-swing,com.thayhoang.quanly,Main,51,0,6,0,24,0,6,0,3,0
 quanly-library-swing,com.thayhoang.quanly.domain.enums,FinePaymentStatus,0,24,0,0,0,3,0,1,0,1
@@ -30,7 +30,7 @@ quanly-library-swing,com.thayhoang.quanly.ui,LibraryShellFrame.CirculationPanel,
 quanly-library-swing,com.thayhoang.quanly.ui,LibraryShellFrame,0,239,0,4,0,53,0,13,0,11
 quanly-library-swing,com.thayhoang.quanly.ui,LibraryShellFrame.BookPanel.new DefaultTableModel() {...},2,8,0,0,1,1,1,1,1,1
 quanly-library-swing,com.thayhoang.quanly.ui,LibraryShellFrame.ReaderPanel,28,557,2,6,8,113,7,14,5,12
-quanly-library-swing,com.thayhoang.quanly.domain.rules,CirculationRules,10,133,2,28,2,35,2,23,0,10
+quanly-library-swing,com.thayhoang.quanly.domain.rules,CirculationRules,45,102,13,19,10,27,12,14,0,10
 quanly-library-swing,com.thayhoang.quanly.application.bootstrap,ApplicationBootstrap,70,21,0,0,31,1,1,1,1,1
 quanly-library-swing,com.thayhoang.quanly.application.support,IdentifierGenerator,0,9,0,0,0,1,0,1,0,1
 quanly-library-swing,com.thayhoang.quanly.infrastructure.db,DatabaseBootstrap,201,100,4,4,41,34,7,9,3,9
@@ -41,7 +41,7 @@ quanly-library-swing,com.thayhoang.quanly.application.exception,BusinessRuleViol
 quanly-library-swing,com.thayhoang.quanly.application.service.impl,AuthenticationServiceImpl,2,74,2,12,0,20,2,9,0,4
 quanly-library-swing,com.thayhoang.quanly.application.service.impl,ReaderManagementServiceImpl,40,104,4,14,10,23,5,12,1,7
 quanly-library-swing,com.thayhoang.quanly.application.service.impl,BookCatalogServiceImpl,18,139,4,20,5,28,4,16,0,8
-quanly-library-swing,com.thayhoang.quanly.application.service.impl,CirculationServiceImpl,131,567,17,23,23,155,22,12,7,7
+quanly-library-swing,com.thayhoang.quanly.application.service.impl,CirculationServiceImpl,119,579,16,24,19,159,22,12,7,7
 quanly-library-swing,com.thayhoang.quanly.application.service.impl,HistoryServiceImpl,16,136,2,10,5,37,2,7,0,3
 quanly-library-swing,com.thayhoang.quanly.application.service.dto,LoanReceipt,0,9,0,0,0,1,0,1,0,1
 quanly-library-swing,com.thayhoang.quanly.application.service.dto,AuthenticatedSession,0,15,0,0,0,1,0,1,0,1

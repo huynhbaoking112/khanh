@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.thayhoang.quanly.thien_circulation.CirculationBorrowingRulesTest" time="0.64" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.thayhoang.quanly.thien_circulation.CirculationPerformanceTest" time="0.647" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -60,28 +60,15 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="tc21_borrowingBeyondLimitIsRejected" classname="com.thayhoang.quanly.thien_circulation.CirculationBorrowingRulesTest" time="0.126">
+  <testcase name="tc32_overdueReaderRetrievalEliminatesNPlusOneQueries" classname="com.thayhoang.quanly.thien_circulation.CirculationPerformanceTest" time="0.641">
     <system-out><![CDATA[
 ==============================================================================
-[PASS] TC21  |  Level: Unit  |  Requirement: FR09 - Chan vuot ngÆ°á»¡ng maxBorrow  |  Dataset: TD14
+[PASS] TC32  |  Level: Improvement  |  Requirement: FR08 - Loai bo N+1 query khi truy van doc gia vi pham qua han  |  Dataset: TD32 (17 readers CR32R01..CR32R17 + overdue loan/detail rows)
 ------------------------------------------------------------------------------
-PRECONDITION : Reader maxBorrow=1, da co 1 loan active
-INPUT        : readerId=CR21, bookId=CB21B; action=Tao phieu muon
-EXPECTED     : Exception: Doc gia da vuot gioi han muon sach
-ACTUAL       : firstLoanId=LOAN-F7279499, exception=Doc gia da vuot gioi han muon sach
-==============================================================================
-
-]]></system-out>
-  </testcase>
-  <testcase name="tc20_lockedReaderIsRejectedFromBorrowing" classname="com.thayhoang.quanly.thien_circulation.CirculationBorrowingRulesTest" time="0.003">
-    <system-out><![CDATA[
-==============================================================================
-[PASS] TC20  |  Level: Unit  |  Requirement: FR09 - Chan doc gia khong ACTIVE  |  Dataset: TD13
-------------------------------------------------------------------------------
-PRECONDITION : Reader status=LOCKED/INACTIVE
-INPUT        : readerId=CR20, bookId=CB20; action=Tao phieu muon
-EXPECTED     : BusinessRuleViolationException: Doc gia khong o trang thai hoat dong
-ACTUAL       : exception=Doc gia khong o trang thai hoat dong
+PRECONDITION : Seed DB co simulated data cua 17 doc gia voi sach dang muon qua han
+INPUT        : Query danh sach doc gia vi pham qua han tai today=2026-05-28
+EXPECTED     : Retrieval chay qua 1 cau SQL JOIN duy nhat, DB call count = 1
+ACTUAL       : violatingReaders_TC32=17, SQL query_count=1
 ==============================================================================
 
 ]]></system-out>

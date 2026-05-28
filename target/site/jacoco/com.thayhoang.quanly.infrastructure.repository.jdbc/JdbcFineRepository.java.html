@@ -28,7 +28,7 @@ import java.util.Optional;
                 &quot;&quot;&quot;)) {
 <span class="fc" id="L29">            statement.setString(1, loanId);</span>
 <span class="fc" id="L30">            try (ResultSet resultSet = statement.executeQuery()) {</span>
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">                return resultSet.next() ? Optional.of(mapRow(resultSet)) : Optional.empty();</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">                return resultSet.next() ? Optional.of(mapRow(resultSet)) : Optional.empty();</span>
             }
         }
     }
@@ -63,13 +63,13 @@ import java.util.Optional;
     }
 
     private Fine mapRow(ResultSet resultSet) throws SQLException {
-<span class="nc" id="L66">        BigDecimal amount = resultSet.getBigDecimal(&quot;amount&quot;);</span>
-<span class="nc" id="L67">        return new Fine(</span>
-<span class="nc" id="L68">                resultSet.getString(&quot;fine_id&quot;),</span>
-<span class="nc" id="L69">                resultSet.getString(&quot;loan_id&quot;),</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">                amount == null ? BigDecimal.ZERO : amount,</span>
-<span class="nc" id="L71">                resultSet.getString(&quot;reason&quot;),</span>
-<span class="nc" id="L72">                FinePaymentStatus.valueOf(resultSet.getString(&quot;paid_status&quot;)));</span>
+<span class="fc" id="L66">        BigDecimal amount = resultSet.getBigDecimal(&quot;amount&quot;);</span>
+<span class="fc" id="L67">        return new Fine(</span>
+<span class="fc" id="L68">                resultSet.getString(&quot;fine_id&quot;),</span>
+<span class="fc" id="L69">                resultSet.getString(&quot;loan_id&quot;),</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">                amount == null ? BigDecimal.ZERO : amount,</span>
+<span class="fc" id="L71">                resultSet.getString(&quot;reason&quot;),</span>
+<span class="fc" id="L72">                FinePaymentStatus.valueOf(resultSet.getString(&quot;paid_status&quot;)));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

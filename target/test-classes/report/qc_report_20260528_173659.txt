@@ -1,6 +1,6 @@
 ==============================================================================
 QC REPORT - Library Management Test Suite
-Generated: Thu May 28 17:40:29 ICT 2026
+Generated: Thu May 28 17:36:59 ICT 2026
 Run from: D:\SQA_V2
 ==============================================================================
 
@@ -11,7 +11,7 @@ Run from: D:\SQA_V2
 PRECONDITION : Reader maxBorrow=1, da co 1 loan active
 INPUT        : readerId=CR21, bookId=CB21B; action=Tao phieu muon
 EXPECTED     : Exception: Doc gia da vuot gioi han muon sach
-ACTUAL       : firstLoanId=LOAN-F7279499, exception=Doc gia da vuot gioi han muon sach
+ACTUAL       : firstLoanId=LOAN-3A794D4F, exception=Doc gia da vuot gioi han muon sach
 ==============================================================================
 
 ==============================================================================
@@ -29,7 +29,7 @@ ACTUAL       : exception=Doc gia khong o trang thai hoat dong
 PRECONDITION : Doc gia ACTIVE va sach con kha dung
 INPUT        : readerId=CR19, bookId=CB19; action=Tao phieu muon
 EXPECTED     : due_date = loan_date + 14 va quantity_available giam 1
-ACTUAL       : loanId=LOAN-A4DF90AB, due=2026-06-11, bookAvailableAfter=1
+ACTUAL       : loanId=LOAN-2D900416, due=2026-06-11, bookAvailableAfter=1
 ------------------------------------------------------------------------------
 DB BEFORE    : id=CR19 | name=Circulation Reader Active | phone='0901090019' | email=circulation.reader.active@example.com | max=5 | status=ACTIVE || id=CB19 | title=Circulation Book Loan | author=Pham Hung Thien | year=2024 | total=2 | available=1 | status=AVAILABLE
 DB AFTER     : id=CR19 | name=Circulation Reader Active | phone='0901090019' | email=circulation.reader.active@example.com | max=5 | status=ACTIVE || id=CB19 | title=Circulation Book Loan | author=Pham Hung Thien | year=2024 | total=2 | available=1 | status=AVAILABLE
@@ -48,7 +48,7 @@ ACTUAL       : violatingReaders_TC32=17, SQL query_count=1
 [PASS] TC31  |  Level: Improvement  |  Requirement: FR12 - Chan gia han co chu dich khi phieu muon da qua han  |  Dataset: TD31
 ------------------------------------------------------------------------------
 PRECONDITION : Loan ticket co status OVERDUE trong he thong
-INPUT        : loanId=LOAN-74F6694A, status=OVERDUE, action=Gia han
+INPUT        : loanId=LOAN-E918ADAE, status=OVERDUE, action=Gia han
 EXPECTED     : Reject time extension va nem BusinessRuleViolationException
 ACTUAL       : Exception thrown=BusinessRuleViolationException, message="Không được phép gia hạn phiếu mượn đã quá hạn trả sách!"
 ==============================================================================
@@ -57,7 +57,7 @@ ACTUAL       : Exception thrown=BusinessRuleViolationException, message="Không 
 [PASS] TC24  |  Level: Unit  |  Requirement: FR12 - Gia han phieu muon hop le  |  Dataset: TD15
 ------------------------------------------------------------------------------
 PRECONDITION : Loan ACTIVE, con sach dang muon
-INPUT        : loanId=LOAN-CC562E64, extraDays=7; action=Gia han
+INPUT        : loanId=LOAN-633FC403, extraDays=7; action=Gia han
 EXPECTED     : due_date.plusDays(7) va status van ACTIVE
 ACTUAL       : renewedDueDate=2026-06-18, status=ACTIVE
 ==============================================================================
@@ -66,7 +66,7 @@ ACTUAL       : renewedDueDate=2026-06-18, status=ACTIVE
 [PASS] TC22  |  Level: Integration  |  Requirement: FR10 - Tra sach dung han va cap nhat kho  |  Dataset: TD15
 ------------------------------------------------------------------------------
 PRECONDITION : Loan ACTIVE, sach dang cho muon
-INPUT        : loanId=LOAN-CAEB731B, bookId=CB22; action=Xu ly tra sach
+INPUT        : loanId=LOAN-349B26A6, bookId=CB22; action=Xu ly tra sach
 EXPECTED     : Loan -> COMPLETED, book quantity_available +1
 ACTUAL       : status=COMPLETED, bookAvailableAfter=1
 ==============================================================================
@@ -75,7 +75,7 @@ ACTUAL       : status=COMPLETED, bookAvailableAfter=1
 [PASS] TC23  |  Level: Acceptance  |  Requirement: FR11 - Tinh phat tre han 50000/ngay  |  Dataset: TD15
 ------------------------------------------------------------------------------
 PRECONDITION : Loan qua han 3 ngay
-INPUT        : loanId=LOAN-13B07DC1, returnDate=2026-06-14; action=Xu ly tra sach
+INPUT        : loanId=LOAN-FA812CA8, returnDate=2026-06-14; action=Xu ly tra sach
 EXPECTED     : Tien phat = 3 * 50000 = 150000, status phat UNPAID
 ACTUAL       : fineAmount=150000, fineStatus=UNPAID
 ==============================================================================
@@ -84,7 +84,7 @@ ACTUAL       : fineAmount=150000, fineStatus=UNPAID
 [PASS] TC30  |  Level: Improvement  |  Requirement: FR11 - Dong bo quy tac phat qua han nghiem ngat 50000 VND/ngay  |  Dataset: TD30
 ------------------------------------------------------------------------------
 PRECONDITION : Source code da cap nhat progressive fine rule = 50000 VND/ngay
-INPUT        : loanId=LOAN-2083566D, returnDate=dueDate.plusDays(3)=2026-06-14; action=Xu ly tra sach
+INPUT        : loanId=LOAN-6FB16255, returnDate=dueDate.plusDays(3)=2026-06-14; action=Xu ly tra sach
 EXPECTED     : Tinh dung tien phat vi pham: 3 ngay * 50000 VND = 150000 VND
 ACTUAL       : SQLite saved FINE amount=150000.00, status=UNPAID
 ==============================================================================

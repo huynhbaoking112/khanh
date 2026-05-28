@@ -250,10 +250,10 @@ public final class CirculationServiceImpl implements CirculationService {
 <span class="fc" id="L250">                loanRepository.update(connection, renewedLoan);</span>
 <span class="fc" id="L251">                connection.commit();</span>
 <span class="fc" id="L252">                return renewedLoan;</span>
-<span class="nc" id="L253">            } catch (Exception exception) {</span>
-<span class="nc" id="L254">                rollback(connection);</span>
-<span class="nc bnc" id="L255" title="All 2 branches missed.">                if (exception instanceof ApplicationException applicationException) {</span>
-<span class="nc" id="L256">                    throw applicationException;</span>
+<span class="fc" id="L253">            } catch (Exception exception) {</span>
+<span class="fc" id="L254">                rollback(connection);</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">                if (exception instanceof ApplicationException applicationException) {</span>
+<span class="fc" id="L256">                    throw applicationException;</span>
                 }
 <span class="nc" id="L258">                throw new ApplicationException(&quot;Khong the gia han phieu muon&quot;, exception);</span>
             } finally {

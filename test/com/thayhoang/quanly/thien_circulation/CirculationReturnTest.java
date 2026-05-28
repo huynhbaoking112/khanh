@@ -94,6 +94,40 @@ class CirculationReturnTest {
                 .pass();
     }
 
+    @Test
+    @DisplayName("TC30 - strict overdue fine rule saves 150000 VND for 3 late days")
+    void tc30_strictOverdueFineRuleSavesExpectedDebt() throws SQLException {
+        String readerId = "CR30";
+        String bookId = "CB30";
+        TestDbHelper.deleteLoansForReader(readerId);
+        TestDbHelper.upsertReader(readerId, "Circulation Reader Strict Fine", "0901090030",
+                "circulation.reader.strict.fine@example.com", 5, ReaderStatus.ACTIVE);
+        TestDbHelper.upsertBook(bookId, "Circulation Book Strict Fine", "Pham Hung Thien", "NXB Test",
+                2024, 1, 1, BookStatus.AVAILABLE);
+
+        CirculationService service = newService();
+
+        LoanReceipt loanReceipt = service.createLoan(readerId, "LIB001", List.of(bookId));
+        LocalDate returnDate = loanReceipt.loan().dueDate().plusDays(3);
+        ReturnReceipt returnReceipt = service.returnBooks(loanReceipt.loan().loanId(), List.of(bookId), returnDate);
+        Fine savedFine = new JdbcFineRepository().findByLoanId(loanReceipt.loan().loanId()).orElseThrow();
+        BigDecimal savedAmount = savedFine.amount().setScale(2);
+
+        assertEquals(new BigDecimal("150000.00"), savedAmount);
+        assertEquals(FinePaymentStatus.UNPAID, savedFine.paidStatus());
+        assertTrue(returnReceipt.fine().isPresent());
+
+        QcReport.tc("TC30", "Improvement")
+                .requirement("FR11 - Dong bo quy tac phat qua han nghiem ngat 50000 VND/ngay")
+                .dataset("TD30")
+                .precondition("Source code da cap nhat progressive fine rule = 50000 VND/ngay")
+                .input("loanId=" + loanReceipt.loan().loanId() + ", returnDate=dueDate.plusDays(3)="
+                        + returnDate + "; action=Xu ly tra sach")
+                .expected("Tinh dung tien phat vi pham: 3 ngay * 50000 VND = 150000 VND")
+                .actual("SQLite saved FINE amount=" + savedAmount + ", status=" + savedFine.paidStatus())
+                .pass();
+    }
+
     private static CirculationService newService() {
         return new CirculationServiceImpl(
                 new JdbcReaderRepository(),

@@ -84,8 +84,8 @@ public final class CirculationRules {
         if (loan.status() == LoanStatus.COMPLETED) {
             throw new BusinessRuleViolationException("Khong the gia han phieu muon da hoan tat");
         }
-        if (loan.dueDate().isBefore(referenceDate)) {
-            throw new BusinessRuleViolationException("Khong the gia han phieu muon da qua han");
+        if (loan.status() == LoanStatus.OVERDUE || loan.dueDate().isBefore(referenceDate)) {
+            throw new BusinessRuleViolationException("Không được phép gia hạn phiếu mượn đã quá hạn trả sách!");
         }
         boolean hasUnreturnedBook = details.stream().anyMatch(detail -> !detail.returned());
         if (!hasUnreturnedBook) {
